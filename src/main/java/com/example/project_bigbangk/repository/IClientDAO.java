@@ -1,7 +1,9 @@
+// Created by vip
+// Creation date 02/12/2021
+
 package com.example.project_bigbangk.repository;
 
 import com.example.project_bigbangk.model.Client;
-
 import java.util.List;
 
 public interface IClientDAO {
