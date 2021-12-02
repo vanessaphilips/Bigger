@@ -1,14 +1,16 @@
 package com.example.project_bigbangk.model;
 
+import com.mysql.cj.x.protobuf.MysqlxDatatypes;
+
 public class Address {
 
-    private int postalCode;
+    private String postalCode;
     private String street;
     private int number;
     private String city;
     private String country;
 
-    public Address(int postalCode, String street, int number, String city, String country) {
+    public Address(String postalCode, String street, int number, String city, String country) {
         this.postalCode = postalCode;
         this.street = street;
         this.number = number;
@@ -16,11 +18,11 @@ public class Address {
         this.country = country;
     }
 
-    public int getPostalCode() {
+    public String getPostalCode() {
         return postalCode;
     }
 
-    public void setPostalCode(int postalCode) {
+    public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
 
