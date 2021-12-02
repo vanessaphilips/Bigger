@@ -1,27 +1,36 @@
 // Created by vip
 // Creation date 02/12/2021
-
 package com.example.project_bigbangk.repository;
 
 import com.example.project_bigbangk.model.Client;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
 @Repository
 public class ClientDAO implements IClientDAO{
 
-    private final Logger logger = LoggerFactory.getLogger(ClientDAO.class);
+    JdbcTemplate jdbcTemplate;
 
-    public ClientDAO() {
-        super();
-        logger.info("New ClientDAO");
+    @Autowired
+    public ClientDAO(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
     public void saveClient(Client mpClient){
+        String sql = "Insert into Client values(?,?,?,?,?,?,?,?,?)";
+        jdbcTemplate.update(sql,
+                mpClient.getFirstName(),
+                mpClient.getInsertion(),
+                mpClient.getLastName(),
+                mpClient.getEmail(),
+                mpClient.getBsn(),
+                mpClient.getDateOfBirth(),
+                mpClient.getPassWord(),
+                mpClient.getAddress(),
+                mpClient.getWallet());
     }
 
     @Override

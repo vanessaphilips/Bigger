@@ -13,23 +13,23 @@ public class Client {
     private String insertion;
     private String lastName;
     private String email;
-    private String bsnNumber;
+    private String bsn;
     private Date dateOfBirth;
-    private String password;
-    private String salt;
-    private Address adres;
+    private String passWord;
+    private Address address;
+    private Wallet wallet;
 
     public Client(String firstName, String insertion, String lastName, String email,
-                  String bsnNumber, Date dateOfBirth, String password, String salt, Address adres) {
+                  String bsn, Date dateOfBirth, String passWord, Address address, Wallet wallet) {
         this.firstName = firstName;
         this.insertion = insertion;
         this.lastName = lastName;
         this.email = email;
-        this.bsnNumber = bsnNumber;
+        this.bsn = bsn;
         this.dateOfBirth = dateOfBirth;
-        this.password = password;
-        this.salt = salt;
-        this.adres = adres;
+        this.passWord = passWord;
+        this.address = address;
+        this.wallet = wallet;
     }
 
     // TODO alle getters en setters aangemaakt als uiteindelijk blijkt dat ze niet gebruikt worden dan weghalen
@@ -66,12 +66,12 @@ public class Client {
         this.email = email;
     }
 
-    public String getBsnNumber() {
-        return bsnNumber;
+    public String getBsn() {
+        return bsn;
     }
 
-    public void setBsnNumber(String bsnNumber) {
-        this.bsnNumber = bsnNumber;
+    public void setBsn(String bsn) {
+        this.bsn = bsn;
     }
 
     public Date getDateOfBirth() {
@@ -82,28 +82,28 @@ public class Client {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public String getPassword() {
-        return password;
+    public String getPassWord() {
+        return passWord;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPassWord(String passWord) {
+        this.passWord = passWord;
     }
 
-    public String getSalt() {
-        return salt;
+    public Address getAddress() {
+        return address;
     }
 
-    public void setSalt(String salt) {
-        this.salt = salt;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
-    public Address getAdres() {
-        return adres;
+    public Wallet getWallet() {
+        return wallet;
     }
 
-    public void setAdres(Address adres) {
-        this.adres = adres;
+    public void setWallet(Wallet wallet) {
+        this.wallet = wallet;
     }
 
     @Override
@@ -113,11 +113,11 @@ public class Client {
                 ", insertion='" + insertion + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", bsnNumber='" + bsnNumber + '\'' +
+                ", bsn='" + bsn + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
-                ", password='" + password + '\'' +
-                ", salt='" + salt + '\'' +
-                ", adres=" + adres +
+                ", passWord='" + passWord + '\'' +
+                ", address=" + address +
+                ", wallet=" + wallet +
                 '}';
     }
 
@@ -128,13 +128,13 @@ public class Client {
         Client client = (Client) o;
         return Objects.equals(firstName, client.firstName) && Objects.equals(insertion, client.insertion) &&
                 Objects.equals(lastName, client.lastName) && Objects.equals(email, client.email) &&
-                Objects.equals(bsnNumber, client.bsnNumber) && Objects.equals(dateOfBirth, client.dateOfBirth) &&
-                Objects.equals(password, client.password) && Objects.equals(salt, client.salt) &&
-                Objects.equals(adres, client.adres);
+                Objects.equals(bsn, client.bsn) && Objects.equals(dateOfBirth, client.dateOfBirth) &&
+                Objects.equals(passWord, client.passWord) && Objects.equals(address, client.address) &&
+                Objects.equals(wallet, client.wallet);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, insertion, lastName, email, bsnNumber, dateOfBirth, password, salt, adres);
+        return Objects.hash(firstName, insertion, lastName, email, bsn, dateOfBirth, passWord, address, wallet);
     }
 }
