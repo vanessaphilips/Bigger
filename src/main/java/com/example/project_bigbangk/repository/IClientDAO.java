@@ -10,7 +10,7 @@ public interface IClientDAO {
 
     public void saveClient(Client mpClient);
 
-    public Client findClientByEmail(int email);
+    public Client findClientByEmail(String email);
 
     public List<Client> findAllClients();
 

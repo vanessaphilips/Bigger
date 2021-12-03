@@ -32,7 +32,7 @@ public class Client {
         this.wallet = wallet;
     }
 
-    // TODO alle getters en setters aangemaakt als uiteindelijk blijkt dat ze niet gebruikt worden dan weghalen
+    // TODO alle getters en setters aangemaakt. Als blijkt dat eea niet gebruikt wordt dan weghalen.
 
     public String getFirstName() {
         return firstName;
