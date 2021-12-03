@@ -9,13 +9,15 @@ public class Address {
     private int number;
     private String city;
     private String country;
+    private String email;
 
-    public Address(String postalCode, String street, int number, String city, String country) {
+    public Address(String postalCode, String street, int number, String city, String country, String email) {
         this.postalCode = postalCode;
         this.street = street;
         this.number = number;
         this.city = city;
         this.country = country;
+        this.email = email;
     }
 
     public String getPostalCode() {
@@ -57,6 +59,10 @@ public class Address {
     public void setCountry(String country) {
         this.country = country;
     }
+
+    public String getEmail() { return email; }
+
+    public void setEmail(String email) { this.email = email; }
 
     @Override
     public String toString() {
