@@ -16,7 +16,7 @@ public class RegistrationDTO {
     private String insertion;
     private String lastName;
     private String bsnNumber;
-    private LocalDate dateOfBirth;
+    private String dateOfBirth;
     private String postalCode;
     private String street;
     private int number;
@@ -24,7 +24,7 @@ public class RegistrationDTO {
     private String country;
 
     public RegistrationDTO(String email, String password, String firstName, String insertion, String lastName,
-                           String bsnNumber, LocalDate dateOfBirth, String postalCode, String street, int number, String city, String country) {
+                           String bsnNumber, String dateOfBirth, String postalCode, String street, int number, String city, String country) {
         this.email = email;
         this.password = password;
         this.firstName = firstName;
@@ -63,7 +63,7 @@ public class RegistrationDTO {
         return bsnNumber;
     }
 
-    public LocalDate getDateOfBirth() {
+    public String getDateOfBirth() {
         return dateOfBirth;
     }
 
