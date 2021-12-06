@@ -21,6 +21,8 @@ public class ClientService {
     }
 
     // TODO de volgende methode actief maken wanneer de RootRepository gereed is.
+    //FIXME uiteindelijk moeten alle aanroepen van DAOs vanuit de root repository en niet in services,
+    // komt dus nog een stapje tussen die nu vrij overbodig is maar later handig is (denk ik)
 
 //    public Client getClientByEmail(String email) {
 //        return rootRepository.findClientByEmail(email);

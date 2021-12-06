@@ -14,7 +14,7 @@ public class Client {
     private String lastName;
     private String email;
     private String bsn;
-    private Date dateOfBirth;
+    private Date dateOfBirth; //FIXME dit moet een LocalDate worden ipv Date, ook in de DAO (was achteraf iets handiger dan Date)
     private String passWord;
     private Address address;
     private Wallet wallet;
@@ -121,6 +121,7 @@ public class Client {
                 '}';
     }
 
+    //FIXME alleen comparison van email nodig om gebruikers te vergelijken
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

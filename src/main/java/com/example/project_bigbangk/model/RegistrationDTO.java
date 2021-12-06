@@ -1,13 +1,11 @@
 package com.example.project_bigbangk.model;
 /*
 
-@Author Philip Beeltje, Studentnummer: 500519452
+@Author Bigbangk
 */
 
-import java.time.LocalDate;
-import java.util.Date;
 
-
+// velden in DTO moeten overeenkomen met JSON! en omgekeerd
 public class RegistrationDTO {
 
     private String email;
@@ -15,7 +13,7 @@ public class RegistrationDTO {
     private String firstName;
     private String insertion;
     private String lastName;
-    private String bsnNumber;
+    private String bsn;
     private String dateOfBirth;
     private String postalCode;
     private String street;
@@ -24,13 +22,13 @@ public class RegistrationDTO {
     private String country;
 
     public RegistrationDTO(String email, String password, String firstName, String insertion, String lastName,
-                           String bsnNumber, String dateOfBirth, String postalCode, String street, int number, String city, String country) {
+                           String bsn, String dateOfBirth, String postalCode, String street, int number, String city, String country) {
         this.email = email;
         this.password = password;
         this.firstName = firstName;
         this.insertion = insertion;
         this.lastName = lastName;
-        this.bsnNumber = bsnNumber;
+        this.bsn = bsn;
         this.dateOfBirth = dateOfBirth;
         this.postalCode = postalCode;
         this.street = street;
@@ -59,8 +57,8 @@ public class RegistrationDTO {
         return lastName;
     }
 
-    public String getBsnNumber() {
-        return bsnNumber;
+    public String getBsn() {
+        return bsn;
     }
 
     public String getDateOfBirth() {

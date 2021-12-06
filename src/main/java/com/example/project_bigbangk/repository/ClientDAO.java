@@ -69,6 +69,8 @@ public class ClientDAO implements IClientDAO{
     }
 
     // TODO hoe zet ik een object hierbij:
+    // FIXME er staan geen adress of wallet objecten op de database alleen foreign keys
+    //moeten we nog even naar kijken ivm kaal ophalen in DAOs en FKs alleen gebruiken in root
 
     private class ClientRowMapper implements RowMapper<Client> {
         @Override
