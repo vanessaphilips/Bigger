@@ -3,7 +3,6 @@ package com.example.project_bigbangk.service;
 import com.example.project_bigbangk.model.HashHelper;
 
 public class HashService {
-    private static final int DEFAULT_ROUNDS = 1;
     private final PepperService pepperService;
 
     public HashService(PepperService pepperService) {
@@ -14,8 +13,7 @@ public class HashService {
         return HashHelper.hash(password, pepperService.getPeper());
     }
 
-    public Boolean hashCheck(String password, String username, String pepper){
-        return HashHelper.hashCheck(password, username, pepper);
+    public Boolean hashCheck(String password, String hashedPassword){
+        return HashHelper.hashCheck(password, hashedPassword);
     }
-
 }
