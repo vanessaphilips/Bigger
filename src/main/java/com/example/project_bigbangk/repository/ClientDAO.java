@@ -2,16 +2,13 @@
 // Creation date 02/12/2021
 package com.example.project_bigbangk.repository;
 
-import com.example.project_bigbangk.model.Address;
 import com.example.project_bigbangk.model.Client;
-import com.example.project_bigbangk.model.Wallet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import java.sql.*;
-import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -68,9 +65,7 @@ public class ClientDAO implements IClientDAO{
         return jdbcTemplate.query(sql, new ClientRowMapper(), lastName);
     }
 
-    // TODO hoe zet ik een object hierbij:
-    // FIXME er staan geen adress of wallet objecten op de database alleen foreign keys
-    //moeten we nog even naar kijken ivm kaal ophalen in DAOs en FKs alleen gebruiken in root
+    //FIXME in RowMapper alleen de attributen uit Client (dus niet Address en Wallet)
 
     private class ClientRowMapper implements RowMapper<Client> {
         @Override
@@ -84,5 +79,4 @@ public class ClientDAO implements IClientDAO{
                     resultSet.getString("passWord"));
         }
     }
-
 }
