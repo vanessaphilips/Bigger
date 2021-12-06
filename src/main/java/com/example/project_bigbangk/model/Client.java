@@ -14,7 +14,7 @@ public class Client {
     private String lastName;
     private String email;
     private String bsn;
-    private Date dateOfBirth; //FIXME dit moet een LocalDate worden ipv Date, ook in de DAO (was achteraf iets handiger dan Date)
+    private Date dateOfBirth;
     private String passWord;
     private Address address;
     private Wallet wallet;
@@ -30,6 +30,16 @@ public class Client {
         this.passWord = passWord;
         this.address = address;
         this.wallet = wallet;
+    }
+
+    public Client(String firstName, String insertion, String lastName, String email, String bsn, Date dateOfBirth, String passWord) {
+        this.firstName = firstName;
+        this.insertion = insertion;
+        this.lastName = lastName;
+        this.email = email;
+        this.bsn = bsn;
+        this.dateOfBirth = dateOfBirth;
+        this.passWord = passWord;
     }
 
     // TODO alle getters en setters aangemaakt. Als blijkt dat eea niet gebruikt wordt dan weghalen.
@@ -121,17 +131,13 @@ public class Client {
                 '}';
     }
 
-    //FIXME alleen comparison van email nodig om gebruikers te vergelijken
+    //FIXME alleen comparison van email om gebruikers te vergelijken
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Client client = (Client) o;
-        return Objects.equals(firstName, client.firstName) && Objects.equals(insertion, client.insertion) &&
-                Objects.equals(lastName, client.lastName) && Objects.equals(email, client.email) &&
-                Objects.equals(bsn, client.bsn) && Objects.equals(dateOfBirth, client.dateOfBirth) &&
-                Objects.equals(passWord, client.passWord) && Objects.equals(address, client.address) &&
-                Objects.equals(wallet, client.wallet);
+        return Objects.equals(email, client.email);
     }
 
     @Override

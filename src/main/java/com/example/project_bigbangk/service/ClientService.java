@@ -20,13 +20,12 @@ public class ClientService {
         this.clientDAO = clientDAO;
     }
 
-    // TODO de volgende methode actief maken wanneer de RootRepository gereed is.
-    //FIXME uiteindelijk moeten alle aanroepen van DAOs vanuit de root repository en niet in services,
-    // komt dus nog een stapje tussen die nu vrij overbodig is maar later handig is (denk ik)
+    // FIXME uiteindelijk moeten alle aanroepen van DAOs vanuit de root repository en niet in services,
+    //  komt dus nog een stapje tussen die nu vrij overbodig is maar later handig is (denk ik)
 
-//    public Client getClientByEmail(String email) {
-//        return rootRepository.findClientByEmail(email);
-//    }
+    public Client getClientByEmail(String email) {
+        return rootRepository.findClientByEmail(email);
+    }
 
     public List<Client> getAllClients() {
         return clientDAO.findAllClients();
@@ -48,5 +47,4 @@ public class ClientService {
     public List<Client> findClientByLastName(String lastName) {
         return clientDAO.findClientByLastName(lastName);
     }
-
 }
