@@ -81,9 +81,7 @@ public class ClientDAO implements IClientDAO{
                     resultSet.getString("email"),
                     resultSet.getString("bsn"),
                     resultSet.getDate("dateOfBirth"),
-                    resultSet.getString("passWord"),
-                    resultSet.getObject("address"),
-                    resultSet.getObject("wallet"));
+                    resultSet.getString("passWord"));
         }
     }
 

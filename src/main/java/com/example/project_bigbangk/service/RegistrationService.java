@@ -48,7 +48,7 @@ public class RegistrationService {
                 registrationDTO.getPostalCode(), registrationDTO.getCountry(), registrationDTO.getCity());
 
         for (String s : inputNotNullList) {
-            if(s == null || s.length()==0){
+            if(s == null || s.isEmpty()){
                 System.out.println("list");
                 return false;}}
 
