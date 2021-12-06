@@ -8,6 +8,8 @@ import com.example.project_bigbangk.model.Client;
 import com.example.project_bigbangk.model.RegistrationDTO;
 import com.example.project_bigbangk.service.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.json.Jackson2JsonEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,17 +19,20 @@ public class Registration {
 
     private RegistrationService registrationService;
 
-
     public Registration(RegistrationService registrationService) {
         this.registrationService = registrationService;
-        //als dit lukt response sturen
+
     }
 
     @PostMapping("/register")
     @ResponseBody
-    public void receiveRegistrationInput( @RequestBody RegistrationDTO registrationDTO) {
-        //krijgt een error als de inkomende data niet voldoet aan het object, wat als verkeerde data toch door frontend komt?
-        registrationService.registerClient(registrationDTO);
+    public ResponseEntity receiveRegistrationInput(@RequestBody RegistrationDTO registrationDTO) {
+        if(registrationService.registerClient(registrationDTO)){
+            //stuur naar login, en popup?(voor later)
+            return ResponseEntity.ok(HttpStatus.OK);
+        }else{
+            return ResponseEntity.ok(HttpStatus.OK);
+        }
     }
 
 }

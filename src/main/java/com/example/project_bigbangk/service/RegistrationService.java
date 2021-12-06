@@ -27,15 +27,17 @@ public class RegistrationService {
 
     public LocalDate convertedDateOfBirth;
 
-    public void registerClient(RegistrationDTO registrationDTO){
+    public boolean registerClient(RegistrationDTO registrationDTO){
         if(checkRegistrationInput(registrationDTO)){
             System.out.println(registrationDTO.getFirstName() + " " + registrationDTO.getLastName());
             // adress aanmaken, client aanmaken met embedden adress
             //check of email al gebruikt is en of address al bestaat(in dat geval geen error maar niet nog een x opslaan)
             //hierboven ook via services
             //opslaan in db via client service
+            return true;
         }else{
             System.out.println("error.");
+            return false;
         }
     }
 
