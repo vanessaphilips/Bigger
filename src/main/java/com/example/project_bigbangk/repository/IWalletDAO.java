@@ -5,7 +5,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 public interface IWalletDAO {
 
-public void saveWallet(Wallet wallet);
+public void createNewWallet(Wallet wallet);
 
 public void updateBalance(Wallet wallet);
 

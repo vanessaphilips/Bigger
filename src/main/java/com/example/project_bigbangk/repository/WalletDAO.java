@@ -20,7 +20,7 @@ public class WalletDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void saveWallet(Wallet wallet) {
+    public void createNewWallet(Wallet wallet) {
         String slq = "Insert into wallet values(?,?);";
         jdbcTemplate.update(slq, wallet.getIban(), wallet.getBalance());
     }
