@@ -1,7 +1,7 @@
 package com.example.project_bigbangk.controller;
 /*
 
-@Author Philip Beeltje, Studentnummer: 500519452
+@Author Bigbangk
 */
 
 import com.example.project_bigbangk.model.Client;
@@ -20,6 +20,7 @@ public class Registration {
 
     public Registration(RegistrationService registrationService) {
         this.registrationService = registrationService;
+        //als dit lukt response sturen
     }
 
     @PostMapping("/register")
