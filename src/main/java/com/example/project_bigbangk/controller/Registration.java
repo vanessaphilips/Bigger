@@ -26,13 +26,13 @@ public class Registration {
 
     @PostMapping("/register")
     @ResponseBody
-    public ResponseEntity receiveRegistrationInput(@RequestBody RegistrationDTO registrationDTO) {
-        if(registrationService.registerClient(registrationDTO)){
-            //stuur naar login, en popup?(voor later)
-            return ResponseEntity.ok(HttpStatus.OK);
-        }else{
-            return ResponseEntity.ok(HttpStatus.OK);
-        }
+    public void receiveRegistrationInput(@RequestBody RegistrationDTO registrationDTO) {
+        registrationService.registerClient(registrationDTO);
+        //stuur naar login, en popup?(voor later)
+//            return ResponseEntity.ok(HttpStatus.OK);
+//        }else{
+//            return ResponseEntity.ok(HttpStatus.OK);
+//        }
     }
 
 }
