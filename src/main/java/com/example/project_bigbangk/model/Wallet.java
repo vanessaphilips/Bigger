@@ -34,6 +34,11 @@ public class Wallet {
         this.owner = owner;
     }
 
+    public Wallet(String iban, double balance) {
+        this.iban = iban;
+        this.balance = balance;
+    }
+
     @Override
     public String toString() {
         return "Wallet{" +
