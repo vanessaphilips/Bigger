@@ -28,7 +28,7 @@ public class LoginService {
 
     public String Login(String email, String password) {
         if ((authenticateService.authenticate(email, password))) {
-            Client client = clientService.findClientByEmail(email);
+            Client client = clientService.getClientByEmail(email);
             String token = jwtService.getToken(email, client.getFirstName());
             return token;
         }

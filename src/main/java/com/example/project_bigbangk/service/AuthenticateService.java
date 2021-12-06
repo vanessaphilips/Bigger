@@ -23,7 +23,7 @@ public class AuthenticateService {
     }
 
     public boolean authenticate(String email, String password) {
-        Client client = clientService.findClientByEmail(email);
+        Client client = clientService.getClientByEmail(email);
         return hashService.hashCheck(password, client.getPassWord());
     }
 

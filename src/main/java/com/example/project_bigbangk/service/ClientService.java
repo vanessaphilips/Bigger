@@ -24,9 +24,9 @@ public class ClientService {
     //FIXME uiteindelijk moeten alle aanroepen van DAOs vanuit de root repository en niet in services,
     // komt dus nog een stapje tussen die nu vrij overbodig is maar later handig is (denk ik)
 
-//    public Client getClientByEmail(String email) {
-//        return rootRepository.findClientByEmail(email);
-//    }
+    public Client getClientByEmail(String email) {
+        return rootRepository.findClientByEmail(email);
+    }
 
     public List<Client> getAllClients() {
         return clientDAO.findAllClients();
@@ -49,7 +49,5 @@ public class ClientService {
         return clientDAO.findClientByLastName(lastName);
     }
 
-    public Client findClientByEmail(String email) {
-        return null;
-    }
+
 }
