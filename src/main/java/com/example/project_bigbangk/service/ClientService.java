@@ -49,4 +49,7 @@ public class ClientService {
         return clientDAO.findClientByLastName(lastName);
     }
 
+    public Client findClientByEmail(String email) {
+        return null;
+    }
 }
