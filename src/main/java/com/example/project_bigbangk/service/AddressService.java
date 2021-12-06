@@ -32,6 +32,7 @@ public class AddressService {
     }
     //TODO: even nagaan deze, want 1. nog geen clientDAO ingericht en 2. moet deze hier of in rootdepository ivm opvragen gegevens
     // via client (immers gegevens gekoppeld aan client en dus ook update via client-input
+    //FIXME moet nu helaas ook anders ivm email
     public String updateAddress(Address address) {
         if (addressDAO.findAddressByEmail(address.getEmail()) == null ) {
             return "This client does not exist, update failed.";

@@ -4,6 +4,7 @@ import com.mysql.cj.x.protobuf.MysqlxDatatypes;
 
 public class Address {
 
+    //FIXME email moet hier en uit de DAO gehaald worden (mijn fout door stomme erd)
     private String postalCode;
     private String street;
     private int number;

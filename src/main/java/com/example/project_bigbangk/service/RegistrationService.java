@@ -30,7 +30,7 @@ public class RegistrationService {
     public boolean registerClient(RegistrationDTO registrationDTO){
         if(checkRegistrationInput(registrationDTO)){
             System.out.println(registrationDTO.getFirstName() + " " + registrationDTO.getLastName());
-            // adress aanmaken, client aanmaken met embedden adress
+            // address aanmaken, client aanmaken(converteer LocalDate naar Date)  met embedden adress
             //check of email al gebruikt is en of address al bestaat(in dat geval geen error maar niet nog een x opslaan)
             //hierboven ook via services
             //opslaan in db via client service
