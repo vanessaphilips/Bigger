@@ -9,26 +9,30 @@ package com.example.project_bigbangk.repository;
 
 import com.example.project_bigbangk.model.Address;
 import com.example.project_bigbangk.model.Client;
+import com.example.project_bigbangk.model.Wallet;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 
 @Repository
 public class RootRepository {
 
    private ClientDAO clientDAO;
    private AddressDAO addressDAO;
+   private WalletDAO walletDAO;
 
-   public RootRepository(AddressDAO addressDAO, ClientDAO clientDAO) {
-      this.addressDAO  = addressDAO;
-      this.clientDAO  = clientDAO;
+   public RootRepository(ClientDAO clientDAO, AddressDAO addressDAO, WalletDAO walletDAO) {
+      this.clientDAO = clientDAO;
+      this.addressDAO = addressDAO;
+      this.walletDAO = walletDAO;
    }
 
-   public Client findClientByEmail(String email){
+   // CLIENT
+
+   public Client findClientByEmail(String email) {
       Client client = clientDAO.findClientByEmail(email);
-      return client;
-   }
-
-   public Address findAddressByEmail(String email){
+      if (client == null) {
+      }
       return null;
    }
 }
