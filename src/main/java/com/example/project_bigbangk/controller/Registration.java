@@ -14,7 +14,6 @@ import org.springframework.http.codec.json.Jackson2JsonEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/client")
 public class Registration {
 
     private RegistrationService registrationService;
@@ -26,13 +25,13 @@ public class Registration {
 
     @PostMapping("/register")
     @ResponseBody
-    public void receiveRegistrationInput(@RequestBody RegistrationDTO registrationDTO) {
-        registrationService.registerClient(registrationDTO);
+    public ResponseEntity receiveRegistrationInput(@RequestBody RegistrationDTO registrationDTO) {
+        if(registrationService.registerClient(registrationDTO)){
         //stuur naar login, en popup?(voor later)
-//            return ResponseEntity.ok(HttpStatus.OK);
-//        }else{
-//            return ResponseEntity.ok(HttpStatus.OK);
-//        }
+            return ResponseEntity.ok(HttpStatus.OK);
+        }else{
+            return ResponseEntity.ok(HttpStatus.OK);
+        }
     }
 
 }
