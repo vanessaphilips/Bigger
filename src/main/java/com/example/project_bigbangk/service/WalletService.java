@@ -37,4 +37,17 @@ public class WalletService {
     private void updateWalletBalance(Wallet wallet) {
         walletDAO.updateBalance(wallet);
     }
+
+    private void updateWalletBalanceAndAsset(Wallet wallet) {
+
+    }
+    private List<Wallet> getAllWalletsWithAsset() {
+        return null;
+    }
+
+    private Wallet findWalletWithAssestByIban(String iban){
+        return null;
+    }
+
+
 }
