@@ -22,7 +22,7 @@ import java.util.Map;
 public class JWTService implements ITokenService {
 
     private final Logger logger = LoggerFactory.getLogger(JWTService.class);
-    private final long EXPIRATION_TIME = 600000;
+    private final long EXPIRATION_TIME = 600*1000;  //milliseconds
     private ISecretKeyService secretKeyService;
     private Algorithm ALGORITHM;
 
@@ -31,7 +31,7 @@ public class JWTService implements ITokenService {
         super();
         logger.info("New JWTService");
         this.secretKeyService = secretKeyService;
-        ALGORITHM = Algorithm.HMAC256(secretKeyService.toString());
+        ALGORITHM = Algorithm.HMAC256(this.secretKeyService.toString());
     }
 
     @Override
