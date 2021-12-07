@@ -8,7 +8,7 @@ public interface IAddressDAO {
 
     public void save(Address mpAddress);
 
-    public Address findAddressByEmail(String email);
+    public Address findAddressByPostalcodeNumber(String postalcode, int number);
 
     public List<Address> findAllAddresses();
 

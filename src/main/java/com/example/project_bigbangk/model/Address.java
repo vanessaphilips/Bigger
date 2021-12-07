@@ -4,21 +4,18 @@ import com.mysql.cj.x.protobuf.MysqlxDatatypes;
 
 public class Address {
 
-    //FIXME email moet hier en uit de DAO gehaald worden (mijn fout door stomme erd)
     private String postalCode;
     private String street;
     private int number;
     private String city;
     private String country;
-    private String email;
 
-    public Address(String postalCode, String street, int number, String city, String country, String email) {
+    public Address(String postalCode, String street, int number, String city, String country) {
         this.postalCode = postalCode;
         this.street = street;
         this.number = number;
         this.city = city;
         this.country = country;
-        this.email = email;
     }
 
     public String getPostalCode() {
@@ -61,9 +58,6 @@ public class Address {
         this.country = country;
     }
 
-    public String getEmail() { return email; }
-
-    public void setEmail(String email) { this.email = email; }
 
     @Override
     public String toString() {

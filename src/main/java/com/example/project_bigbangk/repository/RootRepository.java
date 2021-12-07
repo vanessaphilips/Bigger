@@ -7,28 +7,28 @@
 
 package com.example.project_bigbangk.repository;
 
-import com.example.project_bigbangk.model.Address;
 import com.example.project_bigbangk.model.Client;
 import org.springframework.stereotype.Repository;
-
 
 @Repository
 public class RootRepository {
 
-   private ClientDAO clientDAO;
-   private AddressDAO addressDAO;
+   private JdbcClientDAO jdbcClientDAO;
+   private JdbcAddressDAO jdbcAddressDAO;
+   private JdbcWalletDAO jdbcWalletDAO;
 
-   public RootRepository(AddressDAO addressDAO, ClientDAO clientDAO) {
-      this.addressDAO  = addressDAO;
-      this.clientDAO  = clientDAO;
+   public RootRepository(JdbcClientDAO jdbcClientDAO, JdbcAddressDAO jdbcAddressDAO, JdbcWalletDAO jdbcWalletDAO) {
+      this.jdbcClientDAO = jdbcClientDAO;
+      this.jdbcAddressDAO = jdbcAddressDAO;
+      this.jdbcWalletDAO = jdbcWalletDAO;
    }
 
-   public Client findClientByEmail(String email){
-      Client client = clientDAO.findClientByEmail(email);
-      return client;
-   }
+   // CLIENT
 
-   public Address findAddressByEmail(String email){
+   public Client findClientByEmail(String email) {
+      Client client = jdbcClientDAO.findClientByEmail(email);
+      if (client == null) {
+      }
       return null;
    }
 }
