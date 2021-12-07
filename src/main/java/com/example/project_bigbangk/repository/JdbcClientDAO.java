@@ -12,12 +12,12 @@ import java.sql.*;
 import java.util.List;
 
 @Repository
-public class ClientDAO implements IClientDAO{
+public class JdbcClientDAO implements IClientDAO{
 
     JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public ClientDAO(JdbcTemplate jdbcTemplate) {
+    public JdbcClientDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 

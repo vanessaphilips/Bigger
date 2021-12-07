@@ -15,12 +15,12 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Repository
-public class AddressDAO implements IAddressDAO {
+public class JdbcAddressDAO implements IAddressDAO {
 
     JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public AddressDAO(JdbcTemplate jdbcTemplate) {
+    public JdbcAddressDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 

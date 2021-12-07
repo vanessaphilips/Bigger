@@ -11,12 +11,12 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Repository
-public class WalletDAO {
+public class JdbcWalletDAO {
 
     JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public WalletDAO(JdbcTemplate jdbcTemplate) {
+    public JdbcWalletDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
