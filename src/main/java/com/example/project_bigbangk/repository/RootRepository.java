@@ -13,20 +13,18 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class RootRepository {
 
-   private JdbcClientDAO jdbcClientDAO;
-   private JdbcAddressDAO jdbcAddressDAO;
-   private JdbcWalletDAO jdbcWalletDAO;
+   private IClientDAO clientDAO;
+   private IAddressDAO addressDAO;
 
-   public RootRepository(JdbcClientDAO jdbcClientDAO, JdbcAddressDAO jdbcAddressDAO, JdbcWalletDAO jdbcWalletDAO) {
-      this.jdbcClientDAO = jdbcClientDAO;
-      this.jdbcAddressDAO = jdbcAddressDAO;
-      this.jdbcWalletDAO = jdbcWalletDAO;
+   public RootRepository(IClientDAO clientDAO, IAddressDAO addressDAO) {
+      this.clientDAO = clientDAO;
+      this.addressDAO = addressDAO;
    }
 
    // CLIENT
 
    public Client findClientByEmail(String email) {
-      Client client = jdbcClientDAO.findClientByEmail(email);
+      Client client = clientDAO.findClientByEmail(email);
       if (client == null) {
       }
       return null;
