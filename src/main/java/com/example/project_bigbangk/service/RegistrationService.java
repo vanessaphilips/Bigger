@@ -35,9 +35,9 @@ public class RegistrationService {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private LocalDate convertedDateOfBirth;
     private HashService hashService;
-    private IbanGenerator ibanGenerator;
+    private IbanGeneratorService ibanGenerator;
 
-    public RegistrationService(HashService hashService, IbanGenerator ibanGenerator, RootRepository rootRepository) {
+    public RegistrationService(HashService hashService, IbanGeneratorService ibanGenerator, RootRepository rootRepository) {
         this.hashService = hashService;
         this.ibanGenerator = ibanGenerator;
         this.rootRepository = rootRepository;
