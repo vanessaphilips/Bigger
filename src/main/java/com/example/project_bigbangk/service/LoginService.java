@@ -26,12 +26,15 @@ public class LoginService {
         this.jwtService = jwtService;
     }
 
-    public String Login(String email, String password) {
+    public String login(String email, String password) {
         if ((authenticateService.authenticate(email, password))) {
             Client client = clientService.getClientByEmail(email);
             String token = jwtService.getToken(email, client.getFirstName());
+            logger.info("login user %s succes", client.getEmail());
             return token;
         }
+        logger.info("No combination of %s %s", email, password);
         return null;
+
     }
 }

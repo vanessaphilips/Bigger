@@ -24,7 +24,10 @@ public class AuthenticateService {
 
     public boolean authenticate(String email, String password) {
         Client client = clientService.getClientByEmail(email);
-        return hashService.hashCheck(password, client.getPassWord());
+        if (client != null) {
+            return hashService.hashCheck(password, client.getPassWord());
+        }
+        return false;
     }
 
     public boolean authenticate(String token) {
