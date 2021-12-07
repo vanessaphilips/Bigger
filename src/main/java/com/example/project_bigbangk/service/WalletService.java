@@ -1,12 +1,9 @@
 package com.example.project_bigbangk.service;
 
-import com.example.project_bigbangk.model.IbanGenerator;
 import com.example.project_bigbangk.model.Wallet;
 import com.example.project_bigbangk.repository.JdbcWalletDAO;
 import com.example.project_bigbangk.repository.RootRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class WalletService {
@@ -15,7 +12,7 @@ public class WalletService {
 
     private JdbcWalletDAO jdbcWalletDAO;
     private RootRepository rootRepository;
-    private IbanGenerator ibanGenerator;
+    private IbanGeneratorService ibanGeneratorService;
 
     public WalletService(JdbcWalletDAO jdbcWalletDAO, RootRepository rootRepository) {
         this.jdbcWalletDAO = jdbcWalletDAO;
@@ -23,7 +20,7 @@ public class WalletService {
     }
 
     public void createNewWallet() {
-        Wallet wallet = new Wallet(ibanGenerator.ibanGenerator(), START_CAPITAL_NEW_USER);
+        Wallet wallet = new Wallet(ibanGeneratorService.ibanGenerator(), START_CAPITAL_NEW_USER);
     }
 
     private void updateWalletBalanceAndAsset(Wallet wallet) {
