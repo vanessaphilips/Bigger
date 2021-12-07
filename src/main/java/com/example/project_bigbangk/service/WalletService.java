@@ -2,8 +2,8 @@ package com.example.project_bigbangk.service;
 
 import com.example.project_bigbangk.model.IbanGenerator;
 import com.example.project_bigbangk.model.Wallet;
+import com.example.project_bigbangk.repository.JdbcWalletDAO;
 import com.example.project_bigbangk.repository.RootRepository;
-import com.example.project_bigbangk.repository.WalletDAO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,41 +13,24 @@ public class WalletService {
 
     private final int START_CAPITAL_NEW_USER = 10000;
 
-    private WalletDAO walletDAO;
+    private JdbcWalletDAO jdbcWalletDAO;
     private RootRepository rootRepository;
     private IbanGenerator ibanGenerator;
 
-    public WalletService(WalletDAO walletDAO, RootRepository rootRepository) {
-        this.walletDAO = walletDAO;
+    public WalletService(JdbcWalletDAO jdbcWalletDAO, RootRepository rootRepository) {
+        this.jdbcWalletDAO = jdbcWalletDAO;
         this.rootRepository = rootRepository;
     }
 
-    public Wallet createNewWallet() {
-        return new Wallet(ibanGenerator.ibanGenerator(), START_CAPITAL_NEW_USER);
-    }
-
-    public Wallet findWalletByIban (String iban) {
-        return walletDAO.findWalletByIban(iban);
-    }
-
-    public List<Wallet> getAllWallets() {
-        return walletDAO.findAllWallets();
-    }
-
-    private void updateWalletBalance(Wallet wallet) {
-        walletDAO.updateBalance(wallet);
+    public void createNewWallet() {
+        Wallet wallet = new Wallet(ibanGenerator.ibanGenerator(), START_CAPITAL_NEW_USER);
     }
 
     private void updateWalletBalanceAndAsset(Wallet wallet) {
-
     }
-    private List<Wallet> getAllWalletsWithAsset() {
+
+    private Wallet findWalletWithAssetByIban(String iban){
         return null;
     }
-
-    private Wallet findWalletWithAssestByIban(String iban){
-        return null;
-    }
-
 
 }
