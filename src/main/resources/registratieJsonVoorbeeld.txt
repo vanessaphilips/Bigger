@@ -1,0 +1,29 @@
+ {
+    "email" : "philip.beeltje@gmail.com",
+    "password" : "password12345",
+    "firstName" : "Philip",
+    "insertion" : "",
+    "lastName" : "Beeltje",
+    "bsn" : "123456789",
+    "dateOfBirth" : "1986-01-07",
+    "postalCode" : "1241HL",
+    "street" : "HuisjesSteeg",
+    "number" : 8,
+    "city" : "Amstelredam",
+    "country" : "NLD"
+}
+
+{
+    "email":"henk@unicom.nl",
+    "password":"password1234345",
+    "firstName":"Henk",
+    "insertion":"de",
+    "lastName":"Kort",
+    "bsn":"123434546",
+    "dateOfBirth":"1950-01-01",
+    "postalCode":"1111BN",
+    "street":"Straatie",
+    "number":9,
+    "city":"Muiden",
+    "country":"NLD"
+}

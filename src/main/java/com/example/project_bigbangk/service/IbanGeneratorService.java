@@ -1,6 +1,11 @@
-package com.example.project_bigbangk.model;
+package com.example.project_bigbangk.service;
 
-public class IbanGenerator {
+import com.example.project_bigbangk.repository.RootRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class IbanGeneratorService {
 
     private String ACCOUNT_NUMBER_COMPLEATOR = "000";
     private String BANK_CODE = "BGBK";
@@ -9,6 +14,12 @@ public class IbanGenerator {
     public int MAX_CHECK_NUMBER_VALUE = 80;
     private int MAX_ACCOUNT_NUMBER = 8999999;
     private int MIN_ACCOUNT_NUMBER = 1000000;
+    private RootRepository rootRepository;
+
+    @Autowired
+    public IbanGeneratorService(RootRepository rootRepository) {
+        this.rootRepository = rootRepository;
+    }
 
     public String ibanGenerator() {
         String accountNumber = accountNumberGenerator();

@@ -15,12 +15,12 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Repository
-public class AddressDAO implements IAddressDAO {
+public class JdbcAddressDAO implements IAddressDAO {
 
     JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public AddressDAO(JdbcTemplate jdbcTemplate) {
+    public JdbcAddressDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -33,11 +33,11 @@ public class AddressDAO implements IAddressDAO {
     }
 
     @Override
-    public Address findAddressByPostalcodeNumber(String postalcode, int number) {
-        String sql = "Select * From Address Where postalcode = ? AND number = ?";
+    public Address findAddressByEmail(String email) {
+        String sql = "Select * From Address Where postalcode = ? AND number = ?"; //icm SQL syntax (join) oplossen
         Address address;
         try {
-            address = jdbcTemplate.queryForObject(sql, new AddressRowMapper(), postalcode, number);
+            address = jdbcTemplate.queryForObject(sql, new AddressRowMapper(), email);
         } catch (EmptyResultDataAccessException noResult) {
             address = null;
         }
@@ -48,17 +48,6 @@ public class AddressDAO implements IAddressDAO {
     public List<Address> findAllAddresses() {
         String sql = "Select * From address";
         return jdbcTemplate.query(sql, new AddressRowMapper());
-    }
-
-    // TODO deze even anders inrichten, dinsdag afstemmen met team/Deek
-    @Override
-    public void update(Address address) {
-//        String sql = "Update address Set postalcode = ?, street = ?, " +
-//                "number = ?, city = ?, country = ? where email = ?;";
-//        jdbcTemplate.update(sql, address.getPostalCode(),
-//                address.getStreet(), address.getNumber(),
-//                address.getCity(), address.getCountry(),
-//                address.getEmail());
     }
 
     @Override
