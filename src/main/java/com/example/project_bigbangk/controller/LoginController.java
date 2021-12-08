@@ -38,7 +38,7 @@ public class LoginController {
         if(token!=null){
             return ResponseEntity.ok(token);
         }else{
-            return ResponseEntity.status(401).body("Combination of username and password unknown");
+            return ResponseEntity.status(401).body("Username or password not valid");
         }
     }
 }
