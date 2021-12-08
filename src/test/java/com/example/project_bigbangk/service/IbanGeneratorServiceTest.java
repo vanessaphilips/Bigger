@@ -1,15 +1,11 @@
 package com.example.project_bigbangk.service;
 
 import com.example.project_bigbangk.model.Wallet;
-import com.example.project_bigbangk.repository.JdbcWalletDAO;
 import com.example.project_bigbangk.repository.RootRepository;
-import com.sun.source.tree.ModuleTree;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
 import java.util.ArrayList;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
