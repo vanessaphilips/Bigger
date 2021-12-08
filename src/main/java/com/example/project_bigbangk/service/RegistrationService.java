@@ -43,12 +43,11 @@ public class RegistrationService {
         this.rootRepository = rootRepository;
     }
 
-    public boolean registerClient(RegistrationDTO registrationDTO){
+    public String registerClient(RegistrationDTO registrationDTO){
         Client existingClient = rootRepository.findClientByEmail(registrationDTO.getEmail());
         if(existingClient != null){
-            return false;
+            return "Duplicate Email";
         }
-
         if(checkRegistrationInput(registrationDTO)){
             System.out.println(registrationDTO.getFirstName() + " " + registrationDTO.getLastName());
 
@@ -59,16 +58,12 @@ public class RegistrationService {
             Client client = new Client(registrationDTO.getFirstName(), registrationDTO.getInsertion(), registrationDTO.getLastName(), registrationDTO.getEmail(),
                     registrationDTO.getBsn(), dateOfBirth, hashService.hash(registrationDTO.getPassword()), address, wallet);
 
+            //opslaan via ROOT...
 
-
-            //check of email al gebruikt is en/of address al bestaat(in dat geval geen error maar niet nog een x opslaan)
-            //opslaan via Root, dus client address
-            return true;
-            //moet hier http berichten tonen
+            return "Registration Successful";
         }else{
             System.out.println("error.");
-            //moet hier http berichten returnen.
-            return false;
+            return "Incorrect Input";
         }
     }
 
@@ -106,6 +101,7 @@ public class RegistrationService {
         return false;
     }
 
+    //voegt alle input die strings zijn aan een list toe en loopt er doorheen om te kijken of ze niet leeg zijn. (behalve insertion die mag leeg zijn)
     private boolean checkForEmptyStrings(RegistrationDTO registrationDTO) {
         List<String> inputNotNullList = Arrays.asList(registrationDTO.getFirstName(), registrationDTO.getLastName(),
                 registrationDTO.getBsn(), registrationDTO.getDateOfBirth(), registrationDTO.getEmail(), registrationDTO.getPassword(), registrationDTO.getStreet(),
@@ -126,19 +122,4 @@ public class RegistrationService {
         return matcher.matches();
     }
 
-//in postman, zet op post. http://localhost:8080/client/register. zet hem op body-raw-json. en dan dit in de body:
-    //{
-    //"email" : "philip.beeltje@gmail.com",
-    //"password" : "password12345",
-    //"firstName" : "Philip",
-    //"insertion" : "",
-    //"lastName" : "Beeltje",
-    //"bsn" : "123456789",
-    //"dateofbirth" : "1986-01-07",
-    //"postalCode" : "1241HL",
-    //"street" : "HuisjesSteeg",
-    //"number" : 8,
-    //"city" : "Amstelredam",
-    //"country" : "NLD"
-    //}
 }

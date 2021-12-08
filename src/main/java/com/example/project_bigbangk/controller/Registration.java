@@ -20,17 +20,18 @@ public class Registration {
 
     public Registration(RegistrationService registrationService) {
         this.registrationService = registrationService;
-
     }
 
     @PostMapping("/register")
     @ResponseBody
     public ResponseEntity receiveRegistrationInput(@RequestBody RegistrationDTO registrationDTO) {
-        if(registrationService.registerClient(registrationDTO)){
+        if(registrationService.registerClient(registrationDTO).equals("Registration Successful")){
         //stuur naar login, en popup?(voor later)
-            return ResponseEntity.ok(HttpStatus.OK);
-        }else{
-            return ResponseEntity.ok(HttpStatus.OK);
+            return ResponseEntity.status(201).body("Registration Successful");
+        }else if(registrationService.registerClient(registrationDTO).equals("Duplicate Email")) {
+            return ResponseEntity.status(409).body("This e-mail is already in use");
+        }else {
+            return ResponseEntity.status(406).body("Bad Input");
         }
     }
 
