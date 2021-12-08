@@ -1,6 +1,7 @@
 package com.example.project_bigbangk.controller;
 
 import com.example.project_bigbangk.ProjectBigBangKApplication;
+import com.example.project_bigbangk.Utilities.ObjectToJsonHelper;
 import com.example.project_bigbangk.model.LoginDTO;
 import com.example.project_bigbangk.service.ClientService;
 import com.example.project_bigbangk.service.LoginService;
@@ -52,7 +53,7 @@ class LoginControllerTest {
         this.mockMvc = mockMvc;
         LoginDTO loginDTO = new LoginDTO("deek", "password12345");
         this.builder = MockMvcRequestBuilders.post("/login")
-                .content(asJsonString(loginDTO))
+                .content(ObjectToJsonHelper.objectToJson(loginDTO))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
 
@@ -90,13 +91,5 @@ class LoginControllerTest {
         }
     }
 
-    private static String asJsonString(final Object obj) {
-        try {
-            final ObjectMapper mapper = new ObjectMapper();
-            final String jsonContent = mapper.writeValueAsString(obj);
-            return jsonContent;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+
 }
