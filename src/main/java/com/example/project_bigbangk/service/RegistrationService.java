@@ -52,7 +52,7 @@ public class RegistrationService {
             System.out.println(registrationDTO.getFirstName() + " " + registrationDTO.getLastName());
 
             Date dateOfBirth = java.sql.Date.valueOf(convertedDateOfBirth);
-            Wallet wallet = new Wallet(ibanGenerator.accountNumberGenerator(),10000);
+            Wallet wallet = new Wallet(ibanGenerator.getIban(),10000);
             Address address = new Address(registrationDTO.getPostalCode(),registrationDTO.getStreet(), registrationDTO.getNumber(), registrationDTO.getCity(),
                     registrationDTO.getCountry());
             Client client = new Client(registrationDTO.getFirstName(), registrationDTO.getInsertion(), registrationDTO.getLastName(), registrationDTO.getEmail(),

@@ -20,7 +20,7 @@ public class WalletService {
     }
 
     public void createNewWallet() {
-        Wallet wallet = new Wallet(ibanGeneratorService.ibanGenerator(), START_CAPITAL_NEW_USER);
+        Wallet wallet = new Wallet(ibanGeneratorService.getIban(), START_CAPITAL_NEW_USER);
     }
 
     private void updateWalletBalanceAndAsset(Wallet wallet) {
