@@ -58,7 +58,7 @@ public class RegistrationService {
             Client client = new Client(registrationDTO.getFirstName(), registrationDTO.getInsertion(), registrationDTO.getLastName(), registrationDTO.getEmail(),
                     registrationDTO.getBsn(), dateOfBirth, hashService.hash(registrationDTO.getPassword()), address, wallet);
 
-            //opslaan via ROOT...
+            rootRepository.createNewlyRegisteredClient(client);
 
             return "Registration Successful";
         }else{
