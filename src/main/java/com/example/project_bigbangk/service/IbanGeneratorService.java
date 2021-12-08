@@ -24,7 +24,7 @@ public class IbanGeneratorService {
     public String ibanGenerator() {
         String accountNumber = accountNumberGenerator();
         String checkNumber = checkNumberGenerator();
-        return COUTRY_CODE + checkNumber + BANK_CODE + accountNumber;
+        return ibanStringCheckForDoubles(COUTRY_CODE + checkNumber + BANK_CODE + accountNumber);
     }
 
     public String accountNumberGenerator() {
@@ -36,5 +36,13 @@ public class IbanGeneratorService {
     private String checkNumberGenerator() {
         String checkNumber = Integer.toString((int) (MAX_CHECK_NUMBER_VALUE * Math.random() + MIN_CHECK_NUMBER_VALUE));
         return checkNumber;
+    }
+
+    public String ibanStringCheckForDoubles(String iban) {
+        if (rootRepository.checkIfIbanIsFree(iban) == null) {
+            return iban;
+        } else {
+            return ibanGenerator();
+        }
     }
 }

@@ -8,6 +8,7 @@
 package com.example.project_bigbangk.repository;
 
 import com.example.project_bigbangk.model.Client;
+import com.example.project_bigbangk.model.Wallet;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -15,6 +16,7 @@ public class RootRepository {
 
    private IClientDAO clientDAO;
    private IAddressDAO addressDAO;
+   private IWalletDAO walletDAO;
 
    public RootRepository(IClientDAO clientDAO, IAddressDAO addressDAO) {
       this.clientDAO = clientDAO;
@@ -28,5 +30,12 @@ public class RootRepository {
       if (client == null) {
       }
       return null;
+   }
+
+   // IBAN
+
+   public Wallet checkIfIbanIsFree(String iban) {
+      Wallet wallet = walletDAO.findWalletByIban(iban);
+      return wallet;
    }
 }
