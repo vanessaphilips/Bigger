@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.http.HttpResponse;
-
+/**
+ * created by Pieter Jan Bleichrodt
+ */
 @RestController
 public class LoginController {
 
@@ -38,7 +40,7 @@ public class LoginController {
         if(token!=null){
             return ResponseEntity.ok(token);
         }else{
-            return ResponseEntity.status(401).body("Combination of username and password unknown");
+            return ResponseEntity.status(401).body("Username or password not valid");
         }
     }
 }

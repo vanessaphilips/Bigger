@@ -6,7 +6,9 @@ package com.example.project_bigbangk.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
+/**
+ * created by Pieter Jan Bleichrodt
+ */
 @Service
 public class SecretKeyService implements ISecretKeyService {
 
