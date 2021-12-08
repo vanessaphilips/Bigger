@@ -1,5 +1,6 @@
 package com.example.project_bigbangk.repository;
 
+import com.example.project_bigbangk.model.Client;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,9 +31,13 @@ class JdbcClientDAOTest {
     void saveClient() {
     }
 
-    @Test
-    void findClientByEmail() {
-    }
+//    @Test
+//    void findClientByEmail() {
+//        Client actual = clientDAOUnderTest.findClientByEmail("sander@deboer.nl");
+//        Client expected = new Client("Sander", "de", "Boer", "sander@deboer.nl",
+//                "123456789", 1966-09-09, "sanderdeboer");
+//        assertThat(expected).isEqualTo(actual);
+//    }
 
     @Test
     void findAllClients() {

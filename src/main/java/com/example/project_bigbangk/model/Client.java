@@ -42,6 +42,10 @@ public class Client {
         this.passWord = passWord;
     }
 
+    public Client(String firstName, String lastName, String email, String bsn, Date dateOfBirth, String passWord) {
+        this(firstName, null, lastName, email, bsn, dateOfBirth, passWord);
+    }
+
     // TODO alle getters en setters aangemaakt. Als blijkt dat eea niet gebruikt wordt dan weghalen.
 
     public String getFirstName() {
@@ -131,7 +135,7 @@ public class Client {
                 '}';
     }
 
-    //FIXME alleen comparison van email om gebruikers te vergelijken
+    //NOTE: alleen comparison van email om gebruikers te vergelijken.
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

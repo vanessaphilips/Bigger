@@ -33,13 +33,7 @@ public class JdbcClientDAO implements IClientDAO{
     @Override
     public Client findClientByEmail(String email){
         String sql = "SELECT * FROM Client WHERE email = ?";
-        Client client;
-        try {
-            client = jdbcTemplate.queryForObject(sql, new ClientRowMapper(), email);
-        } catch (EmptyResultDataAccessException noResult) {
-            client = null;
-        }
-        return client;
+        return jdbcTemplate.queryForObject(sql, new ClientRowMapper(), email);
     }
 
     @Override
