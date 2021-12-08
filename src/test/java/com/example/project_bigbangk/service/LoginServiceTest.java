@@ -42,4 +42,10 @@ class LoginServiceTest {
         String actual = loginService.login("deek@deek.nl", "DeekPW");
         assertEquals(expected, actual);
     }
+    @Test
+    public void loginUnSuccesFullWithNull() {
+        String expected = null;
+        String actual = loginService.login(null, null);
+        assertEquals(expected, actual);
+    }
 }

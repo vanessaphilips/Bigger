@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 /**
  * created by Pieter Jan Bleichrodt
  */
@@ -29,7 +30,7 @@ public class LoginService {
     }
 
     public String login(String email, String password) {
-        if ((authenticateService.authenticate(email, password))) {
+        if ((email != null && password != null && authenticateService.authenticate(email, password))) {
             Client client = clientService.getClientByEmail(email);
             String token = jwtService.getToken(email, client.getFirstName());
             logger.info(String.format("login user %s succes", client.getEmail()));
