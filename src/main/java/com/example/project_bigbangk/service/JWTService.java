@@ -50,14 +50,13 @@ public class JWTService implements ITokenService {
                     .sign(ALGORITHM);
 
         } catch (JWTCreationException exception) {
-            //Invalid Signing configuration / Couldn't convert Claims.
-            logger.error(exception.getMessage());
+             logger.error(exception.getMessage());
         }
         return token;
     }
 
     @Override
-    public DecodedJWT authenticateToken(String token) {
+    public boolean authenticateToken(String token) {
 
         try {
             JWTVerifier verifier = JWT.require(ALGORITHM)
@@ -65,11 +64,11 @@ public class JWTService implements ITokenService {
                     .build(); //Reusable verifier instance
           DecodedJWT decodedJWT = verifier.verify(token);
           if(decodedJWT.getExpiresAt().after(new Date(System.currentTimeMillis()))){
-               return decodedJWT;
+               return true;
            }
         } catch (JWTVerificationException exception) {
             logger.error(exception.getMessage());
         }
-        return null;
+        return false;
     }
 }

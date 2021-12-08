@@ -30,10 +30,10 @@ public class LoginService {
         if ((authenticateService.authenticate(email, password))) {
             Client client = clientService.getClientByEmail(email);
             String token = jwtService.getToken(email, client.getFirstName());
-            logger.info("login user %s succes", client.getEmail());
+            logger.info(String.format("login user %s succes", client.getEmail()));
             return token;
         }
-        logger.info("No combination of %s %s", email, password);
+        logger.info(String.format("No combination of %s %s", email, password));
         return null;
 
     }

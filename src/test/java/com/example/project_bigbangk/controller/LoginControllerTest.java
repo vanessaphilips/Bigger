@@ -61,7 +61,6 @@ class LoginControllerTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     @Test
@@ -77,5 +76,4 @@ class LoginControllerTest {
             e.printStackTrace();
         }
     }
-
 }
