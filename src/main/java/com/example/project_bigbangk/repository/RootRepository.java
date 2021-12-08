@@ -34,7 +34,7 @@ public class RootRepository {
 
    // IBAN
 
-   public Wallet checkIfIbanIsFree(String iban) {
+   public Wallet findWalletByIban(String iban) {
       Wallet wallet = walletDAO.findWalletByIban(iban);
       return wallet;
    }

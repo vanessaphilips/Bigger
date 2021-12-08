@@ -2,6 +2,8 @@ package com.example.project_bigbangk.repository;
 
 import com.example.project_bigbangk.model.Wallet;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -32,7 +34,15 @@ public class JdbcWalletDAO implements IWalletDAO{
 
     public Wallet findWalletByIban(String iban) {
         String slq = "Select * From wallet Where IBAN = ?;";
-        return jdbcTemplate.queryForObject(slq, new walletRowMapper(), iban);
+        Wallet wallet = null;
+        try {
+            wallet = jdbcTemplate.queryForObject(slq, new walletRowMapper(), iban);
+        } catch (EmptyResultDataAccessException noResult) {
+            System.err.println(noResult.getMessage());
+        } catch (DataAccessException dataAccessException) {
+            System.err.println(dataAccessException.getMessage());
+        }
+        return wallet;
     }
 
     public class walletRowMapper implements RowMapper<Wallet> {

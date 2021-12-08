@@ -16,18 +16,32 @@ public class IbanGeneratorService {
     private int MIN_ACCOUNT_NUMBER = 1000000;
     private RootRepository rootRepository;
 
+
     @Autowired
     public IbanGeneratorService(RootRepository rootRepository) {
         this.rootRepository = rootRepository;
     }
 
-    public String ibanGenerator() {
-        String accountNumber = accountNumberGenerator();
-        String checkNumber = checkNumberGenerator();
-        return ibanStringCheckForDoubles(COUTRY_CODE + checkNumber + BANK_CODE + accountNumber);
+    public String getIban(){
+        boolean ibanExists = true;
+        String iban = ibanGenerator();
+        while (ibanExists) {
+            if (!ibanStringCheckForDoubles(iban)){
+                ibanExists = false;
+            } else {
+               iban = ibanGenerator();
+            }
+        }
+        return iban;
     }
 
-    public String accountNumberGenerator() {
+    private String ibanGenerator() {
+        String accountNumber = accountNumberGenerator();
+        String checkNumber = checkNumberGenerator();
+        return (COUTRY_CODE + checkNumber + BANK_CODE + accountNumber);
+    }
+
+    private String accountNumberGenerator() {
         String generatetAccountNumberAsString = Integer.toString((int) (MAX_ACCOUNT_NUMBER * Math.random() + MIN_ACCOUNT_NUMBER));
         String accountNumberAsString = ACCOUNT_NUMBER_COMPLEATOR + generatetAccountNumberAsString;
         return accountNumberAsString;
@@ -38,11 +52,10 @@ public class IbanGeneratorService {
         return checkNumber;
     }
 
-    public String ibanStringCheckForDoubles(String iban) {
-        if (rootRepository.checkIfIbanIsFree(iban) == null) {
-            return iban;
-        } else {
-            return ibanGenerator();
+    public boolean ibanStringCheckForDoubles(String iban) {
+        if (rootRepository.findWalletByIban(iban) == null){
+            return false;
         }
+        return true;
     }
 }
