@@ -2,7 +2,9 @@
 // Creation date 12/3/2021
 
 package com.example.project_bigbangk.service;
-
+/**
+ * created by Pieter Jan Bleichrodt
+ */
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;

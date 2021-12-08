@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.http.HttpResponse;
-
+/**
+ * created by Pieter Jan Bleichrodt
+ */
 @RestController
 public class LoginController {
 

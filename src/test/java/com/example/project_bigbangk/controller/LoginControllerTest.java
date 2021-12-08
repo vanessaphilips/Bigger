@@ -27,10 +27,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.security.MessageDigest;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+/**
+ * created by Pieter Jan Bleichrodt
+ */
 @WebMvcTest
-//@SpringBootTest(classes = ProjectBigBangKApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-//@EnableAutoConfiguration(exclude= SecurityAutoConfiguration.class)
 @TestPropertySource(properties =
         "spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration")
 class LoginControllerTest {
