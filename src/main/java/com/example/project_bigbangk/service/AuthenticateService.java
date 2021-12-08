@@ -7,7 +7,9 @@ package com.example.project_bigbangk.service;
 import com.example.project_bigbangk.model.Client;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+/**
+ * created by Pieter Jan Bleichrodt
+ */
 @Service
 public class AuthenticateService {
     ClientService clientService;
