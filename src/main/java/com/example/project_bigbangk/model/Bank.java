@@ -6,16 +6,16 @@ public class Bank {
     private Wallet wallet;
     private List<Client> clients;
     private List<Asset> offeredCryptos;
-    //private List<Administrator> administrators;
-    //private User bankUser;  // Bank direct aan User koppelen of wel voor een administrator gaan?
     private String name;
     private String code;
     private double feePercentage;
+    private double startingcapital;
 
-    public Bank(String name, String code, double feePercentage) {
+    public Bank(String name, String code, double feePercentage, double startingcapital) {
         this.name = name;
         this.code = code;
         this.feePercentage = feePercentage;
+        this.startingcapital = startingcapital;
     }
 
     @Override
@@ -27,6 +27,7 @@ public class Bank {
                 ", name='" + name + '\'' +
                 ", code='" + code + '\'' +
                 ", feePercentage=" + feePercentage +
+                ", startingcapital='" + startingcapital + '\'' +
                 '}';
     }
 
@@ -77,5 +78,13 @@ public class Bank {
 
     public void setFeePercentage(double feePercentage) {
         this.feePercentage = feePercentage;
+    }
+
+    public double getStartingcapital() {
+        return startingcapital;
+    }
+
+    public void setStartingcapital(double startingcapital) {
+        this.startingcapital = startingcapital;
     }
 }
