@@ -46,10 +46,6 @@ public class JWTService implements ITokenService {
             Long timeNow = System.currentTimeMillis();
             Date issuedAt = new Date(timeNow);
             Date experationDate = new Date(timeNow + EXPIRATION_TIME);
-            Map<String, String> payload = new HashMap<>();
-            payload.put("klantId", email);
-            payload.put("firstName", firstName);
-
             token = JWT.create().withIssuer("auth0").withIssuedAt(issuedAt)
                     .withExpiresAt(experationDate)
                     .withAudience(AUDIENCE)
@@ -87,7 +83,7 @@ public class JWTService implements ITokenService {
         try {
             JWTVerifier verifier = JWT.require(ALGORITHM)
                     .withIssuer("auth0")
-                    .build(); //Reusable verifier instance
+                    .build();
            return verifier.verify(token);
 
         } catch (JWTVerificationException exception) {

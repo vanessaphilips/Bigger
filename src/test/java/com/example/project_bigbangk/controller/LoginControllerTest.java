@@ -56,7 +56,6 @@ class LoginControllerTest {
                 .content(ObjectToJsonHelper.objectToJson(loginDTO))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
-
     }
 
 

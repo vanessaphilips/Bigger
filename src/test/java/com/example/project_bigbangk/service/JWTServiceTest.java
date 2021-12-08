@@ -14,7 +14,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class JWTService_SecretKeyService_IntegrationTest {
+class JWTServiceTest {
 
     ISecretKeyService secretKeyService = new SecretKeyService();
     ITokenService jwtService = new JWTService(secretKeyService);

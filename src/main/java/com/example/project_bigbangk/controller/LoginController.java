@@ -24,9 +24,7 @@ import java.net.http.HttpResponse;
 public class LoginController {
 
     private final Logger logger = LoggerFactory.getLogger(LoginController.class);
-
     private LoginService loginService;
-
 
     public LoginController(LoginService loginService) {
         super();
