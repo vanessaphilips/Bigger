@@ -2,6 +2,7 @@ package com.example.project_bigbangk.service;
 
 
 import com.example.project_bigbangk.model.Client;
+import com.example.project_bigbangk.repository.RootRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,13 +17,13 @@ class AuthenticateServiceTest {
         @Test
         void authenticateSucces() {
             ITokenService tokenService = Mockito.mock(JWTService.class);
-            ClientService clientService= Mockito.mock(ClientService.class);
+            RootRepository rootRepository = Mockito.mock(RootRepository.class);
             IHashService hashService = Mockito.mock(HashService.class);
-            AuthenticateService authenticateService = new AuthenticateService(tokenService, clientService, hashService);
+            AuthenticateService authenticateService = new AuthenticateService(tokenService, rootRepository, hashService);
             Client client = Mockito.mock(Client.class);
             Mockito.when(client.getPassWord()).thenReturn("DeekPW");
             Mockito.when(hashService.hashCheck("DeekPW", client.getPassWord())).thenReturn(true);
-            Mockito.when(clientService.getClientByEmail("deek@deek.nl")).thenReturn(client);
+            Mockito.when(rootRepository.findClientByEmail("deek@deek.nl")).thenReturn(client);
             assertTrue(authenticateService.authenticate("deek@deek.nl" ,"DeekPW"));
         }
 }

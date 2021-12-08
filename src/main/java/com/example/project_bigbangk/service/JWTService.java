@@ -5,12 +5,14 @@ package com.example.project_bigbangk.service;
 /**
  * created by Pieter Jan Bleichrodt
  */
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.example.project_bigbangk.model.Client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +26,10 @@ import java.util.Map;
 public class JWTService implements ITokenService {
 
     private final Logger logger = LoggerFactory.getLogger(JWTService.class);
-    private final long EXPIRATION_TIME = 600*1000;  //milliseconds
+    private final long EXPIRATION_TIME = 1200 * 1000;  //milliseconds
     private ISecretKeyService secretKeyService;
     private Algorithm ALGORITHM;
+    private final String AUDIENCE = "www.bigbangk.com";
 
     @Autowired
     public JWTService(ISecretKeyService secretKeyService) {
@@ -40,19 +43,24 @@ public class JWTService implements ITokenService {
     public String getToken(String email, String firstName) {
         String token = null;
         try {
-            Date experationDate = new Date(System.currentTimeMillis() + EXPIRATION_TIME);
+            Long timeNow = System.currentTimeMillis();
+            Date issuedAt = new Date(timeNow);
+            Date experationDate = new Date(timeNow + EXPIRATION_TIME);
             Map<String, String> payload = new HashMap<>();
             payload.put("klantId", email);
             payload.put("firstName", firstName);
 
-            token = JWT.create()
-                    .withIssuer("auth0")
-                   .withExpiresAt(experationDate)
-                   .withPayload(payload)
+            token = JWT.create().withIssuer("auth0").withIssuedAt(issuedAt)
+                    .withExpiresAt(experationDate)
+                    .withAudience(AUDIENCE)
+                    .withSubject(email)
+                    .withClaim("firstName", firstName)
+                    .withClaim("email", email)
+                    .withClaim("role", Client.class.getSimpleName())
                     .sign(ALGORITHM);
 
         } catch (JWTCreationException exception) {
-             logger.error(exception.getMessage());
+            logger.error(exception.getMessage());
         }
         return token;
     }
@@ -64,13 +72,27 @@ public class JWTService implements ITokenService {
             JWTVerifier verifier = JWT.require(ALGORITHM)
                     .withIssuer("auth0")
                     .build(); //Reusable verifier instance
-          DecodedJWT decodedJWT = verifier.verify(token);
-          if(decodedJWT.getExpiresAt().after(new Date(System.currentTimeMillis()))){
-               return true;
-           }
+            DecodedJWT decodedJWT = verifier.verify(token);
+            if (decodedJWT.getExpiresAt().after(new Date(System.currentTimeMillis()))) {
+                return true;
+            }
         } catch (JWTVerificationException exception) {
             logger.error(exception.getMessage());
         }
         return false;
+    }
+
+    @Override
+    public DecodedJWT decodeToken(String token) {
+        try {
+            JWTVerifier verifier = JWT.require(ALGORITHM)
+                    .withIssuer("auth0")
+                    .build(); //Reusable verifier instance
+           return verifier.verify(token);
+
+        } catch (JWTVerificationException exception) {
+            logger.error(exception.getMessage());
+        }
+        return null;
     }
 }
