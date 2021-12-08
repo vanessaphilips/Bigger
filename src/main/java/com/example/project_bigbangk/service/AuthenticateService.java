@@ -31,7 +31,7 @@ public class AuthenticateService {
     }
 
     public boolean authenticate(String token) {
-        if (tokenService.authenticateToken(token) != null) {
+        if (tokenService.authenticateToken(token)) {
             return true;
         }
         return false;
