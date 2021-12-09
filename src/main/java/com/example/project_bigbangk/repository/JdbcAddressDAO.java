@@ -31,7 +31,7 @@ public class JdbcAddressDAO implements IAddressDAO {
         jdbcTemplate.update(sql, mpAddress.getPostalCode(), mpAddress.getStreet(),mpAddress.getNumber(),
                 mpAddress.getCity(), mpAddress.getCountry());
     }
-
+    // exception ophalen uit client
     @Override
     public Address findAddressByEmail(String email) {
         String sql = "Select * From Address Where postalcode = ? AND number = ?"; //icm SQL syntax (join) oplossen
