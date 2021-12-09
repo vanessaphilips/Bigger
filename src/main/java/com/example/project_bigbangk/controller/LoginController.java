@@ -5,6 +5,7 @@ package com.example.project_bigbangk.controller;
 
 import com.example.project_bigbangk.model.LoginDTO;
 import com.example.project_bigbangk.service.LoginService;
+import org.apache.tomcat.util.http.parser.Authorization;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,7 +17,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.lang.reflect.Member;
 import java.net.http.HttpResponse;
+import java.time.LocalDate;
+
 /**
  * created by Pieter Jan Bleichrodt
  */
@@ -30,14 +34,15 @@ public class LoginController {
         super();
         logger.info("New LoginController");
         this.loginService = loginService;
+
     }
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginDTO loginDTO) {
-       String token = loginService.login(loginDTO.getEmail(), loginDTO.getPassword());
-        if(token!=null){
-            return ResponseEntity.ok(token);
-        }else{
+        String token = loginService.login(loginDTO.getEmail(), loginDTO.getPassword());
+        if (token != null) {
+            return ResponseEntity.ok().header("Authorization", token).body("login sucecesfull");
+        } else {
             return ResponseEntity.status(401).body("Username or password not valid");
         }
     }

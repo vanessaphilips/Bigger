@@ -10,5 +10,5 @@ public interface ITokenService {
 
     boolean authenticateToken(String token);
 
-    DecodedJWT decodeToken(String token);
+    public String getUserIdFromtoken(String token) ;
 }
