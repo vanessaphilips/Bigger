@@ -71,7 +71,7 @@ public class JdbcClientDAO implements IClientDAO{
         return jdbcTemplate.query(sql, new ClientRowMapper(), lastName);
     }
 
-    //FIXME in RowMapper alleen de attributen uit Client (dus niet Address en Wallet)
+    // FIXME in RowMapper alleen de attributen uit Client (dus niet Address en Wallet)
 
     private class ClientRowMapper implements RowMapper<Client> {
         @Override
