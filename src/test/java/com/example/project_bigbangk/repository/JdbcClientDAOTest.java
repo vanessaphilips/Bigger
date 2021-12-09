@@ -5,12 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-
 import java.time.LocalDate;
-import java.util.Date;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Fail.fail;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -40,13 +37,12 @@ class JdbcClientDAOTest {
         System.out.println("test0 ");
         Client actual = clientDAOUnderTest.findClientByEmail("sander@deboer.nl");
         System.out.println("test1");
-        Client expected = new Client("sander@deboer.nl", "Sander", "de", "Boer", LocalDate.of(1966,9,9), "123456789","sanderdeboer", null, null);
+        Client expected = new Client("sander@deboer.nl", "Sander", "de",
+                "Boer", LocalDate.of(1966,9,9), "123456789",
+                "sanderdeboer", null, null);
         System.out.println("test2");
         assertThat(expected).isEqualTo(actual);
     }
-
-//    Client expected = new Client("Sander", "de", "Boer", "sander@deboer.nl",
-//            "123456789", new Date(1966, 9,9), "sanderdeboer");
 
     @Test
     void findAllClients() {
