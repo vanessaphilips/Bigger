@@ -9,6 +9,7 @@ package com.example.project_bigbangk.repository;
 
 import com.example.project_bigbangk.model.Asset;
 import com.example.project_bigbangk.model.Client;
+import com.example.project_bigbangk.model.Address;
 import com.example.project_bigbangk.model.Wallet;
 import org.springframework.stereotype.Repository;
 
@@ -36,12 +37,21 @@ public class RootRepository {
       return client;
    }
 
+
+
+   public Address findAddressByEmail(String email) {
+      Address address = addressDAO.findAddressByEmail(email);
+      if (address == null) {
+      }
+      return address;
+   }
+
    /**
     * Saves address, wallet and client seperately in Database.
     * @param client
     */
    public void createNewlyRegisteredClient(Client client){
-      addressDAO.save(client.getAddress());
+      addressDAO.saveAddress(client.getAddress());
       walletDAO.createNewWallet(client.getWallet());
       clientDAO.saveClient(client);
    }
