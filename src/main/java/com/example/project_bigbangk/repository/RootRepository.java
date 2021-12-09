@@ -19,9 +19,10 @@ public class RootRepository {
    private IAddressDAO addressDAO;
    private IWalletDAO walletDAO;
 
-   public RootRepository(IClientDAO clientDAO, IAddressDAO addressDAO) {
+   public RootRepository(IClientDAO clientDAO, IAddressDAO addressDAO, IWalletDAO walletDAO) {
       this.clientDAO = clientDAO;
       this.addressDAO = addressDAO;
+      this.walletDAO = walletDAO;
    }
 
    // CLIENT

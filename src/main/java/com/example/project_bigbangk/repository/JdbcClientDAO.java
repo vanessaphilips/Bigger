@@ -4,6 +4,7 @@ package com.example.project_bigbangk.repository;
 
 import com.example.project_bigbangk.model.Client;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -32,8 +33,14 @@ public class JdbcClientDAO implements IClientDAO{
 
     @Override
     public Client findClientByEmail(String email){
-        String sql = "SELECT * FROM Client WHERE email = ?";
-        return jdbcTemplate.queryForObject(sql, new ClientRowMapper(), email);
+        String sql = "SELECT * FROM Client WHERE email = ?;";
+        Client client = null;
+        try {
+            client = jdbcTemplate.queryForObject(sql, new ClientRowMapper(), email);
+        } catch (DataAccessException dataAccessException){
+            System.err.println(dataAccessException.getMessage());
+        }
+        return client;
     }
 
     @Override
