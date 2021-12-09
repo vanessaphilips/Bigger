@@ -1,6 +1,3 @@
-// Created by Deek
-// Creation date 12/6/2021
-
 package com.example.project_bigbangk.controller;
 
 import com.example.project_bigbangk.model.DTO.LoginDTO;
@@ -15,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * created by Pieter Jan Bleichrodt
+ * Creation date 12/6/2021
  */
 @RestController
 public class LoginController {
