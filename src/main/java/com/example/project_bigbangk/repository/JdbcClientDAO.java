@@ -28,7 +28,7 @@ public class JdbcClientDAO implements IClientDAO{
         jdbcTemplate.update(sql, mpClient.getFirstName(), mpClient.getInsertion(),
                 mpClient.getLastName(), mpClient.getEmail(), mpClient.getBsn(),
                 mpClient.getDateOfBirth(), mpClient.getPassWord(),
-                mpClient.getAddress(), mpClient.getWallet());
+                mpClient.getAddress().getPostalCode(), mpClient.getAddress().getNumber(), mpClient.getWallet().getIban());
     }
 
     @Override

@@ -37,10 +37,13 @@ public class RootRepository {
    //FIXME kijken hoe dit precies werkt met ERD...kan je een client maken zonder address/ wallet..is wel nodig eigenlijk want je slaan ze nooit in een DB aanroep op!
    //waarschijnlijk gewoon alle connecties optioneel maken (of anders een raar systeem waar de DAO de gegerereerde SQL naar de root stuurd en die een grote querry maakt maar dat lijkt me een boel werk)
    public void createNewlyRegisteredClient(Client client){
-      clientDAO.saveClient(client);
-      //FIXME moet nog hier of in addressDAO opvangen wat er gebeurt als een address er al in staat, client check ik al in registratieservice
       addressDAO.save(client.getAddress());
       walletDAO.createNewWallet(client.getWallet());
+      clientDAO.saveClient(client);
+      //FIXME moet nog hier of in addressDAO opvangen wat er gebeurt als een address er al in staat, client check ik al in registratieservice
+      //
+
+
    }
 
 
