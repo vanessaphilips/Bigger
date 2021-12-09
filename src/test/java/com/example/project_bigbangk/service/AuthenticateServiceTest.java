@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 /**
- * created by Pieter Jan Bleichrodt
+ * @author Pieter Jan Bleichrodt
  */
 class AuthenticateServiceTest {
 

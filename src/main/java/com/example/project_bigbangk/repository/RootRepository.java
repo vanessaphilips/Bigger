@@ -41,8 +41,6 @@ public class RootRepository {
       clientDAO.saveClient(client);
       //FIXME moet nog hier of in addressDAO opvangen wat er gebeurt als een address er al in staat, client check ik al in registratieservice
       //
-
-
    }
 
 
