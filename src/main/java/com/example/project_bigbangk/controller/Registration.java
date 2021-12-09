@@ -22,6 +22,12 @@ public class Registration {
         this.registrationService = registrationService;
     }
 
+    /**
+     * Receives http post request with JSON body and sends the DTO to registration service.
+     * Then sents response based on what service returns
+     * @param registrationDTO
+     * @return
+     */
     @PostMapping("/register")
     @ResponseBody
     public ResponseEntity receiveRegistrationInput(@RequestBody RegistrationDTO registrationDTO) {

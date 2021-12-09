@@ -1,5 +1,5 @@
 package com.example.project_bigbangk.service;
-/*
+/**
 
 @Author Bigbangk
 */
@@ -17,6 +17,11 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Takes the RegistrationDTO, chpecks the data within and if correct creates client(with hashed PW), wallet(with generated IBAN) and address objects and sends them to rootrepo for storage.
+ *uses HashService and IbanGeneratorService
+ *
+ */
 @Service
 public class RegistrationService {
 
@@ -67,7 +72,13 @@ public class RegistrationService {
         }
     }
 
-    //controleert input, dit kan heel makkelijk met een validation library, maar we doen het maar met de hand!
+    /**
+     * checks registrationDTO input.
+     * failstates are empty strings(except insertion), not matching specific REGEX for postalcode, bsn, email and password,
+     * and also if the difference between dateofbirth and now isn't under the
+     * @param registrationDTO
+     * @return
+     */
     public boolean checkRegistrationInput(RegistrationDTO registrationDTO){
         if (checkForEmptyStrings(registrationDTO)) return false;
         if (!matchesRegex(registrationDTO.getEmail(), EMAIL_REGEX)){
