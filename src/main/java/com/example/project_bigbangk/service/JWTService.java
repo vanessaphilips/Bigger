@@ -54,7 +54,6 @@ public class JWTService implements ITokenService {
                     .withClaim("email", email)
                     .withClaim("role", Client.class.getSimpleName())
                     .sign(ALGORITHM);
-
         } catch (JWTCreationException exception) {
             logger.error(exception.getMessage());
         }
@@ -78,13 +77,18 @@ public class JWTService implements ITokenService {
         return false;
     }
 
+    /**
+     *
+     * @param token
+     * @return email
+     */
     @Override
-    public DecodedJWT decodeToken(String token) {
+    public String getUserIdFromtoken(String token) {
         try {
             JWTVerifier verifier = JWT.require(ALGORITHM)
                     .withIssuer("auth0")
                     .build();
-           return verifier.verify(token);
+           return verifier.verify(token).getClaim("email").asString();
 
         } catch (JWTVerificationException exception) {
             logger.error(exception.getMessage());

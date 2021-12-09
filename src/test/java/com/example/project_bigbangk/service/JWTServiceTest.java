@@ -22,13 +22,10 @@ class JWTServiceTest {
 
     @Test
     void GetToken() {
-        DecodedJWT decodedJWT = jwtService.decodeToken(token);
-        System.out.println(decodedJWT.getExpiresAt());
-        assertEquals("www.bigbangk.com", decodedJWT.getAudience().stream().findFirst().get());
-        assertEquals("deek@deek.nl", decodedJWT.getSubject());
-        assertEquals("Deek", decodedJWT.getClaim("firstName").asString());
-        assertEquals("deek@deek.nl", decodedJWT.getClaim("email").asString());
-       assertEquals("Client", decodedJWT.getClaim("role").asString());
+        String  email = jwtService.getUserIdFromtoken(token);
+
+        assertEquals("deek@deek.nl", email);
+
     }
 
     @Test
