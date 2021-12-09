@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class LoginService {
-
+    private final String TOKEN_PREFIX = "Bearer ";
     private final Logger logger = LoggerFactory.getLogger(LoginService.class);
     ClientService clientService;
     AuthenticateService authenticateService;
@@ -36,7 +36,7 @@ public class LoginService {
             Client client = clientService.getClientByEmail(email);
             String token = jwtService.getToken(email, client.getFirstName());
             logger.info(String.format("Login user %s succesfull", client.getEmail()));
-            return token;
+            return TOKEN_PREFIX + token;
         }
         logger.info(String.format("Wrong combination of email and password for %s", email));
         return null;
