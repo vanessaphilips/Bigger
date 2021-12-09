@@ -27,8 +27,12 @@ public class JdbcAddressDAO implements IAddressDAO {
     @Override
     public void saveAddress(Address mpAddress) {
         String sql = "Insert into Address values(?,?,?,?,?)";
-        jdbcTemplate.update(sql, mpAddress.getPostalCode(), mpAddress.getStreet(),mpAddress.getNumber(),
-                mpAddress.getCity(), mpAddress.getCountry());
+        try {
+            jdbcTemplate.update(sql, mpAddress.getPostalCode(), mpAddress.getStreet(), mpAddress.getNumber(),
+                    mpAddress.getCity(), mpAddress.getCountry());
+        } catch (DataAccessException dataAccessException) {
+            System.err.println(dataAccessException.getMessage());
+        }
     }
 
     @Override
@@ -46,13 +50,23 @@ public class JdbcAddressDAO implements IAddressDAO {
     @Override
     public List<Address> findAllAddresses() {
         String sql = "Select * From address";
-        return jdbcTemplate.query(sql, new AddressRowMapper());
+        try {
+            return jdbcTemplate.query(sql, new AddressRowMapper());
+        } catch (DataAccessException dataAccessException) {
+            System.err.println(dataAccessException.getMessage());
+        }
+        return null;
     }
 
     @Override
     public List<Address> findAddressByPostalcode(String postalcode) {
         String sql = "Select * From address Where postalcode = ?";
-        return jdbcTemplate.query(sql, new AddressRowMapper(), postalcode);
+        try {
+            return jdbcTemplate.query(sql, new AddressRowMapper(), postalcode);
+        } catch (DataAccessException dataAccessException) {
+            System.err.println(dataAccessException.getMessage());
+        }
+        return null;
     }
 
     private class AddressRowMapper implements RowMapper<Address> {
