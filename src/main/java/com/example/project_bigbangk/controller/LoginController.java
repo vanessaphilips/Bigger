@@ -34,7 +34,6 @@ public class LoginController {
         super();
         logger.info("New LoginController");
         this.loginService = loginService;
-
     }
 
     @PostMapping("/login")
