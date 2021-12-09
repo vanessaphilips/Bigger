@@ -24,11 +24,18 @@ public class JdbcClientDAO implements IClientDAO{
 
     @Override
     public void saveClient(Client mpClient){
-        String sql = "Insert into Client values(?,?,?,?,?,?,?,?,?)";
-        jdbcTemplate.update(sql, mpClient.getFirstName(), mpClient.getInsertion(),
-                mpClient.getLastName(), mpClient.getEmail(), mpClient.getBsn(),
-                mpClient.getDateOfBirth(), mpClient.getPassWord(),
-                mpClient.getAddress().getPostalCode(), mpClient.getAddress().getNumber(), mpClient.getWallet().getIban());
+        String sql = "Insert into Client values(?,?,?,?,?,?,?,?,?,?)";//10 ?s
+        jdbcTemplate.update(sql,
+                mpClient.getEmail(),
+                mpClient.getFirstName(),
+                mpClient.getInsertion(),
+                mpClient.getLastName(),
+                mpClient.getDateOfBirth(),
+                mpClient.getBsn(),
+                mpClient.getPassWord(),
+                mpClient.getAddress().getPostalCode(),
+                mpClient.getAddress().getNumber(),
+                mpClient.getWallet().getIban());
     }
 
     @Override
