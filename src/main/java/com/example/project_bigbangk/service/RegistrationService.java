@@ -121,8 +121,6 @@ public class RegistrationService {
     private boolean checkUnderAgeLimit(RegistrationDTO registrationDTO) {
         convertedDateOfBirth = LocalDate.parse(registrationDTO.getDateOfBirth(), formatter);
         if(Period.between(convertedDateOfBirth, LocalDate.now()).getYears() < AGE_LIMIT){
-            System.out.println(LocalDate.now());
-            System.out.println("age");
             return true;
         }
         return false;
