@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 /**
  * created by Pieter Jan Bleichrodt
+ * This class can authorize an login email and password combination and authorize a token
  */
 @Service
 public class AuthenticateService {
@@ -27,7 +28,6 @@ public class AuthenticateService {
 
     public boolean authenticate(String email, String password) {
       Client client = rootRepository.findClientByEmail(email);
-        //Client client = null;
         if (client != null) {
             return hashService.hashCheck(password, client.getPassWord());
         }

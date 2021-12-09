@@ -22,10 +22,8 @@ class JWTServiceTest {
 
     @Test
     void GetToken() {
-        String  email = jwtService.getUserIdFromtoken(token);
-
+        String email = jwtService.getUserIdFromtoken(token);
         assertEquals("deek@deek.nl", email);
-
     }
 
     @Test
