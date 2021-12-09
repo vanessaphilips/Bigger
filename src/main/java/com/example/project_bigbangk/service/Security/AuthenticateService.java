@@ -1,6 +1,3 @@
-// Created by Deek
-// Creation date 12/3/2021
-
 package com.example.project_bigbangk.service.Security;
 
 
@@ -11,6 +8,7 @@ import org.springframework.stereotype.Service;
 /**
  * created by Pieter Jan Bleichrodt
  * This class can authorize an login email and password combination and authorize a token
+ * Creation date 12/3/2021
  */
 @Service
 public class AuthenticateService {

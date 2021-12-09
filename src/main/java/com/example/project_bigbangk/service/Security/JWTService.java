@@ -1,9 +1,7 @@
-// Created by Deek
-// Creation date 12/3/2021
-
 package com.example.project_bigbangk.service.Security;
 /**
  * @author Pieter Jan Bleichrodt
+ * Creation date 12/3/2021
  * This class generates and valitades JWT
  */
 
@@ -82,7 +80,7 @@ public class JWTService implements ITokenService {
      * @return email
      */
     @Override
-    public String getUserIdFromtoken(String token) {
+    public String getUserIdFromToken(String token) {
         try {
             JWTVerifier verifier = JWT.require(ALGORITHM)
                     .withIssuer("auth0")
