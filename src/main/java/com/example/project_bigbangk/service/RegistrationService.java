@@ -72,6 +72,7 @@ public class RegistrationService {
             return Messages.Email.getBody();
         }
         String checkRegMessage = (checkRegistrationInput(registrationDTO));
+        inputErrorMessage = "";
         if(checkRegMessage.equals(Messages.NoInputErrors.getBody())){
             Wallet wallet = new Wallet(ibanGenerator.getIban(),10000);
             Address address = new Address(registrationDTO.getPostalCode(),registrationDTO.getStreet(), registrationDTO.getNumber(), registrationDTO.getCity(),
