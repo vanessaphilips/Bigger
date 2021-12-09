@@ -27,7 +27,7 @@ public class JWTService implements ITokenService {
     private final long EXPIRATION_TIME = 1200 * 1000;  //milliseconds
     private ISecretKeyService secretKeyService;
     private Algorithm ALGORITHM;
-    private final String AUDIENCE = "www.bigbangk.com";
+    private final String AUDIENCE = "https://www.bigbangk.com";
 
     @Autowired
     public JWTService(ISecretKeyService secretKeyService) {
