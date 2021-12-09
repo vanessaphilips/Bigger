@@ -27,13 +27,15 @@ public class RegistrationController {
     @PostMapping("/register")
     @ResponseBody
     public ResponseEntity receiveRegistrationInput(@RequestBody RegistrationDTO registrationDTO) {
-        if(registrationService.registerClient(registrationDTO).equals("Registration Successful")){
+        String registrationReturn = registrationService.registerClient(registrationDTO);
+
+        if(registrationReturn.equals(RegistrationService.Messages.Success.getBody())){
         //stuur naar login, en popup?(voor later)
             return ResponseEntity.status(201).body("Registration Successful");
-        }else if(registrationService.registerClient(registrationDTO).equals("Duplicate Email")) {
+        }else if(registrationReturn.equals(RegistrationService.Messages.Email.getBody())) {
             return ResponseEntity.status(409).body("This e-mail is already in use");
         }else {
-            return ResponseEntity.status(406).body("Bad Input");
+            return ResponseEntity.status(406).body(registrationReturn);
         }
     }
 
