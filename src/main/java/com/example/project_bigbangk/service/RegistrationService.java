@@ -42,6 +42,8 @@ public class RegistrationService {
     private LocalDate convertedDateOfBirth;
     private HashService hashService;
     private IbanGeneratorService ibanGenerator;
+    private String inputErrorMessage = "";
+
 
     public RegistrationService(HashService hashService, IbanGeneratorService ibanGenerator, RootRepository rootRepository) {
         this.hashService = hashService;
@@ -49,15 +51,28 @@ public class RegistrationService {
         this.rootRepository = rootRepository;
     }
 
+    public enum Messages
+    {
+        Email("Duplicate Email"),
+        Success("Registration Successful"),
+        NoInputErrors("No Errors Found");
+        private String body;
+
+        Messages(String envBody) {
+            this.body = envBody;
+        }
+        public String getBody() {
+            return body;
+        }
+    }
+
     public String registerClient(RegistrationDTO registrationDTO){
         Client existingClient = rootRepository.findClientByEmail(registrationDTO.getEmail());
         if(existingClient != null){
-            return "Duplicate Email";
+            return Messages.Email.getBody();
         }
-        if(checkRegistrationInput(registrationDTO)){
-            System.out.println(registrationDTO.getFirstName() + " " + registrationDTO.getLastName());
-
-            Date dateOfBirth = java.sql.Date.valueOf(convertedDateOfBirth);
+        String checkRegMessage = (checkRegistrationInput(registrationDTO));
+        if(checkRegMessage.equals(Messages.NoInputErrors.getBody())){
             Wallet wallet = new Wallet(ibanGenerator.getIban(),10000);
             Address address = new Address(registrationDTO.getPostalCode(),registrationDTO.getStreet(), registrationDTO.getNumber(), registrationDTO.getCity(),
                     registrationDTO.getCountry());
@@ -66,10 +81,9 @@ public class RegistrationService {
 
             rootRepository.createNewlyRegisteredClient(client);
 
-            return "Registration Successful";
+            return Messages.Success.getBody();
         }else{
-            System.out.println("error.");
-            return "Incorrect Input";
+            return checkRegMessage;
         }
     }
 
@@ -80,27 +94,27 @@ public class RegistrationService {
      * @param registrationDTO
      * @return
      */
-    public boolean checkRegistrationInput(RegistrationDTO registrationDTO){
-        if (checkForEmptyStrings(registrationDTO)) return false;
+    public String checkRegistrationInput(RegistrationDTO registrationDTO){
+        if (checkForEmptyStrings(registrationDTO)){
+            inputErrorMessage += "Empty Field ";}
         if (!matchesRegex(registrationDTO.getEmail(), EMAIL_REGEX)){
-            System.out.println("email");
-            return false;}
+            inputErrorMessage += "Invalid Email ";}
         if (!matchesRegex(registrationDTO.getPassword(), PASSWORD_REGEX)){
-            System.out.println("password");
-            return false;}
-        if (checkUnderAgeLimit(registrationDTO)) return false;
+            inputErrorMessage += "Invalid Password ";}
+        if (checkUnderAgeLimit(registrationDTO)) {
+            inputErrorMessage += "Under Age ";}
         if(!matchesRegex(registrationDTO.getBsn(), BSN_REGEX)){
-            System.out.println("bsn");
-            return false;}
+            inputErrorMessage += "Invalid Email ";}
         if(!matchesRegex(registrationDTO.getPostalCode(), POSTAL_REGEX)){
-            System.out.println("post");
-            return false;}
-        if(registrationDTO.getNumber() < 1){return false;}
+            inputErrorMessage += "Invalid PostalCode ";}
+        if(registrationDTO.getNumber() < 1){
+            inputErrorMessage += "Invalid House Number ";}
         if(!matchesRegex(registrationDTO.getCountry(), COUNTRY_REGEX)){
-            System.out.println("country");
-            return false;
+            inputErrorMessage += "Invalid Countrycode ";}
+        if (inputErrorMessage.length()<1){
+            return Messages.NoInputErrors.getBody();
         }
-        return true;
+        return "Errors Found: " + inputErrorMessage;
     }
 
     private boolean checkUnderAgeLimit(RegistrationDTO registrationDTO) {
@@ -118,13 +132,14 @@ public class RegistrationService {
         List<String> inputNotNullList = Arrays.asList(registrationDTO.getFirstName(), registrationDTO.getLastName(),
                 registrationDTO.getBsn(), registrationDTO.getDateOfBirth(), registrationDTO.getEmail(), registrationDTO.getPassword(), registrationDTO.getStreet(),
                 registrationDTO.getPostalCode(), registrationDTO.getCountry(), registrationDTO.getCity());
+        boolean foundEmpty = false;
 
         for (String s : inputNotNullList) {
             if(s == null || s.isEmpty()){
-                System.out.println("list");
-                return true;
+                s = "";
+                foundEmpty = true;
             }}
-        return false;
+        return  foundEmpty;
     }
 
     //controleerd string tegen regular expression
