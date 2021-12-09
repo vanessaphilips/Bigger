@@ -8,6 +8,7 @@
 package com.example.project_bigbangk.repository;
 
 import com.example.project_bigbangk.model.Client;
+import com.example.project_bigbangk.model.Address;
 import com.example.project_bigbangk.model.Wallet;
 import org.springframework.stereotype.Repository;
 
@@ -33,10 +34,17 @@ public class RootRepository {
       return client;
    }
 
+   public Address findAddressByEmail(String email) {
+      Address address = addressDAO.findAddressByEmail(email);
+      if (address == null) {
+      }
+      return address;
+   }
+
    //FIXME kijken hoe dit precies werkt met ERD...kan je een client maken zonder address/ wallet..is wel nodig eigenlijk want je slaan ze nooit in een DB aanroep op!
    //waarschijnlijk gewoon alle connecties optioneel maken (of anders een raar systeem waar de DAO de gegerereerde SQL naar de root stuurd en die een grote querry maakt maar dat lijkt me een boel werk)
    public void createNewlyRegisteredClient(Client client){
-      addressDAO.save(client.getAddress());
+      addressDAO.saveAddress(client.getAddress());
       walletDAO.createNewWallet(client.getWallet());
       clientDAO.saveClient(client);
       //FIXME moet nog hier of in addressDAO opvangen wat er gebeurt als een address er al in staat, client check ik al in registratieservice

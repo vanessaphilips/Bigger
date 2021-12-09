@@ -2,11 +2,9 @@
 // Creation date 2-12-2021
 
 package com.example.project_bigbangk.repository;
-
 import com.example.project_bigbangk.model.Address;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -27,7 +25,7 @@ public class JdbcAddressDAO implements IAddressDAO {
 
 
     @Override
-    public void save(Address mpAddress) {
+    public void saveAddress(Address mpAddress) {
         String sql = "Insert into Address values(?,?,?,?,?)";
         jdbcTemplate.update(sql, mpAddress.getPostalCode(), mpAddress.getStreet(),mpAddress.getNumber(),
                 mpAddress.getCity(), mpAddress.getCountry());
