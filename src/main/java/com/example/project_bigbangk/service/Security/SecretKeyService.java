@@ -1,7 +1,7 @@
 // Created by Deek
 // Creation date 12/3/2021
 
-package com.example.project_bigbangk.service;
+package com.example.project_bigbangk.service.Security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

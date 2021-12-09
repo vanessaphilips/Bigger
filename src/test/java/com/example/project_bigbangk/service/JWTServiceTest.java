@@ -1,16 +1,10 @@
 package com.example.project_bigbangk.service;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.exceptions.JWTCreationException;
-import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import com.example.project_bigbangk.model.Client;
+import com.example.project_bigbangk.service.Security.ISecretKeyService;
+import com.example.project_bigbangk.service.Security.ITokenService;
+import com.example.project_bigbangk.service.Security.JWTService;
+import com.example.project_bigbangk.service.Security.SecretKeyService;
 import org.junit.jupiter.api.Test;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 

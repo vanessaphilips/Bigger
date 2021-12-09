@@ -1,7 +1,7 @@
 package com.example.project_bigbangk.controller;
 
 import com.example.project_bigbangk.Utilities.ObjectToJsonHelper;
-import com.example.project_bigbangk.model.RegistrationDTO;
+import com.example.project_bigbangk.model.DTO.RegistrationDTO;
 import com.example.project_bigbangk.service.ClientService;
 import com.example.project_bigbangk.service.LoginService;
 import com.example.project_bigbangk.service.RegistrationService;
@@ -59,7 +59,7 @@ class RegistrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
 
-        ////Cannot invoke "String.equals(Object)" because the return value of "com.example.project_bigbangk.service.RegistrationService.registerClient(com.example.project_bigbangk.model.RegistrationDTO)" is null
+        ////Cannot invoke "String.equals(Object)" because the return value of "com.example.project_bigbangk.service.RegistrationService.registerClient(com.example.project_bigbangk.model.DTO.RegistrationDTO)" is null
         ////WAAROM HIJ IS HELEMAAL NIET NULL, mockito returned een string
 
         mockMvc.perform(builder)

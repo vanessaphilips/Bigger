@@ -1,7 +1,7 @@
 // Created by Deek
 // Creation date 12/3/2021
 
-package com.example.project_bigbangk.service;
+package com.example.project_bigbangk.service.Security;
 /**
  * created by Pieter Jan Bleichrodt
  */
@@ -19,8 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class JWTService implements ITokenService {
@@ -79,7 +77,7 @@ public class JWTService implements ITokenService {
 
     /**
      *
-     * @param token
+     * @param token decode a JWT
      * @return email
      */
     @Override

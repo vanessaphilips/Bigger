@@ -1,4 +1,4 @@
-package com.example.project_bigbangk.service;
+package com.example.project_bigbangk.service.Security;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 
