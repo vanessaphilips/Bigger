@@ -30,7 +30,7 @@ public class RootRepository {
       Client client = clientDAO.findClientByEmail(email);
       if (client == null) {
       }
-      return null;
+      return client;
    }
 
    //FIXME kijken hoe dit precies werkt met ERD...kan je een client maken zonder address/ wallet..is wel nodig eigenlijk want je slaan ze nooit in een DB aanroep op!
