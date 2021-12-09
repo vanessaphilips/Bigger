@@ -1,7 +1,7 @@
 INSERT INTO `Client` VALUES
-                            ('Michael',NULL, 'Oosterhout','michael@oosterhout.nl', '123456789', '1965-10-10', 'michaeloosterhout'),
-                            ('Gerke','de', 'Boer','gerke@deboer.nl', '123456789', '1959-03-02', 'gerkedeboer'),
-                            ('Huub','van', 'Thienen','huub@vanthienen.nl', '123456789', '1965-11-11', 'huubvanthienen'),
-                            ('Michel', NULL, 'Oey','michel@oey.nl', '123456789', '1968-09-09', 'micheloey'),
-                            ('Sander', 'de', 'Boer','sander@deboer.nl', '123456789', '1966-09-09', 'sanderdeboer'),
-                            ('Nicole', NULL, 'Wong','nicole@wong.nl', '123456789', '1973-01-01', 'nicolewong');
+                            ('michael@oosterhout.nl', 'Michael',NULL, 'Oosterhout', '1965-10-10', '123456789', 'michaeloosterhout', null, null, null),
+                            ('gerke@deboer.nl', 'Gerke','de', 'Boer', '1959-03-02', '123456789', 'gerkedeboer', null, null, null),
+                            ('huub@vanthienen.nl','Huub','van', 'Thienen', '1965-11-11', '123456789', 'huubvanthienen', null, null, null),
+                            ('michel@oey.nl', 'Michel', NULL, 'Oey', '1968-09-09', '123456789', 'micheloey', null, null, null),
+                            ('sander@deboer.nl', 'Sander', 'de', 'Boer', '1966-09-09', '123456789', 'sanderdeboer', null, null, null),
+                            ('nicole@wong.nl', 'Nicole', NULL, 'Wong', '123456789', '1973-01-01', 'nicolewong', null, null, null);

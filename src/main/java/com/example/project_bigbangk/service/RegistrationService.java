@@ -57,8 +57,8 @@ public class RegistrationService {
             Wallet wallet = new Wallet(ibanGenerator.getIban(),10000);
             Address address = new Address(registrationDTO.getPostalCode(),registrationDTO.getStreet(), registrationDTO.getNumber(), registrationDTO.getCity(),
                     registrationDTO.getCountry());
-            Client client = new Client(registrationDTO.getFirstName(), registrationDTO.getInsertion(), registrationDTO.getLastName(), registrationDTO.getEmail(),
-                    registrationDTO.getBsn(), dateOfBirth, hashService.hash(registrationDTO.getPassword()), address, wallet);
+            Client client = new Client(registrationDTO.getEmail(), registrationDTO.getFirstName(), registrationDTO.getInsertion(), registrationDTO.getLastName(), convertedDateOfBirth,
+                    registrationDTO.getBsn(), hashService.hash(registrationDTO.getPassword()), address, wallet);
 
             rootRepository.createNewlyRegisteredClient(client);
 

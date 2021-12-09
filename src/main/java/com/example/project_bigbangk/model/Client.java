@@ -5,48 +5,58 @@ package com.example.project_bigbangk.model;
 
 // Client object.
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class Client {
+    private String email;
     private String firstName;
     private String insertion;
     private String lastName;
-    private String email;
+    private LocalDate dateOfBirth;
     private String bsn;
-    private Date dateOfBirth;
     private String passWord;
     private Address address;
     private Wallet wallet;
 
-    public Client(String firstName, String insertion, String lastName, String email,
-                  String bsn, Date dateOfBirth, String passWord, Address address, Wallet wallet) {
+    public Client(String email, String firstName, String insertion, String lastName, LocalDate dateOfBirth,
+                  String bsn, String passWord, Address address, Wallet wallet) {
+        this.email = email;
         this.firstName = firstName;
         this.insertion = insertion;
         this.lastName = lastName;
-        this.email = email;
-        this.bsn = bsn;
         this.dateOfBirth = dateOfBirth;
+        this.bsn = bsn;
         this.passWord = passWord;
         this.address = address;
         this.wallet = wallet;
     }
 
-    public Client(String firstName, String insertion, String lastName, String email, String bsn, Date dateOfBirth, String passWord) {
+    public Client(String email, String firstName, String insertion, String lastName, LocalDate dateOfBirth,
+                  String bsn, String passWord) {
+        this.email = email;
         this.firstName = firstName;
         this.insertion = insertion;
         this.lastName = lastName;
-        this.email = email;
-        this.bsn = bsn;
         this.dateOfBirth = dateOfBirth;
+        this.bsn = bsn;
         this.passWord = passWord;
     }
 
-    public Client(String firstName, String lastName, String email, String bsn, Date dateOfBirth, String passWord) {
-        this(firstName, null, lastName, email, bsn, dateOfBirth, passWord);
+    public Client(String email, String firstName, String lastName, LocalDate dateOfBirth,
+                  String bsn, String passWord) {
+        this(email, firstName, null, lastName, dateOfBirth, bsn, passWord);
     }
 
     // TODO alle getters en setters aangemaakt. Als blijkt dat eea niet gebruikt wordt dan weghalen.
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -72,12 +82,12 @@ public class Client {
         this.lastName = lastName;
     }
 
-    public String getEmail() {
-        return email;
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     public String getBsn() {
@@ -86,14 +96,6 @@ public class Client {
 
     public void setBsn(String bsn) {
         this.bsn = bsn;
-    }
-
-    public Date getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
     }
 
     public String getPassWord() {
@@ -120,21 +122,6 @@ public class Client {
         this.wallet = wallet;
     }
 
-    @Override
-    public String toString() {
-        return "Client{" +
-                "firstName='" + firstName + '\'' +
-                ", insertion='" + insertion + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", bsn='" + bsn + '\'' +
-                ", dateOfBirth=" + dateOfBirth +
-                ", passWord='" + passWord + '\'' +
-                ", address=" + address +
-                ", wallet=" + wallet +
-                '}';
-    }
-
     //NOTE: alleen comparison van email om gebruikers te vergelijken.
     @Override
     public boolean equals(Object o) {
@@ -146,6 +133,6 @@ public class Client {
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, insertion, lastName, email, bsn, dateOfBirth, passWord, address, wallet);
+        return Objects.hash(email);
     }
 }
