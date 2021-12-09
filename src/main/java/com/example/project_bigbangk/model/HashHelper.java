@@ -2,6 +2,10 @@ package com.example.project_bigbangk.model;
 
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
+/**
+ * created by Kelly Speelman - de Jonge
+ */
+
 public class HashHelper {
 
     public static String hash(String password, String pepper) {

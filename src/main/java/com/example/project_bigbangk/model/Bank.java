@@ -2,6 +2,10 @@ package com.example.project_bigbangk.model;
 
 import java.util.List;
 
+/**
+ * created by Kelly Speelman - de Jonge
+ */
+
 public class Bank {
     private Wallet wallet;
     private List<Client> clients;

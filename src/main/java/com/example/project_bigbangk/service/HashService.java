@@ -3,6 +3,10 @@ package com.example.project_bigbangk.service;
 import com.example.project_bigbangk.model.HashHelper;
 import org.springframework.stereotype.Service;
 
+/**
+ * created by Kelly Speelman - de Jonge
+ */
+
 @Service
 public class HashService implements IHashService {
     private final PepperService pepperService;

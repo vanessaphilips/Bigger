@@ -1,13 +1,17 @@
 package com.example.project_bigbangk.repository;
 
 import com.example.project_bigbangk.model.Bank;
-import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+
+/**
+ * created by Kelly Speelman - de Jonge
+ */
 
 public class JdbcBankDAO implements IBankDAO{
 
@@ -18,7 +22,7 @@ public class JdbcBankDAO implements IBankDAO{
     }
 
     public void saveBank(Bank bank) {
-        String sql = "INSERT INTO bank VALUES(?,?,?);";
+        String sql = "INSERT INTO bank VALUES(?,?,?,?,?);";
         jdbcTemplate.update(sql, bank.getCode(), bank.getName(),
                 bank.getWallet().getIban(), bank.getStartingcapital(),
                 bank.getFeePercentage());
@@ -29,7 +33,7 @@ public class JdbcBankDAO implements IBankDAO{
         Bank bank = null;
         try {
             bank = jdbcTemplate.queryForObject(sql, new BankRowMapper(), naam);
-        } catch (EmptyResultDataAccessException emptyResult) {
+        } catch (DataAccessException emptyResult) {
             System.out.println(emptyResult.toString());
         }
         return bank;
