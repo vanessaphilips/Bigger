@@ -1,4 +1,4 @@
-package com.example.project_bigbangk.model;
+package com.example.project_bigbangk.model.DTO;
 /*
 
 @Author Bigbangk

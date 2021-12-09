@@ -8,7 +8,6 @@
 package com.example.project_bigbangk.repository;
 
 import com.example.project_bigbangk.model.Client;
-import com.example.project_bigbangk.model.RegistrationDTO;
 import com.example.project_bigbangk.model.Wallet;
 import org.springframework.stereotype.Repository;
 

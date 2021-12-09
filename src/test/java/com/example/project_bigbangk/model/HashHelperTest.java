@@ -1,6 +1,7 @@
 package com.example.project_bigbangk.model;
 
-import com.example.project_bigbangk.service.PepperService;
+import com.example.project_bigbangk.Utilities.HashHelper;
+import com.example.project_bigbangk.service.Security.PepperService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
