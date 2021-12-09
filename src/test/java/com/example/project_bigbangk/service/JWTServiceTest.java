@@ -8,6 +8,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * @author P.J.Bleichrodt
+ * created 12/9/2021
+ */
 class JWTServiceTest {
 
     ISecretKeyService secretKeyService = new SecretKeyService();
@@ -16,7 +20,7 @@ class JWTServiceTest {
 
     @Test
     void GetToken() {
-        String email = jwtService.getUserIdFromtoken(token);
+        String email = jwtService.getUserIdFromToken(token);
         assertEquals("deek@deek.nl", email);
     }
 

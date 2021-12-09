@@ -1,6 +1,3 @@
-// Created by Deek
-// Creation date 12/8/2021
-
 package com.example.project_bigbangk.Utilities;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 /**
  * created by Pieter Jan Bleichrodt
+ * Creation date 12/8/2021
  */
 public class ObjectToJsonHelper {
 

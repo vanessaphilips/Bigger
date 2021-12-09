@@ -1,7 +1,4 @@
 package com.example.project_bigbangk.service.Security;
-
-import com.auth0.jwt.interfaces.DecodedJWT;
-
 /**
  * created by Pieter Jan Bleichrodt
  */
@@ -10,5 +7,5 @@ public interface ITokenService {
 
     boolean authenticateToken(String token);
 
-    public String getUserIdFromtoken(String token) ;
+    public String getUserIdFromToken(String token) ;
 }

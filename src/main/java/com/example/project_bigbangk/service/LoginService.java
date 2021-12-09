@@ -1,6 +1,3 @@
-// Created by Deek
-// Creation date 12/3/2021
-
 package com.example.project_bigbangk.service;
 
 import com.example.project_bigbangk.model.Client;
@@ -14,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * created by Pieter Jan Bleichrodt
+ * Creation date 12/3/2021
  */
 @Service
 public class LoginService {
