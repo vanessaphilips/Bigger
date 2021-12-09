@@ -24,17 +24,21 @@ public class JdbcClientDAO implements IClientDAO{
     @Override
     public void saveClient(Client mpClient){
         String sql = "Insert into Client values(?,?,?,?,?,?,?,?,?,?);";//10 ?s
-        jdbcTemplate.update(sql,
-                mpClient.getEmail(),
-                mpClient.getFirstName(),
-                mpClient.getInsertion(),
-                mpClient.getLastName(),
-                mpClient.getDateOfBirth(),
-                mpClient.getBsn(),
-                mpClient.getPassWord(),
-                mpClient.getAddress().getPostalCode(),
-                mpClient.getAddress().getNumber(),
-                mpClient.getWallet().getIban());
+        try {
+            jdbcTemplate.update(sql,
+                    mpClient.getEmail(),
+                    mpClient.getFirstName(),
+                    mpClient.getInsertion(),
+                    mpClient.getLastName(),
+                    mpClient.getDateOfBirth(),
+                    mpClient.getBsn(),
+                    mpClient.getPassWord(),
+                    mpClient.getAddress().getPostalCode(),
+                    mpClient.getAddress().getNumber(),
+                    mpClient.getWallet().getIban());
+        } catch (DataAccessException dataAccessException) {
+            System.err.println(dataAccessException.getMessage());
+        }
     }
 
     @Override
@@ -52,7 +56,12 @@ public class JdbcClientDAO implements IClientDAO{
     @Override
     public List<Client> findAllClients(){
         String sql = "SELECT * FROM Client;";
-        return jdbcTemplate.query(sql, new ClientRowMapper());
+        try {
+            return jdbcTemplate.query(sql, new ClientRowMapper());
+        } catch (DataAccessException dataAccessException){
+            System.err.println(dataAccessException.getMessage());
+        }
+        return null;
     }
 
     @Override
@@ -60,18 +69,27 @@ public class JdbcClientDAO implements IClientDAO{
         String sql = "UPDATE Client Set email = ?, firstName = ?, insertion = ?, " +
                 "lastName = ?, dateOfBirth = ?, bsn = ?, passWord = ?, " +
                 "address = ? wallet = ?, WHERE email = ?;";
-        jdbcTemplate.update(sql, client.getEmail(), client.getFirstName(), client.getInsertion(),
-                client.getLastName(), client.getDateOfBirth(), client.getBsn(), client.getPassWord(),
-                client.getAddress(), client.getWallet());
+        try {
+            jdbcTemplate.update(sql, client.getEmail(), client.getFirstName(), client.getInsertion(),
+                    client.getLastName(), client.getDateOfBirth(), client.getBsn(), client.getPassWord(),
+                    client.getAddress(), client.getWallet());
+        } catch (DataAccessException dataAccessException){
+            System.err.println(dataAccessException.getMessage());
+        }
     }
 
     @Override
     public List<Client> findClientByLastName(String lastName){
         String sql = "SELECT * FROM Client WHERE lastName = ?;";
-        return jdbcTemplate.query(sql, new ClientRowMapper(), lastName);
+        try {
+            return jdbcTemplate.query(sql, new ClientRowMapper(), lastName);
+        } catch (DataAccessException dataAccessException){
+            System.err.println(dataAccessException.getMessage());
+        }
+        return null;
     }
 
-    // FIXME in RowMapper alleen de attributen uit Client (dus niet Address en Wallet)
+    // Note: in RowMapper alleen de attributen uit Client (dus niet Address en Wallet)
 
     private class ClientRowMapper implements RowMapper<Client> {
         @Override
