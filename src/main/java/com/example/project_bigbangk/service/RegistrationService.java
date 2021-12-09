@@ -1,6 +1,5 @@
 package com.example.project_bigbangk.service;
 /**
-
 @Author Bigbangk
 */
 
@@ -18,7 +17,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Takes the RegistrationDTO, chpecks the data within and if correct creates client(with hashed PW), wallet(with generated IBAN) and address objects and sends them to rootrepo for storage.
+ * Takes the RegistrationDTO, checks the data within and if correct creates client(with hashed PW), wallet(with generated IBAN) and address objects and sends them to rootrepo for storage.
  *uses HashService and IbanGeneratorService
  *
  */

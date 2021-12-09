@@ -1,5 +1,5 @@
 package com.example.project_bigbangk.controller;
-/*
+/**
 
 @Author Bigbangk
 */
@@ -24,7 +24,7 @@ public class Registration {
 
     /**
      * Receives http post request with JSON body and sends the DTO to registration service.
-     * Then sents response based on what service returns
+     * Then sends response based on what service returns
      * @param registrationDTO
      * @return
      */
