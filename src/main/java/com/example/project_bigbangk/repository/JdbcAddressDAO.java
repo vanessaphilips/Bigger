@@ -5,6 +5,7 @@ package com.example.project_bigbangk.repository;
 
 import com.example.project_bigbangk.model.Address;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -31,15 +32,15 @@ public class JdbcAddressDAO implements IAddressDAO {
         jdbcTemplate.update(sql, mpAddress.getPostalCode(), mpAddress.getStreet(),mpAddress.getNumber(),
                 mpAddress.getCity(), mpAddress.getCountry());
     }
-    // exception ophalen uit client
+
     @Override
     public Address findAddressByEmail(String email) {
-        String sql = "Select * From Address Where postalcode = ? AND number = ?"; //icm SQL syntax (join) oplossen
-        Address address;
+        String sql = "Select * From AddressWithClientEmail Where email = ?";
+        Address address = null;
         try {
-            address = jdbcTemplate.queryForObject(sql, new AddressRowMapper(), email);
-        } catch (EmptyResultDataAccessException noResult) {
-            address = null;
+            address = jdbcTemplate.queryForObject(sql, new JdbcAddressDAO.AddressRowMapper(), email);
+        } catch (DataAccessException dataAccessException){
+            System.err.println(dataAccessException.getMessage());
         }
         return address;
     }
