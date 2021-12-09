@@ -21,7 +21,6 @@ class RegistrationServiceTest {
         registrationService = new RegistrationService(hashService, ibanGeneratorService, rootRepository);
     }
 
-
     @Test
     void registerClient(){
         RegistrationDTO registrationDTO = new RegistrationDTO("henk@unicom.nl", "password1234345", "Henk", "de", "Kort",
@@ -36,7 +35,7 @@ class RegistrationServiceTest {
 
         String actual2 = registrationService.registerClient(missingInput);
 
-        assertEquals("Incorrect Input", actual2);
+        assertEquals("Errors Found: Empty Field Invalid Email ", actual2);
     }
 
 
