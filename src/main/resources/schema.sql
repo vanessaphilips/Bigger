@@ -10,6 +10,7 @@ CREATE TABLE `client` (
 `number` INT NULL,
 `IBAN` VARCHAR(45) NULL,
 PRIMARY KEY (`email`));
+
 -- CONSTRAINT `verzinzelf1`
 -- FOREIGN KEY (`postalcode` , `number`)
 -- REFERENCES `bigbangk`.`address` (`postalcode` , `number`)
