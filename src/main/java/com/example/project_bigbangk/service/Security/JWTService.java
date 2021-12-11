@@ -12,6 +12,7 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.project_bigbangk.model.Client;
+import com.example.project_bigbangk.model.Role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,11 @@ public class JWTService implements ITokenService {
 
     private final Logger logger = LoggerFactory.getLogger(JWTService.class);
     private final long EXPIRATION_TIME = 1200 * 1000;  //milliseconds
+    private final String ISSUER = "BigBangk";  //milliseconds
     private ISecretKeyService secretKeyService;
     private Algorithm ALGORITHM;
     private final String AUDIENCE = "https://www.bigbangk.com";
+    private JWTVerifier verifier;
 
     @Autowired
     public JWTService(ISecretKeyService secretKeyService) {
@@ -34,22 +37,25 @@ public class JWTService implements ITokenService {
         logger.info("New JWTService");
         this.secretKeyService = secretKeyService;
         ALGORITHM = Algorithm.HMAC256(this.secretKeyService.toString());
+        verifier = JWT.require(ALGORITHM)
+                .withIssuer(ISSUER)
+                .build();
     }
 
     @Override
     public String getToken(String email, String firstName) {
         String token = null;
         try {
-            Long timeNow = System.currentTimeMillis();
+            long timeNow = System.currentTimeMillis();
             Date issuedAt = new Date(timeNow);
             Date experationDate = new Date(timeNow + EXPIRATION_TIME);
-            token = JWT.create().withIssuer("auth0").withIssuedAt(issuedAt)
+            token = JWT.create().withIssuer(ISSUER).withIssuedAt(issuedAt)
                     .withExpiresAt(experationDate)
                     .withAudience(AUDIENCE)
                     .withSubject(email)
                     .withClaim("firstName", firstName)
                     .withClaim("email", email)
-                    .withClaim("role", Client.class.getSimpleName())
+                    .withClaim("role", Role.CLIENT.toString())
                     .sign(ALGORITHM);
         } catch (JWTCreationException exception) {
             logger.error(exception.getMessage());
@@ -61,9 +67,6 @@ public class JWTService implements ITokenService {
     public boolean authenticateToken(String token) {
 
         try {
-            JWTVerifier verifier = JWT.require(ALGORITHM)
-                    .withIssuer("auth0")
-                    .build(); //Reusable verifier instance
             DecodedJWT decodedJWT = verifier.verify(token);
             if (decodedJWT.getExpiresAt().after(new Date(System.currentTimeMillis()))) {
                 return true;
@@ -75,18 +78,13 @@ public class JWTService implements ITokenService {
     }
 
     /**
-     *
      * @param token decode a JWT
      * @return email
      */
     @Override
-    public String getUserIdFromToken(String token) {
+    public String getEmailFromToken(String token) {
         try {
-            JWTVerifier verifier = JWT.require(ALGORITHM)
-                    .withIssuer("auth0")
-                    .build();
-           return verifier.verify(token).getClaim("email").asString();
-
+            return verifier.verify(token).getClaim("email").asString();
         } catch (JWTVerificationException exception) {
             logger.error(exception.getMessage());
         }

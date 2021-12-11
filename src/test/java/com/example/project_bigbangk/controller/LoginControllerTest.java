@@ -52,7 +52,7 @@ class LoginControllerTest {
 
 
     @Test
-    void login() {
+    void loginFail() {
         Mockito.when(loginService.login("deek", "password12345")).thenReturn(null);
         ResultActions response;
         try {
@@ -66,7 +66,7 @@ class LoginControllerTest {
     }
 
     @Test
-    void login2() {
+    void loginSucces() {
         String message = "login succesfull";
         Mockito.when(loginService.login("deek", "password12345")).thenReturn(message);
         ResultActions response;
@@ -76,7 +76,6 @@ class LoginControllerTest {
             MvcResult result = response.andExpect(MockMvcResultMatchers.status().isOk())
                     .andReturn();
             assertEquals("login succesfull", result.getResponse().getContentAsString());
-
         } catch (Exception e) {
             e.printStackTrace();
         }

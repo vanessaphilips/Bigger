@@ -7,5 +7,5 @@ public interface ITokenService {
 
     boolean authenticateToken(String token);
 
-    public String getUserIdFromToken(String token) ;
+    public String getEmailFromToken(String token) ;
 }
