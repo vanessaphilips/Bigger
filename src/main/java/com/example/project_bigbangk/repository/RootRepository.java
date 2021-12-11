@@ -30,7 +30,10 @@ public class RootRepository {
 
     public Client findClientByEmail(String email) {
         Client client = clientDAO.findClientByEmail(email);
-        if (client == null) {
+         if(client!=null) {
+            Address adress = findAddressByEmail(email);
+            client.setAddress(adress);
+            //ToDO findWalletByEmail
         }
         return client;
     }
@@ -38,8 +41,6 @@ public class RootRepository {
 
     public Address findAddressByEmail(String email) {
         Address address = addressDAO.findAddressByEmail(email);
-        if (address == null) {
-        }
         return address;
     }
 
