@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -38,6 +39,7 @@ public class RegistrationService {
     //precies 3 letters
     private static final String COUNTRY_REGEX = "^[a-zA-Z]{3}$";
     private final int AGE_LIMIT = 18;
+    private  final int UPPER_AGE_LIMIT = 150;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private LocalDate convertedDateOfBirth;
     private HashService hashService;
@@ -103,9 +105,9 @@ public class RegistrationService {
         if (!matchesRegex(registrationDTO.getPassword(), PASSWORD_REGEX)){
             inputErrorMessage += "Invalid Password ";}
         if (checkUnderAgeLimit(registrationDTO)) {
-            inputErrorMessage += "Under Age ";}
+            inputErrorMessage += "Invalid Age ";}
         if(!matchesRegex(registrationDTO.getBsn(), BSN_REGEX)){
-            inputErrorMessage += "Invalid Email ";}
+            inputErrorMessage += "Invalid Bsn ";}
         if(!matchesRegex(registrationDTO.getPostalCode(), POSTAL_REGEX)){
             inputErrorMessage += "Invalid PostalCode ";}
         if(registrationDTO.getNumber() < 1){
@@ -119,8 +121,13 @@ public class RegistrationService {
     }
 
     private boolean checkUnderAgeLimit(RegistrationDTO registrationDTO) {
-        convertedDateOfBirth = LocalDate.parse(registrationDTO.getDateOfBirth(), formatter);
-        if(Period.between(convertedDateOfBirth, LocalDate.now()).getYears() < AGE_LIMIT){
+        try {
+            convertedDateOfBirth = LocalDate.parse(registrationDTO.getDateOfBirth(), formatter);
+        }catch(DateTimeParseException e){
+            return true;
+        }
+        int yearsBetween = Period.between(convertedDateOfBirth, LocalDate.now()).getYears();
+        if(yearsBetween < AGE_LIMIT || yearsBetween > UPPER_AGE_LIMIT){
             return true;
         }
         return false;

@@ -4,4 +4,4 @@ INSERT INTO `Client` VALUES
                             ('huub@vanthienen.nl','Huub','van', 'Thienen', '1965-11-11', '123456789', 'huubvanthienen', null, null, null),
                             ('michel@oey.nl', 'Michel', NULL, 'Oey', '1968-09-09', '123456789', 'micheloey', null, null, null),
                             ('sander@deboer.nl', 'Sander', 'de', 'Boer', '1966-09-09', '123456789', 'sanderdeboer', null, null, null),
-                            ('nicole@wong.nl', 'Nicole', NULL, 'Wong', '123456789', '1973-01-01', 'nicolewong', null, null, null);
+                            ('nicole@wong.nl', 'Nicole', NULL, 'Wong', '1973-01-01', '123456789', 'nicolewong', null, null, null);
