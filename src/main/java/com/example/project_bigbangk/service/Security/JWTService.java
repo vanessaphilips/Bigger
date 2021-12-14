@@ -49,7 +49,7 @@ public class JWTService implements ITokenService {
             long timeNow = System.currentTimeMillis();
             Date issuedAt = new Date(timeNow);
             Date experationDate = new Date(timeNow + EXPIRATION_TIME);
-            token = JWT.create().withIssuer(ISSUER).withIssuedAt(issuedAt)
+            token =JWT.create().withIssuer(ISSUER).withIssuedAt(issuedAt)
                     .withExpiresAt(experationDate)
                     .withAudience(AUDIENCE)
                     .withSubject(email)
