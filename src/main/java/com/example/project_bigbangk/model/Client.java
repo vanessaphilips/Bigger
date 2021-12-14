@@ -43,9 +43,8 @@ public class Client {
         this.passWord = passWord;
     }
 
-    public Client(String email, String firstName, String lastName, LocalDate dateOfBirth,
-                  String bsn, String passWord) {
-        this(email, firstName, null, lastName, dateOfBirth, bsn, passWord);
+    public Client(){
+        this("", "", "", "", null, "", "", null, null);
     }
 
     // TODO alle getters en setters aangemaakt. Als blijkt dat eea niet gebruikt wordt dan weghalen.

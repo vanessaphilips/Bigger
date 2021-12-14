@@ -8,6 +8,8 @@ import org.springframework.test.context.ActiveProfiles;
 import java.time.LocalDate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Fail.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -30,18 +32,22 @@ class JdbcClientDAOTest {
 
     @Test
     void saveClient() {
+        fail("Test not yet implemented");
     }
 
     @Test
     void findClientByEmail() {
-        System.out.println("test0 ");
-        Client actual = clientDAOUnderTest.findClientByEmail("sander@deboer.nl");
-        System.out.println("test1");
-        Client expected = new Client("sander@deboer.nl", "Sander", "de",
+        Client actual1 = clientDAOUnderTest.findClientByEmail("sander@deboer.nl");
+        Client expected1 = new Client("sander@deboer.nl", "Sander", "de",
                 "Boer", LocalDate.of(1966,9,9), "123456789",
                 "sanderdeboer", null, null);
-        System.out.println("test2");
-        assertThat(expected).isEqualTo(actual);
+        assertThat(expected1).isEqualTo(actual1);
+
+        Client actual2 = clientDAOUnderTest.findClientByEmail("nicole@wong.nl");
+        Client expected2 = new Client("nicole@wong.nl", "Nicole", "",
+                "Wong", LocalDate.of(1973, 01, 01), "123456789",
+                "nicolewong", null, null);
+        assertEquals(expected2, actual2);
     }
 
     @Test
