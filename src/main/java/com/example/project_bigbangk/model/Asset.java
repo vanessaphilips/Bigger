@@ -15,6 +15,11 @@ public class Asset {
         this.code = code;
         this.currentPrice = currentPrice;
     }
+    public Asset(String name, String code) {
+        this.name = name;
+        this.code = code;
+
+    }
 
     @Override
     public String toString() {

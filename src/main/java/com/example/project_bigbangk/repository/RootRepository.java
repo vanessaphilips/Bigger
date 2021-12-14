@@ -7,11 +7,10 @@
 
 package com.example.project_bigbangk.repository;
 
-import com.example.project_bigbangk.model.Asset;
-import com.example.project_bigbangk.model.Client;
-import com.example.project_bigbangk.model.Address;
-import com.example.project_bigbangk.model.Wallet;
+import com.example.project_bigbangk.model.*;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public class RootRepository {
@@ -19,18 +18,22 @@ public class RootRepository {
     private IClientDAO clientDAO;
     private IAddressDAO addressDAO;
     private IWalletDAO walletDAO;
+    private IAssetDAO assetDAO;
+    private final IPriceHistoryDAO priceHistoryDAO;
 
-    public RootRepository(IClientDAO clientDAO, IAddressDAO addressDAO, IWalletDAO walletDAO) {
+    public RootRepository(IClientDAO clientDAO, IAddressDAO addressDAO, IWalletDAO walletDAO, IPriceHistoryDAO priceHistoryDAO, IAssetDAO assetDAO) {
         this.clientDAO = clientDAO;
         this.addressDAO = addressDAO;
         this.walletDAO = walletDAO;
+        this.priceHistoryDAO = priceHistoryDAO;
+        this.assetDAO = assetDAO;
     }
 
     // CLIENT
 
     public Client findClientByEmail(String email) {
         Client client = clientDAO.findClientByEmail(email);
-         if(client!=null) {
+        if (client != null) {
             Address adress = findAddressByEmail(email);
             client.setAddress(adress);
             //ToDO findWalletByEmail
@@ -55,6 +58,13 @@ public class RootRepository {
         clientDAO.saveClient(client);
     }
 
+    //PriceHistory
+    public void savePriceHistories(List<PriceHistory> priceHistories) {
+        for (PriceHistory priceHistory : priceHistories) {
+            assetDAO.saveAsset(priceHistory.getAsset());
+            priceHistoryDAO.savePriceHistory(priceHistory);
+        }
+    }
 
     // IBAN
 
