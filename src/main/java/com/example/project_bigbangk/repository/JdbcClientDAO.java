@@ -4,7 +4,7 @@ package com.example.project_bigbangk.repository;
 
 import com.example.project_bigbangk.model.Client;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -23,59 +23,84 @@ public class JdbcClientDAO implements IClientDAO{
 
     @Override
     public void saveClient(Client mpClient){
-        String sql = "Insert into Client values(?,?,?,?,?,?,?,?,?)";
-        jdbcTemplate.update(sql, mpClient.getFirstName(), mpClient.getInsertion(),
-                mpClient.getLastName(), mpClient.getEmail(), mpClient.getBsn(),
-                mpClient.getDateOfBirth(), mpClient.getPassWord(),
-                mpClient.getAddress(), mpClient.getWallet());
+        String sql = "Insert into Client values(?,?,?,?,?,?,?,?,?,?);";//10 ?s
+        try {
+            jdbcTemplate.update(sql,
+                    mpClient.getEmail(),
+                    mpClient.getFirstName(),
+                    mpClient.getInsertion(),
+                    mpClient.getLastName(),
+                    mpClient.getDateOfBirth(),
+                    mpClient.getBsn(),
+                    mpClient.getPassWord(),
+                    mpClient.getAddress().getPostalCode(),
+                    mpClient.getAddress().getNumber(),
+                    mpClient.getWallet().getIban());
+        } catch (DataAccessException dataAccessException) {
+            System.err.println(dataAccessException.getMessage());
+        }
     }
 
     @Override
     public Client findClientByEmail(String email){
-        String sql = "SELECT * FROM Client WHERE email = ?";
-        Client client;
+        String sql = "SELECT * FROM Client WHERE email = ?;";
+        Client client = null;
         try {
             client = jdbcTemplate.queryForObject(sql, new ClientRowMapper(), email);
-        } catch (EmptyResultDataAccessException noResult) {
-            client = null;
+        } catch (DataAccessException dataAccessException){
+            System.err.println(dataAccessException.getMessage());
         }
         return client;
     }
 
     @Override
     public List<Client> findAllClients(){
-        String sql = "SELECT * FROM Client";
-        return jdbcTemplate.query(sql, new ClientRowMapper());
+        String sql = "SELECT * FROM Client;";
+        try {
+            return jdbcTemplate.query(sql, new ClientRowMapper());
+        } catch (DataAccessException dataAccessException){
+            System.err.println(dataAccessException.getMessage());
+        }
+        return null;
     }
 
     @Override
     public void updateClient(Client client){
-        String sql = "UPDATE Client Set firstName = ?, insertion = ?, " +
-                "lastName = ?, email = ?, bsn = ?, dateOfBirth = ?, " +
-                "passWord = ?, address = ? wallet = ?, WHERE email = ?;";
-        jdbcTemplate.update(sql, client.getFirstName(), client.getInsertion(),
-                client.getLastName(), client.getEmail(), client.getBsn(),
-                client.getDateOfBirth(), client.getPassWord(),
-                client.getAddress(), client.getWallet());
+        String sql = "UPDATE Client Set email = ?, firstName = ?, insertion = ?, " +
+                "lastName = ?, dateOfBirth = ?, bsn = ?, passWord = ?, " +
+                "address = ? wallet = ?, WHERE email = ?;";
+        try {
+            jdbcTemplate.update(sql, client.getEmail(), client.getFirstName(), client.getInsertion(),
+                    client.getLastName(), client.getDateOfBirth(), client.getBsn(), client.getPassWord(),
+                    client.getAddress(), client.getWallet());
+        } catch (DataAccessException dataAccessException){
+            System.err.println(dataAccessException.getMessage());
+        }
     }
 
     @Override
     public List<Client> findClientByLastName(String lastName){
-        String sql = "SELECT * FROM Client WHERE lastName = ?";
-        return jdbcTemplate.query(sql, new ClientRowMapper(), lastName);
+        String sql = "SELECT * FROM Client WHERE lastName = ?;";
+        try {
+            return jdbcTemplate.query(sql, new ClientRowMapper(), lastName);
+        } catch (DataAccessException dataAccessException){
+            System.err.println(dataAccessException.getMessage());
+        }
+        return null;
     }
 
-    //FIXME in RowMapper alleen de attributen uit Client (dus niet Address en Wallet)
+    // Note: in RowMapper alleen de attributen uit Client (dus niet Address en Wallet)
 
     private class ClientRowMapper implements RowMapper<Client> {
         @Override
         public Client mapRow(ResultSet resultSet, int rowNumber) throws SQLException {
-            return new Client(resultSet.getString("firstName"),
+            return new Client(
+                    resultSet.getString("email"),
+                    resultSet.getString("firstName"),
                     resultSet.getString("insertion"),
                     resultSet.getString("lastName"),
-                    resultSet.getString("email"),
+                    resultSet.getDate("dateOfBirth").toLocalDate(),
                     resultSet.getString("bsn"),
-                    resultSet.getDate("dateOfBirth"),
                     resultSet.getString("passWord"));
         }
     }

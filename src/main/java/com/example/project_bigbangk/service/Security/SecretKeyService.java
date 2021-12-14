@@ -1,13 +1,12 @@
-// Created by Deek
-// Creation date 12/3/2021
-
-package com.example.project_bigbangk.service;
+package com.example.project_bigbangk.service.Security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 /**
- * created by Pieter Jan Bleichrodt
+ * @author Pieter Jan Bleichrodt
+ * Deze service simuleert een secret key
+ * reation date 12/3/2021
  */
 @Service
 public class SecretKeyService implements ISecretKeyService {

@@ -2,10 +2,9 @@
 // Creation date 2-12-2021
 
 package com.example.project_bigbangk.repository;
-
 import com.example.project_bigbangk.model.Address;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -26,20 +25,24 @@ public class JdbcAddressDAO implements IAddressDAO {
 
 
     @Override
-    public void save(Address mpAddress) {
+    public void saveAddress(Address mpAddress) {
         String sql = "Insert into Address values(?,?,?,?,?)";
-        jdbcTemplate.update(sql, mpAddress.getPostalCode(), mpAddress.getStreet(),mpAddress.getNumber(),
-                mpAddress.getCity(), mpAddress.getCountry());
+        try {
+            jdbcTemplate.update(sql, mpAddress.getPostalCode(), mpAddress.getStreet(), mpAddress.getNumber(),
+                    mpAddress.getCity(), mpAddress.getCountry());
+        } catch (DataAccessException dataAccessException) {
+            System.err.println(dataAccessException.getMessage());
+        }
     }
 
     @Override
     public Address findAddressByEmail(String email) {
-        String sql = "Select * From Address Where postalcode = ? AND number = ?"; //icm SQL syntax (join) oplossen
-        Address address;
+        String sql = "Select * From AddressWithClientEmail Where email = ?";
+        Address address = null;
         try {
-            address = jdbcTemplate.queryForObject(sql, new AddressRowMapper(), email);
-        } catch (EmptyResultDataAccessException noResult) {
-            address = null;
+            address = jdbcTemplate.queryForObject(sql, new JdbcAddressDAO.AddressRowMapper(), email);
+        } catch (DataAccessException dataAccessException){
+            System.err.println(dataAccessException.getMessage());
         }
         return address;
     }
@@ -47,13 +50,23 @@ public class JdbcAddressDAO implements IAddressDAO {
     @Override
     public List<Address> findAllAddresses() {
         String sql = "Select * From address";
-        return jdbcTemplate.query(sql, new AddressRowMapper());
+        try {
+            return jdbcTemplate.query(sql, new AddressRowMapper());
+        } catch (DataAccessException dataAccessException) {
+            System.err.println(dataAccessException.getMessage());
+        }
+        return null;
     }
 
     @Override
     public List<Address> findAddressByPostalcode(String postalcode) {
         String sql = "Select * From address Where postalcode = ?";
-        return jdbcTemplate.query(sql, new AddressRowMapper(), postalcode);
+        try {
+            return jdbcTemplate.query(sql, new AddressRowMapper(), postalcode);
+        } catch (DataAccessException dataAccessException) {
+            System.err.println(dataAccessException.getMessage());
+        }
+        return null;
     }
 
     private class AddressRowMapper implements RowMapper<Address> {

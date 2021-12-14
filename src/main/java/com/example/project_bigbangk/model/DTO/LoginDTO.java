@@ -1,12 +1,10 @@
-// Created by Deek
-// Creation date 12/7/2021
-
-package com.example.project_bigbangk.model;
+package com.example.project_bigbangk.model.DTO;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 /**
  * created by Pieter Jan Bleichrodt
+ * Creation date 12/7/2021
  */
 public class LoginDTO {
 
@@ -36,4 +34,6 @@ public class LoginDTO {
     public void setPassword(String password) {
         this.password = password;
     }
+
+
 }

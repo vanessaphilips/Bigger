@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface IAddressDAO {
 
-    public void save(Address mpAddress);
+    public void saveAddress(Address mpAddress);
 
     public Address findAddressByEmail(String email);
 

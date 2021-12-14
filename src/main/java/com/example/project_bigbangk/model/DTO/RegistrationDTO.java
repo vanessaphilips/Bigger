@@ -1,9 +1,11 @@
-package com.example.project_bigbangk.model;
+package com.example.project_bigbangk.model.DTO;
 /*
 
 @Author Bigbangk
 */
 
+
+import java.util.Objects;
 
 // velden in DTO moeten overeenkomen met JSON! en omgekeerd
 public class RegistrationDTO {
@@ -83,5 +85,18 @@ public class RegistrationDTO {
 
     public String getCountry() {
         return country;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RegistrationDTO that = (RegistrationDTO) o;
+        return number == that.number && Objects.equals(email, that.email) && Objects.equals(password, that.password) && Objects.equals(firstName, that.firstName) && Objects.equals(insertion, that.insertion) && Objects.equals(lastName, that.lastName) && Objects.equals(bsn, that.bsn) && Objects.equals(dateOfBirth, that.dateOfBirth) && Objects.equals(postalCode, that.postalCode) && Objects.equals(street, that.street) && Objects.equals(city, that.city) && Objects.equals(country, that.country);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(email, password, firstName, insertion, lastName, bsn, dateOfBirth, postalCode, street, number, city, country);
     }
 }

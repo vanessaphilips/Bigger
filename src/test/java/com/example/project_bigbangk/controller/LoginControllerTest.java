@@ -1,19 +1,14 @@
 package com.example.project_bigbangk.controller;
 
-import com.example.project_bigbangk.ProjectBigBangKApplication;
 import com.example.project_bigbangk.Utilities.ObjectToJsonHelper;
-import com.example.project_bigbangk.model.LoginDTO;
+import com.example.project_bigbangk.model.DTO.LoginDTO;
 import com.example.project_bigbangk.service.ClientService;
 import com.example.project_bigbangk.service.LoginService;
 import com.example.project_bigbangk.service.RegistrationService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
@@ -22,10 +17,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import java.security.MessageDigest;
 
 import static org.junit.jupiter.api.Assertions.*;
 /**
@@ -56,7 +48,6 @@ class LoginControllerTest {
                 .content(ObjectToJsonHelper.objectToJson(loginDTO))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
-
     }
 
 
@@ -76,15 +67,15 @@ class LoginControllerTest {
 
     @Test
     void login2() {
-        String token = "deek";
-        Mockito.when(loginService.login("deek", "password12345")).thenReturn(token);
+        String message = "login succesfull";
+        Mockito.when(loginService.login("deek", "password12345")).thenReturn(message);
         ResultActions response;
 
         try {
             response = mockMvc.perform(builder);
             MvcResult result = response.andExpect(MockMvcResultMatchers.status().isOk())
                     .andReturn();
-            assertEquals("deek", result.getResponse().getContentAsString());
+            assertEquals("login succesfull", result.getResponse().getContentAsString());
 
         } catch (Exception e) {
             e.printStackTrace();

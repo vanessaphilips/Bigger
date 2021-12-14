@@ -1,20 +1,18 @@
 package com.example.project_bigbangk.service;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.exceptions.JWTCreationException;
-import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import com.example.project_bigbangk.model.Client;
+import com.example.project_bigbangk.service.Security.ISecretKeyService;
+import com.example.project_bigbangk.service.Security.ITokenService;
+import com.example.project_bigbangk.service.Security.JWTService;
+import com.example.project_bigbangk.service.Security.SecretKeyService;
 import org.junit.jupiter.api.Test;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class JWTService_SecretKeyService_IntegrationTest {
+/**
+ * @author P.J.Bleichrodt
+ * created 12/9/2021
+ */
+class JWTServiceTest {
 
     ISecretKeyService secretKeyService = new SecretKeyService();
     ITokenService jwtService = new JWTService(secretKeyService);
@@ -22,13 +20,8 @@ class JWTService_SecretKeyService_IntegrationTest {
 
     @Test
     void GetToken() {
-        DecodedJWT decodedJWT = jwtService.decodeToken(token);
-        System.out.println(decodedJWT.getExpiresAt());
-        assertEquals("www.bigbangk.com", decodedJWT.getAudience().stream().findFirst().get());
-        assertEquals("deek@deek.nl", decodedJWT.getSubject());
-        assertEquals("Deek", decodedJWT.getClaim("firstName").asString());
-        assertEquals("deek@deek.nl", decodedJWT.getClaim("email").asString());
-       assertEquals("Client", decodedJWT.getClaim("role").asString());
+        String email = jwtService.getUserIdFromToken(token);
+        assertEquals("deek@deek.nl", email);
     }
 
     @Test

@@ -3,13 +3,14 @@ package com.example.project_bigbangk.service;
 
 import com.example.project_bigbangk.model.Client;
 import com.example.project_bigbangk.repository.RootRepository;
+import com.example.project_bigbangk.service.Security.*;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import static org.junit.jupiter.api.Assertions.*;
 
 
 /**
- * created by Pieter Jan Bleichrodt
+ * @author Pieter Jan Bleichrodt
  */
 class AuthenticateServiceTest {
 

@@ -1,9 +1,8 @@
-// Created by Deek
-// Creation date 12/3/2021
-
-package com.example.project_bigbangk.service;
+package com.example.project_bigbangk.service.Security;
 /**
- * created by Pieter Jan Bleichrodt
+ * @author Pieter Jan Bleichrodt
+ * Creation date 12/3/2021
+ * This class generates and valitades JWT
  */
 
 import com.auth0.jwt.JWT;
@@ -19,8 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class JWTService implements ITokenService {
@@ -29,7 +26,7 @@ public class JWTService implements ITokenService {
     private final long EXPIRATION_TIME = 1200 * 1000;  //milliseconds
     private ISecretKeyService secretKeyService;
     private Algorithm ALGORITHM;
-    private final String AUDIENCE = "www.bigbangk.com";
+    private final String AUDIENCE = "https://www.bigbangk.com";
 
     @Autowired
     public JWTService(ISecretKeyService secretKeyService) {
@@ -46,10 +43,6 @@ public class JWTService implements ITokenService {
             Long timeNow = System.currentTimeMillis();
             Date issuedAt = new Date(timeNow);
             Date experationDate = new Date(timeNow + EXPIRATION_TIME);
-            Map<String, String> payload = new HashMap<>();
-            payload.put("klantId", email);
-            payload.put("firstName", firstName);
-
             token = JWT.create().withIssuer("auth0").withIssuedAt(issuedAt)
                     .withExpiresAt(experationDate)
                     .withAudience(AUDIENCE)
@@ -58,7 +51,6 @@ public class JWTService implements ITokenService {
                     .withClaim("email", email)
                     .withClaim("role", Client.class.getSimpleName())
                     .sign(ALGORITHM);
-
         } catch (JWTCreationException exception) {
             logger.error(exception.getMessage());
         }
@@ -82,13 +74,18 @@ public class JWTService implements ITokenService {
         return false;
     }
 
+    /**
+     *
+     * @param token decode a JWT
+     * @return email
+     */
     @Override
-    public DecodedJWT decodeToken(String token) {
+    public String getUserIdFromToken(String token) {
         try {
             JWTVerifier verifier = JWT.require(ALGORITHM)
                     .withIssuer("auth0")
-                    .build(); //Reusable verifier instance
-           return verifier.verify(token);
+                    .build();
+           return verifier.verify(token).getClaim("email").asString();
 
         } catch (JWTVerificationException exception) {
             logger.error(exception.getMessage());

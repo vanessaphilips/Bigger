@@ -1,6 +1,6 @@
-package com.example.project_bigbangk.service;
+package com.example.project_bigbangk.service.Security;
 
-import com.example.project_bigbangk.model.HashHelper;
+import com.example.project_bigbangk.Utilities.HashHelper;
 import org.springframework.stereotype.Service;
 
 /**

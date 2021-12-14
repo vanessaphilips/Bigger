@@ -1,7 +1,8 @@
 package com.example.project_bigbangk.service;
 
-import com.example.project_bigbangk.model.RegistrationDTO;
+import com.example.project_bigbangk.model.DTO.RegistrationDTO;
 import com.example.project_bigbangk.repository.RootRepository;
+import com.example.project_bigbangk.service.Security.HashService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -20,7 +21,6 @@ class RegistrationServiceTest {
         registrationService = new RegistrationService(hashService, ibanGeneratorService, rootRepository);
     }
 
-
     @Test
     void registerClient(){
         RegistrationDTO registrationDTO = new RegistrationDTO("henk@unicom.nl", "password1234345", "Henk", "de", "Kort",
@@ -35,7 +35,7 @@ class RegistrationServiceTest {
 
         String actual2 = registrationService.registerClient(missingInput);
 
-        assertEquals("Incorrect Input", actual2);
+        assertEquals("Errors Found: Empty Field Invalid Email ", actual2);
     }
 
 
@@ -44,25 +44,26 @@ class RegistrationServiceTest {
         RegistrationDTO registrationDTO = new RegistrationDTO("henk@unicom.nl", "password1234345", "Henk", "de", "Kort",
                 "123434546", "1950-01-01", "1111BN", "Straatie", 9, "Muiden", "NLD");
 
-        assertTrue(registrationService.checkRegistrationInput(registrationDTO));
-    }
+        assertEquals(RegistrationService.Messages.NoInputErrors.getBody(), registrationService.checkRegistrationInput(registrationDTO));}
 
     @Test
     void checkRegistrationInputWrongEmail(){
         RegistrationDTO missingAt = new RegistrationDTO("henkunicom.nl", "password1234345", "Henk", "de", "Kort",
                 "123434546", "1950-01-01", "1111BN", "Straatie", 9, "Muiden", "NLD");
 
-        assertFalse(registrationService.checkRegistrationInput(missingAt));
+        assertNotEquals(RegistrationService.Messages.NoInputErrors.getBody(), registrationService.checkRegistrationInput(missingAt));
 
         RegistrationDTO missingPoint = new RegistrationDTO("henk@unicomnl", "password1234345", "Henk", "de", "Kort",
-                "123434546", "1950-01-01", "1111BN", "Straatie", 9, "Muiden", "NLD");
+                    "123434546", "1950-01-01", "1111BN", "Straatie", 9, "Muiden", "NLD");
 
-        assertFalse(registrationService.checkRegistrationInput(missingPoint));
+        assertNotEquals(RegistrationService.Messages.NoInputErrors.getBody(), registrationService.checkRegistrationInput(missingPoint));
+
 
         RegistrationDTO empty = new RegistrationDTO("", "password1234345", "Henk", "de", "Kort",
-                "123434546", "1950-01-01", "1111BN", "Straatie", 9, "Muiden", "NLD");
+                    "123434546", "1950-01-01", "1111BN", "Straatie", 9, "Muiden", "NLD");
 
-        assertFalse(registrationService.checkRegistrationInput(empty));
+        assertNotEquals(RegistrationService.Messages.NoInputErrors.getBody(), registrationService.checkRegistrationInput(empty));
+
     }
 
     @Test
@@ -70,17 +71,20 @@ class RegistrationServiceTest {
         RegistrationDTO shortPW = new RegistrationDTO("henk@unicom.nl", "pas", "Henk", "de", "Kort",
                 "123434546", "1950-01-01", "1111BN", "Straatie", 9, "Muiden", "NLD");
 
-        assertFalse(registrationService.checkRegistrationInput(shortPW));
+        assertNotEquals(RegistrationService.Messages.NoInputErrors.getBody(), registrationService.checkRegistrationInput(shortPW));
+
 
         RegistrationDTO noPW = new RegistrationDTO("henk@unicom.nl", "", "Henk", "de", "Kort",
                 "123434546", "1950-01-01", "1111BN", "Straatie", 9, "Muiden", "NLD");
 
-        assertFalse(registrationService.checkRegistrationInput(noPW));
+        assertNotEquals(RegistrationService.Messages.NoInputErrors.getBody(), registrationService.checkRegistrationInput(noPW));
+
 
         RegistrationDTO spaceInPw = new RegistrationDTO("henk@unicom.nl", "pas pas pas 123456789", "Henk", "de", "Kort",
                 "123434546", "1950-01-01", "1111BN", "Straatie", 9, "Muiden", "NLD");
 
-        assertFalse(registrationService.checkRegistrationInput(spaceInPw));
+        assertNotEquals(RegistrationService.Messages.NoInputErrors.getBody(), registrationService.checkRegistrationInput(spaceInPw));
+
     }
 
     @Test
@@ -88,12 +92,14 @@ class RegistrationServiceTest {
         RegistrationDTO postalOnlyNumbers = new RegistrationDTO("henk@unicom.nl", "password1234345", "Henk", "de", "Kort",
                 "123434546", "1950-01-01", "111111", "Straatie", 9, "Muiden", "NLD");
 
-        assertFalse(registrationService.checkRegistrationInput(postalOnlyNumbers));
+        assertNotEquals(RegistrationService.Messages.NoInputErrors.getBody(), registrationService.checkRegistrationInput(postalOnlyNumbers));
+
 
         RegistrationDTO postalTooLong = new RegistrationDTO("henk@unicom.nl", "password1234345", "Henk", "de", "Kort",
                 "123434546", "1950-01-01", "1111BNN", "Straatie", 9, "Muiden", "NLD");
 
-        assertFalse(registrationService.checkRegistrationInput(postalTooLong));
+        assertNotEquals(RegistrationService.Messages.NoInputErrors.getBody(), registrationService.checkRegistrationInput(postalTooLong));
+
     }
 
 }
