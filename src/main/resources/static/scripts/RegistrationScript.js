@@ -36,3 +36,17 @@ function saveRegistration() {
     alert(JSON.stringify(registration));
 }
 
+//voor later
+//$.ajax({
+//    type: "POST",
+//    url: "https://reqbin.com/echo/post/json",
+//    data: JSON.stringify({ "userName": userName, "password" : password }),
+//    contentType: "application/json",
+//    success: function (result) {
+//      console.log(result);
+//    },
+//    error: function (result, status) {
+//      console.log(result);
+//    }
+// });
+

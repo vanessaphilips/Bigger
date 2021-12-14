@@ -14,15 +14,15 @@
 <form id="registrationForm">
     <br>
     <label for="email">E-mail</label>
-    <input type="text" id="email" class="Rinput">
+    <input type="email" required="required" id="email" class="Rinput">
     <br><br>
     <br>
     <label for="password">Password</label>
-    <input type="text" id="password" class="Rinput">
+    <input type="text" required="required" id="password" class="Rinput">
     <br><br>
     <br>
     <label for="firstName">First Name</label>
-    <input type="text" id="firstName" class="Rinput">
+    <input type="text" required="required" id="firstName" class="Rinput">
     <br><br>
     <br>
     <label for="insertion">Insertion</label>
@@ -30,37 +30,38 @@
     <br><br>
     <br>
     <label for="lastName">Last Name</label>
-    <input type="text" id="lastName" class="Rinput">
+    <input type="text" required="required" id="lastName" class="Rinput">
     <br><br>
     <br>
     <label for="bsn">Burgerservicenummer</label>
-    <input type="text" id="bsn" class="Rinput">
+    <input type="text" required="required" id="bsn" minlength="9" maxlength="9" class="Rinput">
 <!--    bsn verstoppen of vervangen op basis van land?? -->
     <br><br>
     <br>
     <label for="dateOfBirth">Date of Birth</label>
-    <input type="date" id="dateOfBirth" class="Rinput">
+    <input type="date" required="required" id="dateOfBirth" class="Rinput">
     <br><br>
     <br>
     <label for="postalCode">PostalCode</label>
-    <input type="text" id="postalCode" class="Rinput">
+    <input type="text" required="required" id="postalCode" class="Rinput">
     <br><br>
     <br>
 <!--    op basis van postcode nr straat etc ophalen later.-->
     <label for="street">Street</label>
-    <input type="text" id="street" class="Rinput">
+    <input type="text" required="required" id="street" class="Rinput">
     <br><br>
     <br>
     <label for="number">Number</label>
-    <input type="text" id="number" class="Rinput">
+    <input type="number" required="required" min="0" id="number" class="Rinput">
     <br><br>
     <br>
     <label for="city">City</label>
-    <input type="text" id="city" class="Rinput">
+    <input type="text" required="required" id="city" class="Rinput">
     <br><br>
     <br>
     <label for="county">County</label>
-    <input type="text" id="county" class="Rinput">
+    <input type="text" required="required" id="county" class="Rinput">
+<!--    dropdown voor landen maken-->
     <br><br>
     <button onclick="saveRegistration()">Register</button>
 

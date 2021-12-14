@@ -1,2 +1,5 @@
 
-
+form :invalid {
+    color: red;
+    outline: red 2px;
+}
