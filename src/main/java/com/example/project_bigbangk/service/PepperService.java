@@ -3,7 +3,9 @@ package com.example.project_bigbangk.service;
 import org.springframework.stereotype.Service;
 
 /**
- * created by Kelly Speelman - de Jonge
+ * Hier staat de pepper die bij elk wachtwoord wordt gebruikt in de hash
+ *
+ * @Author Kelly Speelman - de Jonge
  */
 
 @Service

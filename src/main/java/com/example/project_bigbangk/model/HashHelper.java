@@ -3,7 +3,10 @@ package com.example.project_bigbangk.model;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 /**
- * created by Kelly Speelman - de Jonge
+ * Hier staat is de hashHelper die gebruikt kan worden om wachtwoorden te hashen
+ * of het paswoord te controleren met een gehased paswoord
+ *
+ * @Author Kelly Speelman - de Jonge
  */
 
 public class HashHelper {

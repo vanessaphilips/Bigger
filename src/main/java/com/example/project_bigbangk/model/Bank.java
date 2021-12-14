@@ -3,7 +3,9 @@ package com.example.project_bigbangk.model;
 import java.util.List;
 
 /**
- * created by Kelly Speelman - de Jonge
+ * Hier staat alle informatie waar een bank uit bestaat.
+ *
+ * @Author Kelly Speelman - de Jonge
  */
 
 public class Bank {

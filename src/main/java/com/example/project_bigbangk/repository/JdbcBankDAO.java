@@ -10,7 +10,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * created by Kelly Speelman - de Jonge
+ * Hier wordt de bank informatie uit een Jdbc database gehaald.
+ *
+ * @Author Kelly Speelman - de Jonge
  */
 
 public class JdbcBankDAO implements IBankDAO{
