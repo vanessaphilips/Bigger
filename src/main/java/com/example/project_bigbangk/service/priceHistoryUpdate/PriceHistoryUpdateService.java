@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -30,12 +31,14 @@ public class PriceHistoryUpdateService {
     }
 
     public void updatePriceHistory() {
-        System.out.println("priceupdate gestart");
         List<PriceHistory> priceHistories = null;
-            while (priceHistories == null) {
-                cryptoNegotiatorService = cryptoApiNegotiatorStrategy.getAvailableCryptoService();
-                priceHistories = cryptoNegotiatorService.getPriceHistory();
-                rootRepository.savePriceHistories(priceHistories);
-            }
+        cryptoNegotiatorService = cryptoApiNegotiatorStrategy.getAvailableCryptoService();
+        priceHistories = cryptoNegotiatorService.getPriceHistory();
+        if (priceHistories != null) {
+            rootRepository.savePriceHistories(priceHistories);
+            logger.info(String.format("Price history updated on %s", LocalDateTime.now()));
+        } else {
+            logger.error(String.format("Price history update encountered an error on %s", LocalDateTime.now()));
+        }
     }
 }

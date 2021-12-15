@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,20 +15,22 @@ import java.util.Optional;
 public class CryptoApiNegotiatorStrategy implements ICryptoApiNegotiatorStrategy {
 
     private final Logger logger = LoggerFactory.getLogger(CryptoApiNegotiatorStrategy.class);
-    private List<ICryptoApiNegotiatorService> cryptoNegotiatorServices;
+    private List<ICryptoApiNegotiatorService> cryptoApiNegotiatorServices;
 
-    public CryptoApiNegotiatorStrategy(List<ICryptoApiNegotiatorService> cryptoNegotiatorServices) {
+    public CryptoApiNegotiatorStrategy() {
         super();
         logger.info("New CryptoNegotiatorStrategy");
-        this.cryptoNegotiatorServices = cryptoNegotiatorServices;
-        cryptoNegotiatorServices.add(new CoinMarketCapNegociator());
-        //cryptoNegotiatorServices.add(new CryptoApiNegotiatorService2());
-       // cryptoNegotiatorServices.add(new CryptoApiNegotiatorService3());
+        this.cryptoApiNegotiatorServices = new ArrayList<>();
     }
 
     @Override
     public ICryptoApiNegotiatorService getAvailableCryptoService() {
-                Optional<ICryptoApiNegotiatorService> cryptoApiNegotiatorService = cryptoNegotiatorServices.stream().filter(c->c.isAvailable()).findFirst();
-                return cryptoApiNegotiatorService.isPresent()? cryptoApiNegotiatorService.get(): null;
+        Optional<ICryptoApiNegotiatorService> cryptoApiNegotiatorService = cryptoApiNegotiatorServices.stream().filter(c -> c.isAvailable()).findFirst();
+        return cryptoApiNegotiatorService.orElse(null);
+    }
+
+    @Override
+    public void addNegotiator(ICryptoApiNegotiatorService coinMarketCapNegotiator) {
+        cryptoApiNegotiatorServices.add(coinMarketCapNegotiator);
     }
 }

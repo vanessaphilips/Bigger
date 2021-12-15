@@ -36,10 +36,22 @@ public class JdbcAssetDAO implements IAssetDAO {
         try {// public Asset(String name, String code, double currentPrice)
             jdbcTemplate.update(sql, asset.getCode(),
                     asset.getName()
-                   );
+            );
         } catch (DataAccessException dataAccessException) {
             logger.info(dataAccessException.getMessage());
         }
+    }
+
+    @Override
+    public int getAmountOfAssets() {
+        String sql = "SELECT count(code) FROM Asset";
+        try {
+            return jdbcTemplate.queryForObject(sql, Integer.class);
+
+        } catch (DataAccessException dataAccessException) {
+            logger.info(dataAccessException.getMessage());
+        }
+        return 0;
     }
 
     private class AssetRowMapper implements RowMapper<Asset> {

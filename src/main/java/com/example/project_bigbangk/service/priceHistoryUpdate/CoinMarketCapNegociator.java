@@ -35,7 +35,7 @@ public class CoinMarketCapNegociator implements ICryptoApiNegotiatorService {
     private final static String API_KEY = "9a38f7d6-3288-491a-8a0d-0338079527bc";
     private final static String ASSET_DATA_URL = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest";
     private final static String SERVER_INFO_URL = "https://pro-api.coinmarketcap.com/v1/key/info";
-    private final static String AssetAll = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest";
+    private final static String ALLASSETS = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest";
     private final static int[] ASSET_IDS = new int[]{1, 1027, 1839, 825, 5426, 3408, 2010, 52, 6636, 74, 4172, 5805, 5994, 4687, 3635, 3890, 3717, 2, 7083, 1027, 4943,};
 
 
@@ -65,7 +65,7 @@ public class CoinMarketCapNegociator implements ICryptoApiNegotiatorService {
         return true;
     }
 
-        @Override
+    @Override
     public List<PriceHistory> getPriceHistory() {
         String jsonResult = null;
         List<NameValuePair> parameters = new ArrayList<>();
@@ -83,23 +83,27 @@ public class CoinMarketCapNegociator implements ICryptoApiNegotiatorService {
         List<PriceHistory> priceHistories = convertJSonToPriceHistory(jsonResult);
         return priceHistories;
     }
-//    @Override
-//    public List<PriceHistory> getPriceHistory() {
-//        String jsonResult = null;
-//        List<NameValuePair> parameters = new ArrayList<>();
-//        parameters.add(new BasicNameValuePair("limit", "20"));
-//        parameters.add(new BasicNameValuePair("convert", "EUR"));
-//        try {
-//            URIBuilder query = makeAPIQuery(AssetAll, parameters);
-//            HttpGet request = makeApiRequest(query);
-//            jsonResult = makeAPiCall(request);
-//        } catch (IOException e) {
-//            System.out.println("Error: cannont access content - " + e.toString());
-//        } catch (URISyntaxException e) {
-//            System.out.println("Error: Invalid URL " + e.toString());
-//        }
-//        return convertJSonToPriceHistory(jsonResult);
-//    }
+
+    /**
+     *
+     * @return a list of currentPrices for the first 20 most populair assets
+     */
+    public List<PriceHistory> getRangeOfCoins() {
+        String jsonResult = null;
+        List<NameValuePair> parameters = new ArrayList<>();
+        parameters.add(new BasicNameValuePair("limit", "20"));
+        parameters.add(new BasicNameValuePair("convert", "EUR"));
+        try {
+            URIBuilder query = makeAPIQuery(ALLASSETS, parameters);
+            HttpGet request = makeApiRequest(query);
+            jsonResult = makeAPiCall(request);
+        } catch (IOException e) {
+            System.out.println("Error: cannont access content - " + e.toString());
+        } catch (URISyntaxException e) {
+            System.out.println("Error: Invalid URL " + e.toString());
+        }
+        return convertJSonToPriceHistory(jsonResult);
+    }
 
     private List<PriceHistory> convertJSonToPriceHistory(String result) {
         ObjectNode node = null;
@@ -127,10 +131,10 @@ public class CoinMarketCapNegociator implements ICryptoApiNegotiatorService {
     private String getCoinIdsAsString() {
         StringBuilder stringBuilder = new StringBuilder();
         int i = 0;
-            for (int assetCode :ASSET_IDS) {
+        for (int assetCode : ASSET_IDS) {
             stringBuilder.append(assetCode);
             i++;
-            if (i < ASSET_IDS.length ) {
+            if (i < ASSET_IDS.length) {
                 stringBuilder.append(",");
             }
         }
