@@ -61,7 +61,7 @@ public class RootRepository {
 
     //PriceHistory
     public void savePriceHistories(List<PriceHistory> priceHistories) {
-        boolean saveAssets = assetDAO.getAmountOfAssets() != AMOUNT_OF_ASSETS;
+        boolean saveAssets = assetDAO.getNumberOfAssets() != AMOUNT_OF_ASSETS;
         for (PriceHistory priceHistory : priceHistories) {
             if (saveAssets) {
             assetDAO.saveAsset(priceHistory.getAsset());

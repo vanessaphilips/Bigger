@@ -1,8 +1,6 @@
 package com.example.project_bigbangk.model;
 
-import javax.lang.model.element.Name;
-
-public enum AssetCode {
+public enum AssetCode_Name {
     BTC("Bitcoin"), ETH("Ethereum"),
     BNB("Binance Coin"), USDT("Tether"),
     SOL("Solana"), USDC("USD Coin"),
@@ -17,7 +15,7 @@ public enum AssetCode {
 
     private String coinName;
 
-    private AssetCode(String coinName) {
+    private AssetCode_Name(String coinName) {
         this.coinName = coinName;
     }
 

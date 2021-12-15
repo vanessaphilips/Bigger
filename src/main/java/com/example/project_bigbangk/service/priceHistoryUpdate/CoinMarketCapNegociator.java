@@ -4,7 +4,7 @@
 package com.example.project_bigbangk.service.priceHistoryUpdate;
 
 import com.example.project_bigbangk.model.Asset;
-import com.example.project_bigbangk.model.AssetCode;
+import com.example.project_bigbangk.model.AssetCode_Name;
 import com.example.project_bigbangk.model.PriceHistory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -118,9 +118,9 @@ public class CoinMarketCapNegociator implements ICryptoApiNegotiatorService {
             for (JsonNode json : node.findValues("data")) {
                 for (JsonNode coin : json) {
                     double price = Double.parseDouble(coin.get("quote").get("EUR").get("price").toString());
-                    AssetCode assetCode = AssetCode.valueOf(coin.get("symbol").textValue());
+                    AssetCode_Name assetCodeName = AssetCode_Name.valueOf(coin.get("symbol").textValue());
                     JsonNode jsonName = coin.get("name");
-                    PriceHistory priceHistory = new PriceHistory(LocalDateTime.now(), price, new Asset(assetCode.getAssetName(), assetCode.getAssetCode(), price));
+                    PriceHistory priceHistory = new PriceHistory(LocalDateTime.now(), price, new Asset(assetCodeName, price));
                     priceHistorys.add(priceHistory);
                 }
             }
