@@ -64,19 +64,24 @@ public class RootRepository {
         boolean saveAssets = assetDAO.getNumberOfAssets() != AMOUNT_OF_ASSETS;
         for (PriceHistory priceHistory : priceHistories) {
             if (saveAssets) {
-            assetDAO.saveAsset(priceHistory.getAsset());
-        }
+                assetDAO.saveAsset(priceHistory.getAsset());
+            }
             priceHistoryDAO.savePriceHistory(priceHistory);
         }
     }
+    //Asset
+public List<Asset> getAllAssets(){
+        List<Asset> assets = assetDAO.getAllAssets();
+        for(Asset asset:assets){
+            asset.setCurrentPrice(priceHistoryDAO.getCurrentPriceByAssetCode(asset.getCode()));
+        }
+        return assets;
+}
 
-    // IBAN
-
+    // WALLET
     public Wallet findWalletByIban(String iban) {
         return walletDAO.findWalletByIban(iban);
     }
-
-    // WALLET
 
     //TODO methode invullen
     public void createNewWalletWithAssets() {
@@ -85,6 +90,7 @@ public class RootRepository {
     public void updateWalletBalanceAndAsset(Wallet wallet, Asset asset) {
         walletDAO.updateWalletBalanceAndAsset(wallet, asset);
     }
+
 
     //TODO methode invullen
 //   public Wallet findWalletWithAssetByIban(String iban) {

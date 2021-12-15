@@ -10,10 +10,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.support.AbstractLobStreamingResultSetExtractor;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 @Repository
 public class JdbcAssetDAO implements IAssetDAO {
@@ -27,6 +29,17 @@ public class JdbcAssetDAO implements IAssetDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    @Override
+    public List<Asset> getAllAssets() {
+        String sql = "Select * from Asset;";
+        List<Asset> assets = null;
+        try {
+           assets = jdbcTemplate.query(sql, new AssetRowMapper());
+        } catch (DataAccessException dataAccessException) {
+            logger.info(dataAccessException.getMessage());
+        }
+        return assets;
+    }
 
     @Override
     public void saveAsset(Asset asset) {
@@ -42,6 +55,7 @@ public class JdbcAssetDAO implements IAssetDAO {
 
     /**
      * for checking the number assets already in DB
+     *
      * @return number of rows from Asset Table
      */
     @Override

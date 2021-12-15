@@ -3,6 +3,7 @@
 
 package com.example.project_bigbangk.repository;
 
+import com.example.project_bigbangk.model.Asset;
 import com.example.project_bigbangk.model.Client;
 import com.example.project_bigbangk.model.PriceHistory;
 import org.slf4j.Logger;
@@ -40,6 +41,20 @@ public class JdbcPriceHistoryDAO implements IPriceHistoryDAO {
         } catch (DataAccessException dataAccessException) {
            logger.info(dataAccessException.getMessage());
         }
+    }
+
+    @Override
+    public double getCurrentPriceByAssetCode(String assetCode){
+        String sql = "Select * from priceHistory where datetime in (SELECT max(datetime) FROM bigbangk.pricehistory ) and code = ? ;";
+        double currentprice = 0;
+        try {
+            PriceHistory priceHistory = jdbcTemplate.queryForObject(sql,
+                    new PiceHistoryRowMapper(), assetCode);
+            currentprice = priceHistory.getPrice();
+        } catch (DataAccessException dataAccessException) {
+            logger.info(dataAccessException.getMessage());
+        }
+        return currentprice;
     }
 
     private class PiceHistoryRowMapper implements RowMapper<PriceHistory> {
