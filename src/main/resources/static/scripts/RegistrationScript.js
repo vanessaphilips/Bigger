@@ -18,6 +18,8 @@ class RegistrationDTO{
     }
 }
 
+
+
 function saveRegistration() {
     let registration = new RegistrationDTO(
         document.getElementById('email').value,
@@ -34,6 +36,26 @@ function saveRegistration() {
         document.getElementById('county').value
     );
     alert(JSON.stringify(registration));
+    return true;
+}
+
+function validate() {
+    let registration = new RegistrationDTO(
+        document.getElementById('email').value,
+        document.getElementById('password').value,
+        document.getElementById('firstName').value,
+        document.getElementById('insertion').value,
+        document.getElementById('lastName').value,
+        document.getElementById('bsn').value,
+        document.getElementById('dateOfBirth').value,
+        document.getElementById('postalCode').value,
+        document.getElementById('street').value,
+        parseInt(document.getElementById('number').value),
+        document.getElementById('city').value,
+        document.getElementById('county').value
+    );
+    alert(JSON.stringify(registration));
+    return JSON.stringify(registration);
 }
 
 //voor later
