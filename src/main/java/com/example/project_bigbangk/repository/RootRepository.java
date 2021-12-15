@@ -69,14 +69,17 @@ public class RootRepository {
             priceHistoryDAO.savePriceHistory(priceHistory);
         }
     }
+
     //Asset
-public List<Asset> getAllAssets(){
+    public List<Asset> getAllAssets() {
         List<Asset> assets = assetDAO.getAllAssets();
-        for(Asset asset:assets){
-            asset.setCurrentPrice(priceHistoryDAO.getCurrentPriceByAssetCode(asset.getCode()));
+        if (assets != null) {
+            for (Asset asset : assets) {
+                asset.setCurrentPrice(priceHistoryDAO.getCurrentPriceByAssetCode(asset.getCode()));
+            }
         }
         return assets;
-}
+    }
 
     // WALLET
     public Wallet findWalletByIban(String iban) {
