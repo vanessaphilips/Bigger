@@ -6,11 +6,14 @@ package com.example.project_bigbangk.model;
 import java.time.LocalDateTime;
 
 abstract class AbstractOrder {
+    private Asset asset;
+    private double requestedPrice;
+    private int numberOfAssets;
+    private LocalDateTime date;
+    private double transactionFee;
+    private static final double DEFAULT_TRANSACTIONFEE = 0.0025;
 
-    private int transactionId;
-    private static final int DEFAULT_TRANSACTIONID = 0;
-    private double coinAmount;
-    private double transactionValue;
-    private LocalDateTime transactionTime;
-    private Asset assetCode;
+    //TODO deze klasse afmaken!
+
+
 }
