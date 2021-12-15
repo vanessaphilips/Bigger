@@ -1,5 +1,4 @@
-// Created by Deek
-// Creation date 12/11/2021
+
 
 package com.example.project_bigbangk.service.priceHistoryUpdate;
 
@@ -28,6 +27,11 @@ import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.util.*;
 
+/**
+ * This class talks to the CoinMarketCap.com api and get information about assets and converts it to PriceHistory
+ * @author Pieter Jan - Deek
+ * Creation date 12/11/2021
+ */
 
 public class CoinMarketCapNegociator implements ICryptoApiNegotiatorService {
 
@@ -35,17 +39,18 @@ public class CoinMarketCapNegociator implements ICryptoApiNegotiatorService {
     private final static String API_KEY = "9a38f7d6-3288-491a-8a0d-0338079527bc";
     private final static String ASSET_DATA_URL = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest";
     private final static String SERVER_INFO_URL = "https://pro-api.coinmarketcap.com/v1/key/info";
-    private final static String ALLASSETS = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest";
+    private final static String ALLASSETS_URL = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest";
     private final static int[] ASSET_IDS = new int[]{1, 1027, 1839, 825, 5426, 3408, 2010, 52, 6636, 74, 4172, 5805, 5994, 4687, 3635, 3890, 3717, 2, 7083, 1027, 4943,};
-
-
-    CloseableHttpClient client;
+    private final static int NUMBER_OF_ASSETS = 20;
+    private static final int STATUS_OK = 200;
+    private final CloseableHttpClient HTTPClIENT;
 
     public CoinMarketCapNegociator() {
         super();
         logger.info("New CoinMarketCapNegociator");
-        client = HttpClients.createDefault();
+        HTTPClIENT = HttpClients.createDefault();
     }
+
 
     @Override
     public boolean isAvailable() {
@@ -54,55 +59,59 @@ public class CoinMarketCapNegociator implements ICryptoApiNegotiatorService {
         parameters.add(new BasicNameValuePair("id", getCoinIdsAsString()));
         parameters.add(new BasicNameValuePair("aux", "status"));
         try {
-            URIBuilder query = makeAPIQuery(SERVER_INFO_URL, parameters);
-            HttpGet request = makeApiRequest(query);
-            return getStatusCode(request) == 200;
+            HttpGet request = makeApiRequest(SERVER_INFO_URL, parameters);
+            return getStatusCode(request) == STATUS_OK;
         } catch (IOException e) {
-            System.out.println("Error: cannont access content - " + e.toString());
+            System.out.println("Error: cannont access content - " + e.getMessage());
         } catch (URISyntaxException e) {
-            System.out.println("Error: Invalid URL " + e.toString());
+            System.out.println("Error: Invalid URL " + e.getMessage());
         }
         return true;
     }
 
+
     @Override
     public List<PriceHistory> getPriceHistory() {
-        String jsonResult = null;
+        List<PriceHistory> priceHistories = null;
+        String response_AssetListJSON = null;
         List<NameValuePair> parameters = new ArrayList<>();
         parameters.add(new BasicNameValuePair("id", getCoinIdsAsString()));
         parameters.add(new BasicNameValuePair("convert", "EUR"));
         try {
-            URIBuilder query = makeAPIQuery(ASSET_DATA_URL, parameters);
-            HttpGet request = makeApiRequest(query);
-            jsonResult = makeAPiCall(request);
+            HttpGet request = makeApiRequest(ASSET_DATA_URL, parameters);
+            response_AssetListJSON = makeAPiCall(request);
         } catch (IOException e) {
-            System.out.println("Error: cannont access content - " + e.toString());
+            logger.error("Error: cannont access content - " + e.getMessage());
         } catch (URISyntaxException e) {
-            System.out.println("Error: Invalid URL " + e.toString());
+            logger.error("Error: Invalid URL " +e.getMessage());
         }
-        List<PriceHistory> priceHistories = convertJSonToPriceHistory(jsonResult);
+        if (response_AssetListJSON != null) {
+            priceHistories = convertJSonToPriceHistory(response_AssetListJSON);
+        }
         return priceHistories;
     }
 
     /**
-     *
      * @return a list of currentPrices for the first 20 most populair assets
      */
     public List<PriceHistory> getRangeOfCoins() {
-        String jsonResult = null;
+        List<PriceHistory> priceHistories = null;
+        String response_AssetListJSON = null;
         List<NameValuePair> parameters = new ArrayList<>();
-        parameters.add(new BasicNameValuePair("limit", "20"));
+        parameters.add(new BasicNameValuePair("limit", String.valueOf(NUMBER_OF_ASSETS)));
         parameters.add(new BasicNameValuePair("convert", "EUR"));
         try {
-            URIBuilder query = makeAPIQuery(ALLASSETS, parameters);
-            HttpGet request = makeApiRequest(query);
-            jsonResult = makeAPiCall(request);
+            HttpGet request = makeApiRequest(ALLASSETS_URL, parameters);
+            response_AssetListJSON = makeAPiCall(request);
         } catch (IOException e) {
-            System.out.println("Error: cannont access content - " + e.toString());
+            logger.error("Error: cannont access content - " + e.getMessage());
         } catch (URISyntaxException e) {
-            System.out.println("Error: Invalid URL " + e.toString());
+            logger.error("Error: Invalid URL " + e.getMessage());
         }
-        return convertJSonToPriceHistory(jsonResult);
+        if (response_AssetListJSON != null) {
+            priceHistories = convertJSonToPriceHistory(response_AssetListJSON);
+        }
+        return priceHistories;
     }
 
     private List<PriceHistory> convertJSonToPriceHistory(String result) {
@@ -112,20 +121,20 @@ public class CoinMarketCapNegociator implements ICryptoApiNegotiatorService {
         } catch (JsonProcessingException e) {
             logger.info(e.getMessage());
         }
+        List<PriceHistory> priceHistories = null;
 
-        List<PriceHistory> priceHistorys = new ArrayList<>();
-        if (node.has("data")) {
+        if (node != null && node.has("data")) {
+            priceHistories = new ArrayList<>();
             for (JsonNode json : node.findValues("data")) {
                 for (JsonNode coin : json) {
                     double price = Double.parseDouble(coin.get("quote").get("EUR").get("price").toString());
                     AssetCode_Name assetCodeName = AssetCode_Name.valueOf(coin.get("symbol").textValue());
-                    JsonNode jsonName = coin.get("name");
                     PriceHistory priceHistory = new PriceHistory(LocalDateTime.now(), price, new Asset(assetCodeName, price));
-                    priceHistorys.add(priceHistory);
+                    priceHistories.add(priceHistory);
                 }
             }
         }
-        return priceHistorys;
+        return priceHistories;
     }
 
     private String getCoinIdsAsString() {
@@ -141,24 +150,19 @@ public class CoinMarketCapNegociator implements ICryptoApiNegotiatorService {
         return stringBuilder.toString();
     }
 
-    private URIBuilder makeAPIQuery(String uri, List<NameValuePair> parameters)
+    private HttpGet makeApiRequest(String uri, List<NameValuePair> parameters)
             throws URISyntaxException, IOException {
-        String response_content = "";
         URIBuilder query = new URIBuilder(uri);
         query.addParameters(parameters);
-        return query;
-    }
-
-    private HttpGet makeApiRequest(URIBuilder query) throws URISyntaxException, IOException {
         HttpGet request = new HttpGet(query.build());
         request.setHeader(HttpHeaders.ACCEPT, "application/json");
         request.addHeader("X-CMC_PRO_API_KEY", API_KEY);
-        logger.info(request.toString());
         return request;
     }
 
+
     private int getStatusCode(HttpGet request) throws URISyntaxException, IOException {
-        CloseableHttpResponse response = client.execute(request);
+        CloseableHttpResponse response = HTTPClIENT.execute(request);
         int responseStatusCode;
         try {
             responseStatusCode = response.getStatusLine().getStatusCode();
@@ -169,17 +173,15 @@ public class CoinMarketCapNegociator implements ICryptoApiNegotiatorService {
     }
 
     private String makeAPiCall(HttpGet request) throws URISyntaxException, IOException {
-        CloseableHttpResponse response = client.execute(request);
-        String response_content = "";
+        CloseableHttpResponse response = HTTPClIENT.execute(request);
+        String response_AssetListJSON;
         try {
             HttpEntity entity = response.getEntity();
-            response_content = EntityUtils.toString(entity);
+            response_AssetListJSON = EntityUtils.toString(entity);
             EntityUtils.consume(entity);
         } finally {
             response.close();
         }
-        return response_content;
+        return response_AssetListJSON;
     }
-
-
 }
