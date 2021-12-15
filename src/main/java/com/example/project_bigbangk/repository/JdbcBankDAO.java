@@ -1,9 +1,11 @@
 package com.example.project_bigbangk.repository;
 
 import com.example.project_bigbangk.model.Bank;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,10 +17,12 @@ import java.util.List;
  * @Author Kelly Speelman - de Jonge
  */
 
+@Repository
 public class JdbcBankDAO implements IBankDAO{
 
     JdbcTemplate jdbcTemplate;
 
+    @Autowired
     public JdbcBankDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -36,7 +40,7 @@ public class JdbcBankDAO implements IBankDAO{
         try {
             bank = jdbcTemplate.queryForObject(sql, new BankRowMapper(), naam);
         } catch (DataAccessException emptyResult) {
-            System.out.println(emptyResult.toString());
+            System.out.println(emptyResult.getMessage());
         }
         return bank;
     }
