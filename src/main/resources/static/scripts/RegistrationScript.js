@@ -47,30 +47,21 @@ function checkaddress(){
     }
 }
 
-function processError(){
-    document.getElementById('error').style.display = 'block';
-    // velden legen
-    document.getElementById('city').value = ''; // zonder validatie
-    document.getElementById('street').value = ''; // zonder validatie
-
-    // error style geven
-    document.getElementById('postalCode').classList.add('error');
-    document.getElementById('number').classList.add('error');
-
-}
-
-function processAddress(data){
+function processAddress(data) {
     console.log(data)
-    document.getElementById('postalError').style.display = 'none';
-    // haal de data uit de request
-    let addressPart = data; // de data is in ASCII format, nu nog naar object omzetten
-    // velden vullen
-    document.getElementById('city').value = addressPart.city; // zonder validatie
-    document.getElementById('street').value = addressPart.street; // zonder validatie
+    let addressPart = data;
+    if (addressPart.hasOwnProperty('message')) {
+        document.getElementById('postalError').style.display = 'block';
+        document.getElementById('postalCode').classList.add('error');
+        document.getElementById('number').classList.add('error');
+    } else {
+        document.getElementById('postalError').style.display = 'none';
+        document.getElementById('city').value = addressPart.city; // zonder validatie
+        document.getElementById('street').value = addressPart.street; // zonder validatie
 
-    // error style weghalen
-    document.getElementById('postalCode').classList.remove('error');
-    document.getElementById('number').classList.remove('error');
+        document.getElementById('postalCode').classList.remove('error');
+        document.getElementById('number').classList.remove('error');
+        }
 }
 
 function saveRegistration() {
