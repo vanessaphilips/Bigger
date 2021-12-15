@@ -6,44 +6,32 @@ package com.example.project_bigbangk.model;
 
 public class Asset {
 
-    private String name;
-    private String code;
+    private AssetCode_Name assetCodeName;
     private double currentPrice;
 
-    public Asset(String name, String code, double currentPrice) {
-        this.name = name;
-        this.code = code;
+    public Asset(AssetCode_Name assetCodeName, double currentPrice) {
         this.currentPrice = currentPrice;
+        this.assetCodeName = assetCodeName;
     }
-    public Asset(String name, String code) {
-        this.name = name;
-        this.code = code;
-
+    public Asset(AssetCode_Name assetCodeName) {
+        this.assetCodeName = assetCodeName;
     }
 
     @Override
     public String toString() {
-        return "Asset{" +
-                "name='" + name + '\'' +
-                ", code='" + code + '\'' +
-                ", currentPrice=" + currentPrice +
-                '}';
+        return String.format("%s (%s)", assetCodeName.getAssetCode(), assetCodeName.getAssetName());
     }
 
     public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+        return assetCodeName.getAssetName();
     }
 
     public String getCode() {
-        return code;
+        return assetCodeName.getAssetCode();
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setAssetCodeEnum(AssetCode_Name assetCodeName) {
+        this.assetCodeName = assetCodeName;
     }
 
     public double getCurrentPrice() {

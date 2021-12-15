@@ -36,7 +36,7 @@ class JWTServiceTest {
         Matcher matcher = pattern.matcher(input);
         return matcher.matches();
     }
-
+//ToDo test of twee JwTs naa elkaar verschillend zijn
     @Test
     void getEamilFromToken() {
         String email = jwtService.getEmailFromToken(token);

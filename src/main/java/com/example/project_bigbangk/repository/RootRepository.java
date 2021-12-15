@@ -20,6 +20,7 @@ public class RootRepository {
     private IWalletDAO walletDAO;
     private IAssetDAO assetDAO;
     private final IPriceHistoryDAO priceHistoryDAO;
+    private final int AMOUNT_OF_ASSETS = 20;
 
     public RootRepository(IClientDAO clientDAO, IAddressDAO addressDAO, IWalletDAO walletDAO, IPriceHistoryDAO priceHistoryDAO, IAssetDAO assetDAO) {
         this.clientDAO = clientDAO;
@@ -60,8 +61,11 @@ public class RootRepository {
 
     //PriceHistory
     public void savePriceHistories(List<PriceHistory> priceHistories) {
+        boolean saveAssets = assetDAO.getNumberOfAssets() != AMOUNT_OF_ASSETS;
         for (PriceHistory priceHistory : priceHistories) {
+            if (saveAssets) {
             assetDAO.saveAsset(priceHistory.getAsset());
+        }
             priceHistoryDAO.savePriceHistory(priceHistory);
         }
     }

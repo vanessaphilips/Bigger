@@ -8,15 +8,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.Random;
+
+/**
+ * Dummy class, remove in future
+ */
+//ToDo remove thhis class in futuire
+public class DummyCryptoApiNegotiatorService2 implements ICryptoApiNegotiatorService {
+
+    private final Logger logger = LoggerFactory.getLogger(DummyCryptoApiNegotiatorService2.class);
 
 
-public class CryptoApiNegotiatorService2 implements ICryptoApiNegotiatorService {
-
-    private final Logger logger = LoggerFactory.getLogger(CryptoApiNegotiatorService2.class);
-
-
-    public CryptoApiNegotiatorService2() {
+    public DummyCryptoApiNegotiatorService2() {
         super();
         logger.info("New CryptoNegotiatorService2");
     }
@@ -30,8 +32,6 @@ public class CryptoApiNegotiatorService2 implements ICryptoApiNegotiatorService 
 
     @Override
     public boolean isAvailable(){
-        Random rand = new Random();
-        int bool = rand.nextInt(2);
-        return bool !=0;
+      return false;
     }
 }

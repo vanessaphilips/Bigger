@@ -9,10 +9,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * Service for updating the current price of an Asset in Euro's
+ * @author  Pieter Jan -Deek
+ */
 @Service
 public class PriceHistoryUpdateService {
 
@@ -29,13 +34,19 @@ public class PriceHistoryUpdateService {
         this.rootRepository = rootRepository;
     }
 
+    /**
+     * calls the available CryptoAPiNegotiator (determined by the ICryptoApiNegotiatorStrategy) for cuurent prices 
+     * and sends it to the rootrepository
+     */
     public void updatePriceHistory() {
-        System.out.println("priceupdate gestart");
-        List<PriceHistory> priceHistories = null;
-            while (priceHistories == null) {
-                cryptoNegotiatorService = cryptoApiNegotiatorStrategy.getAvailableCryptoService();
-                priceHistories = cryptoNegotiatorService.getPriceHistory();
-                rootRepository.savePriceHistories(priceHistories);
-            }
+        List<PriceHistory> priceHistories;
+        cryptoNegotiatorService = cryptoApiNegotiatorStrategy.getAvailableCryptoService();
+        priceHistories = cryptoNegotiatorService.getPriceHistory();
+        if (priceHistories != null) {
+            rootRepository.savePriceHistories(priceHistories);
+            logger.info(String.format("Price history updated on %s", LocalDateTime.now()));
+        } else {
+            logger.error(String.format("Price history update encountered an error on %s", LocalDateTime.now()));
+        }
     }
 }

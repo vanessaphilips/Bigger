@@ -10,16 +10,12 @@ import java.time.LocalDateTime;
 
 public class PriceHistory {
 
-    private final Logger logger = LoggerFactory.getLogger(PriceHistory.class);
-
     public Asset getAsset() {
         return asset;
     }
-
     public LocalDateTime getDateTime() {
         return dateTime;
     }
-
     public double getPrice() {
         return price;
     }
@@ -31,14 +27,13 @@ public class PriceHistory {
 
     public PriceHistory(LocalDateTime dateTime, double price, Asset asset) {
         super();
-        logger.info("New PriceHistory");
         this.dateTime = dateTime;
         this.asset = asset;
         this.price = price;
     }
+
     public PriceHistory(LocalDateTime dateTime, double price) {
         super();
-        logger.info("New PriceHistory");
         this.dateTime = dateTime;
         this.price = price;
     }
