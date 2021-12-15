@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <title>Client Registration</title>
     <link rel="stylesheet" href="stylesheets/RegistrationCSS.css">
-    <script src="scripts/RegistrationScript.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script defer src="scripts/RegistrationScript.js"></script>
 
 </head>
 <body>
@@ -42,24 +43,27 @@
     <input type="date" required="required" id="dateOfBirth" class="Rinput">
     <br><br>
     <br>
-    <label for="postalCode">PostalCode</label>
+    <label for="postalCode">Postalcode</label>
     <input type="text" required="required" id="postalCode" class="Rinput">
-    <br><br>
-    <br>
-<!--    op basis van postcode nr straat etc ophalen later.-->
-    <label for="street">Street</label>
-    <input type="text" required="required" id="street" class="Rinput">
     <br><br>
     <br>
     <label for="number">Number</label>
     <input type="number" required="required" min="0" id="number" class="Rinput">
     <br><br>
+    <div id="postalError" hidden>
+        <p>Unknown Number/Postalcode Combination</p>
+    </div>
     <br>
-    <label for="city">City</label>
-    <input type="text" required="required" id="city" class="Rinput">
+<!--    op basis van postcode nr straat etc ophalen later.-->
+    <label for="street">Street</label>
+    <input type="text" required="required" id="street" class="Rinput" placeholder="street">
     <br><br>
     <br>
-    <label>County</label>
+    <label for="city">City</label>
+    <input type="text" required="required" id="city" class="Rinput" placeholder="city">
+    <br><br>
+    <br>
+    <label for="country">County</label>
     <select id="country" required="required" class="Rinput">
         <option value="NLD">The Netherlands</option>
         <option value="BEL">Belgium</option>

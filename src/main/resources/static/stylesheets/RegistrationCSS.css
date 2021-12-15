@@ -1,5 +1,14 @@
 
+/*functie van html <form> zet style sommige inputs op invalid pseudo klasse bij verkeerde invoer*/
 form :invalid {
     color: red;
     outline: red 2px;
+}
+/*komt van postalcode check*/
+.error {
+    color: red;
+}
+/*ook postal code check*/
+.hidden {
+    display: none;
 }
