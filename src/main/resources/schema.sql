@@ -16,3 +16,12 @@ PRIMARY KEY (`email`));
 -- CONSTRAINT `verzinzelf4`
 -- FOREIGN KEY (`IBAN`)
 -- REFERENCES `bigbangk`.`wallet` (`IBAN`)
+
+CREATE TABLE `bank` (
+    `code` VARCHAR(45) NOT NULL,
+    `name` VARCHAR(64) NOT NULL,
+    `IBAN` VARCHAR(45) NULL,
+    `startingcapital` DECIMAL(10,3) NULL,
+    `transactioncosts` DECIMAL(5,5) NULL,
+    PRIMARY KEY (`code`)
+);
