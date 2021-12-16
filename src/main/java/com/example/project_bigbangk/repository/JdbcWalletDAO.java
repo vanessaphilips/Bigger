@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 
 @Repository
@@ -45,7 +46,7 @@ public class JdbcWalletDAO implements IWalletDAO{
 
     public void updateWalletBalanceAndAsset(Wallet wallet, Asset asset) {
         String sql = "Update wallet_has_asset Set amount = ? Where IBAN = ? And code = ?;";
-        jdbcTemplate.update(sql, wallet.getIban(),asset.getCode());
+        jdbcTemplate.update(sql, wallet.getIban(),asset.getAssetCodeName().getAssetCode());
     }
 
     @Override

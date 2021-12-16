@@ -77,7 +77,7 @@ public class RootRepository {
         List<Asset> assets = assetDAO.getAllAssets();
         if (assets != null) {
             for (Asset asset : assets) {
-                asset.setCurrentPrice(priceHistoryDAO.getCurrentPriceByAssetCode(asset.getCode()));
+                asset.setCurrentPrice(priceHistoryDAO.getCurrentPriceByAssetCodeName(asset.getAssetCodeName()));
             }
         }
         return assets;
