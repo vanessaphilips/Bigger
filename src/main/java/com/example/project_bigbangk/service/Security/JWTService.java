@@ -70,6 +70,7 @@ public class JWTService implements ITokenService {
             DecodedJWT decodedJWT = verifier.verify(token);
             if (decodedJWT.getExpiresAt().after(new Date(System.currentTimeMillis()))) {
                 return true;
+                //TODO refresh token
             }
         } catch (JWTVerificationException exception) {
             logger.error(exception.getMessage());
