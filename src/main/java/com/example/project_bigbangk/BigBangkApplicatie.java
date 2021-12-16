@@ -18,20 +18,22 @@ import java.util.TimerTask;
 @Component
 public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedEvent> {
 
-    private final Logger logger = LoggerFactory.getLogger(BigBangkApplicatie.class);
     private final int UPDATE_INTERVAL_PRICEUPDATESERVICE = 300000;//5min
+    private final int NUMBER_OF_CLIENTS_TO_SEED = 3000;
+
+
     //ToDO Misschien nog een Singleton bank object hier instantieren? Zodat de bank er altijd is.
     private final PriceHistoryUpdateService priceHistoryUpdateService;
     private final ICryptoApiNegotiatorStrategy cryptoApiNegotiatorStrategy;
     private ClientFactory clientFactory;
-    private final int NUMBER_OF_CLIENTS_TO_SEED = 3000;
+    private final Logger logger = LoggerFactory.getLogger(BigBangkApplicatie.class);
     private RootRepository rootRepository;
 
 
     public BigBangkApplicatie(PriceHistoryUpdateService priceHistoryUpdateService,
                               ICryptoApiNegotiatorStrategy cryptoApiNegotiatorStrategy,
                               ClientFactory clientFactory,
-    RootRepository rootrepository) {
+                              RootRepository rootrepository) {
         super();
         logger.info("New BigBangkApplicatie");
         this.priceHistoryUpdateService = priceHistoryUpdateService;
@@ -44,7 +46,7 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
     public void onApplicationEvent(ContextRefreshedEvent event) {
         initializeUpdateStragegy();
         startPriceHistoryUpdateTimer();
-      //  seedDataBase();
+        //  seedDataBase();
     }
 
     private void seedDataBase() {
@@ -53,7 +55,7 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
     }
 
     private void initializeUpdateStragegy() {
-        ICryptoApiNegotiatorService coinMarketCapNegotiator = new CoinMarketCapNegociator();
+        ICryptoApiNegotiatorService coinMarketCapNegotiator = new CoinMarketCapNegotiator();
         cryptoApiNegotiatorStrategy.addNegotiator(coinMarketCapNegotiator);
     }
 
