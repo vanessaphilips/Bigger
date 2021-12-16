@@ -17,6 +17,5 @@ public interface IWalletDAO {
 
     public void updateWalletBalanceAndAsset(Wallet wallet, Asset asset);
 
-    public Map<String, Double> findAssetCodeWithAmount(String iban);
-
+    public Double findAmountOfAsset(String iban, String assetCode);
 }
