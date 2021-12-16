@@ -12,9 +12,11 @@ public class Asset {
     public Asset(AssetCode_Name assetCodeName, double currentPrice) {
         this.currentPrice = currentPrice;
         this.assetCodeName = assetCodeName;
+
     }
     public Asset(AssetCode_Name assetCodeName) {
         this.assetCodeName = assetCodeName;
+
     }
 
     @Override
