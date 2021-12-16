@@ -18,12 +18,14 @@ class RegistrationDTO{
     }
 }
 
-document.getElementById('postalCode').addEventListener('focusout', checkaddress);
+document.getElementById('postalCode').addEventListener('focusout', checkAddress);
 
-document.getElementById('number').addEventListener('focusout', checkaddress);
+document.getElementById('number').addEventListener('focusout', checkAddress);
+
+document.getElementById('submitForm').addEventListener('click', prepareRegistration);
 
 
-function checkaddress(){
+function checkAddress(){
     let regex = new RegExp(/^[1-9][0-9]{3}[\s]?[A-Za-z]{2}$/i);
 
     let postcode = document.getElementById('postalCode').value
@@ -39,7 +41,7 @@ function checkaddress(){
                 'Authorization': 'Bearer 9565619a-9760-47d8-8f6d-e789d63b60ca',
             },
         })
-            .then(response => response.json())
+            .then(response => response.json())//kan hier ook checken wat de response is.
             .then(json => {
                 processAddress(json)
             })
@@ -64,7 +66,7 @@ function processAddress(data) {
         }
 }
 
-function saveRegistration() {
+function prepareRegistration() {
     let registration = new RegistrationDTO(
         document.getElementById('email').value,
         document.getElementById('password').value,
@@ -77,11 +79,44 @@ function saveRegistration() {
         document.getElementById('street').value,
         parseInt(document.getElementById('number').value),
         document.getElementById('city').value,
-        document.getElementById('county').value
+        document.getElementById('country').value
     );
     alert(JSON.stringify(registration));
-    return true;
+    sendRegistrationData(registration);
 }
+
+function sendRegistrationData(rData){
+    fetch("http://localhost:8080/register", {
+        method: 'POST',
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(rData)
+    })
+        .then(response => {
+            if(response.ok){
+                alert("ok");
+            }
+            else{
+                alert("niet ok");
+            }
+        })
+        .catch((error) => {console.error('Error', error)});
+}
+
+//fetch("https://postcode.tech/api/v1/postcode?" + formData , {
+//             headers: {
+//                 'Authorization': 'Bearer 9565619a-9760-47d8-8f6d-e789d63b60ca',
+//             },
+//         })
+//             .then(response => response.json())//kan hier ook checken wat de response is.
+//             .then(json => {
+//                 processAddress(json)
+//             })
+//             .catch((error) => { console.error('Error', error) });
+//     }
+
 
 //voor later
 //$.ajax({

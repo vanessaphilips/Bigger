@@ -8,7 +8,7 @@ import com.example.project_bigbangk.model.DTO.RegistrationDTO;
 import com.example.project_bigbangk.service.RegistrationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+@CrossOrigin
 @RestController
 public class RegistrationController {
 

@@ -1,4 +1,4 @@
-CREATE VIEW AddresWithClientEmail
+CREATE VIEW AddressWithClientEmail
 AS 
 SELECT
 	email,
