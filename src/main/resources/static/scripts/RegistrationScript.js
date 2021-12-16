@@ -67,7 +67,8 @@ function processAddress(data) {
 }
 
 function prepareRegistration() {
-    let registration = new RegistrationDTO(
+
+        let registration = new RegistrationDTO(
         document.getElementById('email').value,
         document.getElementById('password').value,
         document.getElementById('firstName').value,
@@ -81,7 +82,7 @@ function prepareRegistration() {
         document.getElementById('city').value,
         document.getElementById('country').value
     );
-    alert(JSON.stringify(registration));
+    //alert(JSON.stringify(registration));
     sendRegistrationData(registration);
 }
 
@@ -95,12 +96,17 @@ function sendRegistrationData(rData){
         body: JSON.stringify(rData)
     })
         .then(response => {
-            if(response.ok){
-                alert("ok");
+            if(response.status == 201){
+                return response.text()
+                    .then(text => {
+                        alert(text);
+                        //naar login pagina
+                    })
             }
-            else{
-                alert("niet ok");
-            }
+            else if(response.status == 409 || response.status == 406){
+                return response.text()
+                    .then(text => alert(text))
+            }else{alert('Unknown Error.')}
         })
         .catch((error) => {console.error('Error', error)});
 }
