@@ -4,16 +4,12 @@ import com.example.project_bigbangk.model.Asset;
 import com.example.project_bigbangk.model.Wallet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -52,18 +48,17 @@ public class JdbcWalletDAO implements IWalletDAO{
         jdbcTemplate.update(sql, wallet.getIban(),asset.getCode());
     }
 
-    public Map<String, Double> findAssetCodeWithAmount(String iban) {
-        String sql = "Select * From wallet_has_asset Where IBAN = ?;";
+    @Override
+    public Double findAmountOfAsset(String iban, String assetCode) {
+        String sql = "SELECT * FROM wallet_has_asset WHERE IBAN = ? AND code = ?;";
 
-        Map<String, Double> asset = null;
         try {
-           asset = jdbcTemplate.queryForObject(sql, new wallet_has_assetRowMapper(), iban);
+            return jdbcTemplate.queryForObject(sql, new Wallet_has_assetRowMapper(), iban, assetCode);
         }  catch (DataAccessException dataAccessException) {
             System.err.println(dataAccessException.getMessage());
         }
-        return asset;
+        return null;
     }
-
 
     public class walletRowMapper implements RowMapper<Wallet> {
 
@@ -73,13 +68,11 @@ public class JdbcWalletDAO implements IWalletDAO{
         }
     }
 
-    public class wallet_has_assetRowMapper implements RowMapper<Map<String, Double>> {
+    public class Wallet_has_assetRowMapper implements RowMapper<Double> {
 
         @Override
-        public Map<String,Double> mapRow(ResultSet resultSet, int rowNum) throws SQLException {
-            Map<String, Double> asset = new HashMap<>();
-            asset.put(resultSet.getString("code"), resultSet.getDouble("amount"));
-            return asset;
+        public Double mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+            return resultSet.getDouble("amount");
         }
     }
 

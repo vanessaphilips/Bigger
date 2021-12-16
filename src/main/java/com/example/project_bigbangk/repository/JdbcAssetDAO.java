@@ -70,6 +70,18 @@ public class JdbcAssetDAO implements IAssetDAO {
         return 0;
     }
 
+    @Override
+    public Asset findAssetByCode(String assetCode) {
+        String slq = "SELECT * FROM Asset WHERE code = ?;";
+        Asset asset = null;
+        try {
+            asset = jdbcTemplate.queryForObject(slq, new AssetRowMapper(), assetCode);
+        } catch (DataAccessException dataAccessException) {
+            System.err.println(dataAccessException.getMessage());
+        }
+        return asset;
+    }
+
     private class AssetRowMapper implements RowMapper<Asset> {
         @Override
         public Asset mapRow(ResultSet resultSet, int rowNumber) throws SQLException {
