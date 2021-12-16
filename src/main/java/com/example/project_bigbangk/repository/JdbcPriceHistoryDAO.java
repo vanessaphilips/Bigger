@@ -3,8 +3,7 @@
 
 package com.example.project_bigbangk.repository;
 
-import com.example.project_bigbangk.model.Asset;
-import com.example.project_bigbangk.model.Client;
+import com.example.project_bigbangk.model.AssetCode_Name;
 import com.example.project_bigbangk.model.PriceHistory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +35,7 @@ public class JdbcPriceHistoryDAO implements IPriceHistoryDAO {
         try {
             jdbcTemplate.update(sql,
                     priceHistory.getDateTime(),
-                    priceHistory.getAsset().getCode(),
+                    priceHistory.getAsset().getAssetCodeName().getAssetCode(),
                     priceHistory.getPrice());
         } catch (DataAccessException dataAccessException) {
            logger.info(dataAccessException.getMessage());
@@ -44,12 +43,12 @@ public class JdbcPriceHistoryDAO implements IPriceHistoryDAO {
     }
 
     @Override
-    public double getCurrentPriceByAssetCode(String assetCode){
-        String sql = "Select * from priceHistory where datetime in (SELECT max(datetime) FROM bigbangk.pricehistory ) and code = ? ;";
+    public double getCurrentPriceByAssetCodeName(AssetCode_Name assetCodeName){
+        String sql = "Select * from priceHistory where datetime in (SELECT max(datetime) FROM pricehistory ) and code = ? ;";
         double currentprice = 0;
         try {
             PriceHistory priceHistory = jdbcTemplate.queryForObject(sql,
-                    new PiceHistoryRowMapper(), assetCode);
+                    new PiceHistoryRowMapper(), assetCodeName.getAssetCode());
             currentprice = priceHistory.getPrice();
         } catch (DataAccessException dataAccessException) {
             logger.info(dataAccessException.getMessage());

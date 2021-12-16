@@ -4,7 +4,6 @@ import com.example.project_bigbangk.model.Asset;
 import com.example.project_bigbangk.model.Wallet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -12,8 +11,6 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -49,7 +46,7 @@ public class JdbcWalletDAO implements IWalletDAO{
 
     public void updateWalletBalanceAndAsset(Wallet wallet, Asset asset) {
         String sql = "Update wallet_has_asset Set amount = ? Where IBAN = ? And code = ?;";
-        jdbcTemplate.update(sql, wallet.getIban(),asset.getCode());
+        jdbcTemplate.update(sql, wallet.getIban(),asset.getAssetCodeName().getAssetCode());
     }
 
     public Map<String, Double> findAssetCodeWithAmount(String iban) {

@@ -24,16 +24,19 @@ public class Asset {
         return String.format("%s (%s)", assetCodeName.getAssetCode(), assetCodeName.getAssetName());
     }
 
-    public String getName() {
-        return assetCodeName.getAssetName();
-    }
-
-    public String getCode() {
-        return assetCodeName.getAssetCode();
-    }
+//    public String getName() {
+//        return assetCodeName.getAssetName();
+//    }
+//
+//    public String getCode() {
+//        return assetCodeName.getAssetCode();
+//    }
 
     public void setAssetCodeEnum(AssetCode_Name assetCodeName) {
         this.assetCodeName = assetCodeName;
+    }
+    public AssetCode_Name getAssetCodeName() {
+       return assetCodeName;
     }
 
     public double getCurrentPrice() {
