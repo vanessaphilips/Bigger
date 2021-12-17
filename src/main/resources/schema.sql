@@ -33,3 +33,10 @@ CREATE TABLE `Asset`
     `code` VARCHAR(45) NOT NULL,
     PRIMARY KEY (`code`)
 );
+
+CREATE TABLE `wallet`
+(
+    `IBAN` VARCHAR(45) NOT NULL,
+    `balance` DECIMAL(25,2) NOT NULL,
+    PRIMARY KEY (`IBAN`)
+);
