@@ -44,17 +44,14 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        initializeUpdateStragegy();
+        initializeUpdateStrategy();
         startPriceHistoryUpdateTimer();
-        //  seedDataBase();
+        new SeedDatabse().run();
     }
 
-    private void seedDataBase() {
-        //TODO checken of er al wat in de DB staat
-        clientFactory.createClients(NUMBER_OF_CLIENTS_TO_SEED);
-    }
 
-    private void initializeUpdateStragegy() {
+
+    private void initializeUpdateStrategy() {
         ICryptoApiNegotiatorService coinMarketCapNegotiator = new CoinMarketCapNegotiator();
         cryptoApiNegotiatorStrategy.addNegotiator(coinMarketCapNegotiator);
     }
@@ -70,6 +67,12 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
         @Override
         public void run() {
             priceHistoryUpdateService.updatePriceHistory();
+        }
+    }
+    class SeedDatabse extends TimerTask {
+        @Override
+        public void run() {
+            clientFactory.createClients(NUMBER_OF_CLIENTS_TO_SEED);
         }
     }
 }

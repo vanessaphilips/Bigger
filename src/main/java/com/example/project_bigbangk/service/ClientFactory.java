@@ -15,8 +15,10 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.Normalizer;
 import java.time.LocalDate;
 import java.util.*;
+
 @Service
 public class ClientFactory {
 
@@ -27,9 +29,9 @@ public class ClientFactory {
     private List<String> streetNames;
     private RegistrationService registrationService;
 
-    private List<String> providers = Arrays.asList("Chello", "xs4All", "Yahoo", "Gmail");
-    private List<String> EMAIL_EXTENSIONS = Arrays.asList("nl", "com", "de", "be", "biz");
-    private final String[] COUNTRIES = {"NLD", "BE", "GER", "VS", "UK", "FR"};
+    private List<String> providers = Arrays.asList("Chello", "xs4All", "Yahoo", "Gmail", "Wanadoo", "T-Mobile", "Samsung", "work", "Pixelpool");
+    private List<String> EMAIL_EXTENSIONS = Arrays.asList("nl", "com", "de", "be", "biz", "fr", "vs", "org", "uk");
+    private final String[] COUNTRIES = {"NLD", "BEL", "GER", "USA", "GBR", "FRA", "POL", "CHE"};
     private final Random RAND = new Random();
     private IbanGeneratorService ibanGeneratorService;
 
@@ -48,12 +50,11 @@ public class ClientFactory {
         initializeAdressArrays();
         List<Client> clients = new ArrayList<>();
         for (int i = 0; i < numberOfClients; i++) {
-            //public Client(String email, String firstName, String insertion, String lastName, LocalDate dateOfBirth,
-            //                  String bsn, String passWord, Address address, Wallet wallet) {
             Client client = createClient();
             client.setAddress(createAdress());
             clients.add(client);
         }
+        int i = 0;
         for (Client client : clients) {
             RegistrationDTO clientDTO = new RegistrationDTO(client.getEmail(),
                     "password",
@@ -62,14 +63,13 @@ public class ClientFactory {
                     client.getLastName(),
                     client.getBsn(),
                     createBirthDay(),
-            client.getAddress().getPostalCode(),
-            client.getAddress().getStreet(),
-            client.getAddress().getNumber(),
-            client.getAddress().getCity(),
-            client.getAddress().getCountry());
-            registrationService.registerClient(clientDTO);
+                    client.getAddress().getPostalCode(),
+                    client.getAddress().getStreet(),
+                    client.getAddress().getNumber(),
+                    client.getAddress().getCity(),
+                    client.getAddress().getCountry());
+           registrationService.registerClient(clientDTO);
         }
-
     }
 
     private void initializeAdressArrays() {
@@ -98,22 +98,22 @@ public class ClientFactory {
     private Address createAdress() {
         String postalCode = createPostalCode();
         String street = streetNames.get(RAND.nextInt(streetNames.size()));
-        int number = RAND.nextInt(300);
+        int number = RAND.nextInt(300) + 1;
         String country = COUNTRIES[RAND.nextInt(COUNTRIES.length)];
         String city = (String) cities.toArray()[RAND.nextInt(cities.size())];
         return new Address(postalCode, street, number, city, country);
     }
 
     private String createPostalCode() {
-        return String.format("%s%s%s", (RAND.nextInt(10000)),
-                Character.toUpperCase((char) (RAND.nextInt(15)+65)),
-                Character.toUpperCase((char) (RAND.nextInt(15)+65)));
+        return String.format("%s%s%s", (RAND.nextInt(9000) + 1000),
+                Character.toUpperCase((char) (RAND.nextInt(26) + 65)),
+                Character.toUpperCase((char) (RAND.nextInt(26) + 65)));
     }
 
     private Client createClient() {
         Client client = new Client();
         client.setFirstName(firstNames.get(RAND.nextInt(firstNames.size())));
-        client.setLastName((String)(lastNames.keySet().toArray()[RAND.nextInt(lastNames.size())]));
+        client.setLastName((String) (lastNames.keySet().toArray()[RAND.nextInt(lastNames.size())]));
         client.setInsertion(lastNames.get(client.getLastName()));
         client.setDateOfBirth(LocalDate.parse(createBirthDay()));
         client.setEmail(createEmail(client.getFirstName()));
@@ -123,20 +123,20 @@ public class ClientFactory {
     }
 
     private String createBirthDay() {
-        int maand = RAND.nextInt(12)+1;
-        int dag = RAND.nextInt(maand==2?28:30)+1;
+        int maand = RAND.nextInt(12) + 1;
+        int dag = RAND.nextInt(maand == 2 ? 28 : 30) + 1;
         return String.format("%s-%s-%s", RAND.nextInt(70) + 1932, makeDoubleNumber(maand), makeDoubleNumber(dag));
-
     }
-    private String makeDoubleNumber(int number){
-        if ((String.valueOf(number).length()==1)){
-          return String.format("0%s", number);
+
+    private String makeDoubleNumber(int number) {
+        if ((String.valueOf(number).length() == 1)) {
+            return String.format("0%s", number);
         }
         return String.valueOf(number);
     }
 
     private String creatBsn() {
-        String firsthalf = String.valueOf(RAND.nextInt(10000));
+        String firsthalf = String.valueOf(RAND.nextInt(9000) + 1000);
         String reversed = "";
         for (int i = firsthalf.length() - 1; i >= 0; i--) {
             reversed += firsthalf.charAt(i);
@@ -145,7 +145,7 @@ public class ClientFactory {
     }
 
     private String createEmail(String firstName) {
-        String email = String.format("%s@%s.nl", firstName,
+        String email = String.format("%s@%s.%s", firstName,
                 providers.get(RAND.nextInt(providers.size())),
                 EMAIL_EXTENSIONS.get(RAND.nextInt(EMAIL_EXTENSIONS.size()))
         );
@@ -178,13 +178,13 @@ public class ClientFactory {
     private Set<String> initializePlaatsnamen() {
         File cityFile = new File("src/main/resources/metatopos-places.json");
         Set<String> tempCities = new HashSet<>();
-        JsonNode cityNode;
+        JsonNode cityNodes;
         ObjectMapper mapper = new ObjectMapper();
         try {
-            cityNode = mapper.readTree(cityFile);
-            cityNode = cityNode.findValue("places");
-            for (JsonNode lastNameJN : cityNode) {
-                tempCities.add(lastNameJN.get("municipality").asText());
+            cityNodes = mapper.readTree(cityFile);
+            cityNodes = cityNodes.findValue("places");
+            for (JsonNode cityname : cityNodes) {
+                tempCities.add(cityname.get("municipality").asText());
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -201,8 +201,13 @@ public class ClientFactory {
             lastNamesNode = mapper.readTree(lastNamesFile);
             JsonNode lastNamesNodes = lastNamesNode.findValue("database");
             lastNamesNodes = lastNamesNodes.findValue("record");
-            for (JsonNode lastNameJN : lastNamesNodes) {
-                tempListFirstNames.add(lastNameJN.get("voornaam").asText());
+            for (JsonNode firstNameJN : lastNamesNodes) {
+                String firstName = firstNameJN.get("voornaam").asText();
+                String nameNorm = Normalizer.normalize(firstName, Normalizer.Form.NFD);
+                if (!firstName.equals(nameNorm)) {
+                    nameNorm = nameNorm.replaceAll("[^\\p{ASCII}]", "");
+                    tempListFirstNames.add(nameNorm);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
