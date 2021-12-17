@@ -5,6 +5,7 @@ package com.example.project_bigbangk.model;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class Wallet {
 
@@ -52,6 +53,19 @@ public class Wallet {
                 ", pendingOrders=" + pendingOrder +
                 ", owner=" + owner +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Wallet wallet = (Wallet) o;
+        return Double.compare(wallet.balance, balance) == 0 && iban.equals(wallet.iban);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(iban, balance);
     }
 
     public String getBank() {
