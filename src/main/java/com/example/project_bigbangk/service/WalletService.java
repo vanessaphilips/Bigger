@@ -21,8 +21,9 @@ public class WalletService {
         this.ibanGeneratorService = ibanGeneratorService;
     }
 
-    public void createNewWalletWithAssets() {
+    public void saveNewWallet() {
         Wallet wallet = new Wallet(ibanGeneratorService.getIban(), START_CAPITAL_NEW_USER);
+        rootRepository.saveNewWallet(wallet);
     }
 
     public void updateWalletBalanceAndAsset(Wallet wallet, Asset asset) {
