@@ -105,7 +105,7 @@ public class RegistrationService {
         if (!matchesRegex(registrationDTO.getPassword(), PASSWORD_REGEX)){
             inputErrorMessage += "Invalid Password ";}
         if (checkUnderAgeLimit(registrationDTO)) {
-            inputErrorMessage += "Invalid Age ";}
+            inputErrorMessage += "Invalid Date of Birth ";}
         if(!matchesRegex(registrationDTO.getBsn(), BSN_REGEX)){
             inputErrorMessage += "Invalid Bsn ";}
         if(!matchesRegex(registrationDTO.getPostalCode(), POSTAL_REGEX)){
