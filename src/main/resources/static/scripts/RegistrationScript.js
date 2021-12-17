@@ -118,7 +118,6 @@ function prepareRegistration() {
         document.getElementById('city').value,
         document.getElementById('country').value
     );
-    //alert(JSON.stringify(registration));
     sendRegistrationData(registration);
 }
 
@@ -146,31 +145,3 @@ function sendRegistrationData(rData){
         })
         .catch((error) => {console.error('Error', error)});
 }
-
-//fetch("https://postcode.tech/api/v1/postcode?" + formData , {
-//             headers: {
-//                 'Authorization': 'Bearer 9565619a-9760-47d8-8f6d-e789d63b60ca',
-//             },
-//         })
-//             .then(response => response.json())//kan hier ook checken wat de response is.
-//             .then(json => {
-//                 processAddress(json)
-//             })
-//             .catch((error) => { console.error('Error', error) });
-//     }
-
-
-//voor later
-//$.ajax({
-//    type: "POST",
-//    url: "https://reqbin.com/echo/post/json",
-//    data: JSON.stringify({ "userName": userName, "password" : password }),
-//    contentType: "application/json",
-//    success: function (result) {
-//      console.log(result);
-//    },
-//    error: function (result, status) {
-//      console.log(result);
-//    }
-// });
-
