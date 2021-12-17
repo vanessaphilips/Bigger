@@ -28,14 +28,13 @@ class JdbcPriceHistoryDAOTest {
     private List<Asset> assets = new ArrayList<>();
     private List<PriceHistory> priceHistories = new ArrayList<>();
 
-    //    JdbcPriceHistoryDAOTest(JdbcPriceHistoryDAO jdbcPriceHistoryDAO){
-//        this.priceHistoryDAO = jdbcPriceHistoryDAO;
+
     @BeforeEach
     public void setup() {
         priceHistories.add(createPriceHisory(0.7, createAsset(AssetCode_Name.BTC)));
         priceHistories.add(createPriceHisory(1.3, createAsset(AssetCode_Name.BTC)));
-        priceHistories.add(createPriceHisory(1.2, createAsset(AssetCode_Name.BTC)));
         priceHistories.add(createPriceHisory(1.1, createAsset(AssetCode_Name.BTC)));
+        priceHistories.add(createPriceHisory(1.21, createAsset(AssetCode_Name.BTC)));
         priceHistories.add(createPriceHisory(1.3, createAsset(AssetCode_Name.ETH)));
         priceHistories.add(createPriceHisory(4.3, createAsset(AssetCode_Name.ETH)));
         priceHistories.add(createPriceHisory(2.3, createAsset(AssetCode_Name.ETH)));
@@ -53,12 +52,12 @@ class JdbcPriceHistoryDAOTest {
             priceHistoryDAO.savePriceHistory(priceHistory);
         }
         double actual = priceHistoryDAO.getCurrentPriceByAssetCodeName(AssetCode_Name.BTC);
-        double expected = 1.1;
+        double expected = 1.21;
         assertEquals(expected, actual);
         actual = priceHistoryDAO.getCurrentPriceByAssetCodeName(AssetCode_Name.ETH);
         expected = 6.3;
         assertEquals(expected, actual);
-    }
+            }
 
 
     private PriceHistory createPriceHisory(double currentprice, Asset asset) {
