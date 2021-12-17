@@ -5,12 +5,16 @@ import com.example.project_bigbangk.model.AssetCode_Name;
 import com.example.project_bigbangk.model.PriceHistory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ActiveProfiles;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,29 +25,56 @@ class JdbcPriceHistoryDAOTest {
     @Resource
     JdbcPriceHistoryDAO priceHistoryDAO;
 
-//    JdbcPriceHistoryDAOTest(JdbcPriceHistoryDAO jdbcPriceHistoryDAO){
+    private List<Asset> assets = new ArrayList<>();
+    private List<PriceHistory> priceHistories = new ArrayList<>();
+
+    //    JdbcPriceHistoryDAOTest(JdbcPriceHistoryDAO jdbcPriceHistoryDAO){
 //        this.priceHistoryDAO = jdbcPriceHistoryDAO;
-//    }
+    @BeforeEach
+    public void setup() {
+        priceHistories.add(createPriceHisory(0.7, createAsset(AssetCode_Name.BTC)));
+        priceHistories.add(createPriceHisory(1.3, createAsset(AssetCode_Name.BTC)));
+        priceHistories.add(createPriceHisory(1.2, createAsset(AssetCode_Name.BTC)));
+        priceHistories.add(createPriceHisory(1.1, createAsset(AssetCode_Name.BTC)));
+        priceHistories.add(createPriceHisory(1.3, createAsset(AssetCode_Name.ETH)));
+        priceHistories.add(createPriceHisory(4.3, createAsset(AssetCode_Name.ETH)));
+        priceHistories.add(createPriceHisory(2.3, createAsset(AssetCode_Name.ETH)));
+        priceHistories.add(createPriceHisory(6.3, createAsset(AssetCode_Name.ETH)));
+        priceHistories.add(createPriceHisory(1.5, createAsset(AssetCode_Name.ADA)));
+        priceHistories.add(createPriceHisory(5.5, createAsset(AssetCode_Name.ADA)));
+        priceHistories.add(createPriceHisory(2.5, createAsset(AssetCode_Name.ADA)));
+        priceHistories.add(createPriceHisory(0.5, createAsset(AssetCode_Name.ADA)));
+    }
+
+
     @Test
     void savePriceHistory() {
-        //public PriceHistory(LocalDateTime dateTime, double price, Asset asset)
-        //public Asset(AssetCode_Name assetCodeName, double currentPrice)
-
-        PriceHistory priceHistory = new PriceHistory( LocalDateTime.now(), 1, new Asset(AssetCode_Name.ADA, 0.5));
-        PriceHistory priceHistory2 = new PriceHistory( LocalDateTime.now(), 4, new Asset(AssetCode_Name.ETH, 0.5));
-        PriceHistory priceHistory3 = new PriceHistory( LocalDateTime.now(), 6, new Asset(AssetCode_Name.BNB, 0.5));
-        PriceHistory priceHistory4 = new PriceHistory( LocalDateTime.now(), 9, new Asset(AssetCode_Name.BTC, 0.5));
-        priceHistoryDAO.savePriceHistory(priceHistory);
-        priceHistoryDAO.savePriceHistory(priceHistory2);
-        priceHistoryDAO.savePriceHistory(priceHistory3);
-        priceHistoryDAO.savePriceHistory(priceHistory4);
+        for (PriceHistory priceHistory : priceHistories) {
+            priceHistoryDAO.savePriceHistory(priceHistory);
+        }
         double actual = priceHistoryDAO.getCurrentPriceByAssetCodeName(AssetCode_Name.BTC);
-        double expected = 9;
+        double expected = 1.1;
         assertEquals(expected, actual);
-
+        actual = priceHistoryDAO.getCurrentPriceByAssetCodeName(AssetCode_Name.ETH);
+        expected = 6.3;
+        assertEquals(expected, actual);
     }
 
-    @Test
-    void getCurrentPriceByAssetCode() {
+
+    private PriceHistory createPriceHisory(double currentprice, Asset asset) {
+        PriceHistory priceHistory = Mockito.mock(PriceHistory.class);
+        Mockito.when(priceHistory.getPrice()).thenReturn(currentprice);
+        Mockito.when(priceHistory.getDateTime()).thenReturn(LocalDateTime.now());
+        Mockito.when(priceHistory.getAsset()).thenReturn(asset);
+        return priceHistory;
     }
+
+    private Asset createAsset(AssetCode_Name assetCodeName) {
+        Asset asset = Mockito.mock(Asset.class);
+        Mockito.when(asset.getAssetCodeName()).thenReturn(assetCodeName);
+        Mockito.when(asset.getCurrentPrice()).thenReturn(1.0);
+
+        return asset;
+    }
+
 }

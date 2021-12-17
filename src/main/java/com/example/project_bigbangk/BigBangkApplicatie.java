@@ -46,7 +46,7 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
     public void onApplicationEvent(ContextRefreshedEvent event) {
         initializeUpdateStrategy();
         startPriceHistoryUpdateTimer();
-        new SeedDatabse().run();
+       //new SeedDatabse().run();
     }
 
 

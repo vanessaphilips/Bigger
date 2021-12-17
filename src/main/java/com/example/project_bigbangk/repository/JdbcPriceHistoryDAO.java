@@ -44,7 +44,7 @@ public class JdbcPriceHistoryDAO implements IPriceHistoryDAO {
 
     @Override
     public double getCurrentPriceByAssetCodeName(AssetCode_Name assetCodeName){
-        String sql = "Select * from priceHistory where datetime in (SELECT max(datetime) FROM pricehistory ) and code = ? ;";
+        String sql = "Select * from (SELECT * FROM pricehistory where code = ? )as priceHisotryByCoin ORDER BY dateTime DESC LIMIT 1;";
         double currentprice = 0;
         try {
             PriceHistory priceHistory = jdbcTemplate.queryForObject(sql,
