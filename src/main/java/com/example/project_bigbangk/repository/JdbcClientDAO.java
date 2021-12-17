@@ -8,11 +8,12 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+
 import java.sql.*;
 import java.util.List;
 
 @Repository
-public class JdbcClientDAO implements IClientDAO{
+public class JdbcClientDAO implements IClientDAO {
 
     JdbcTemplate jdbcTemplate;
 
@@ -22,7 +23,7 @@ public class JdbcClientDAO implements IClientDAO{
     }
 
     @Override
-    public void saveClient(Client mpClient){
+    public void saveClient(Client mpClient) {
         String sql = "Insert into Client values(?,?,?,?,?,?,?,?,?,?);";//10 ?s
         try {
             jdbcTemplate.update(sql,
@@ -42,30 +43,32 @@ public class JdbcClientDAO implements IClientDAO{
     }
 
     @Override
-    public Client findClientByEmail(String email){
+    public Client findClientByEmail(String email) {
         String sql = "SELECT * FROM Client WHERE email = ?;";
         Client client = null;
         try {
             client = jdbcTemplate.queryForObject(sql, new ClientRowMapper(), email);
-        } catch (DataAccessException dataAccessException){
-            System.err.println(dataAccessException.getMessage());
+        } catch (DataAccessException dataAccessException) {
+            if (! dataAccessException.getMessage().toString().equals("Incorrect result size: expected 1, actual 0")) {
+                System.err.println(dataAccessException.getMessage());
+            }
         }
         return client;
     }
 
     @Override
-    public List<Client> findAllClients(){
+    public List<Client> findAllClients() {
         String sql = "SELECT * FROM Client;";
         try {
             return jdbcTemplate.query(sql, new ClientRowMapper());
-        } catch (DataAccessException dataAccessException){
+        } catch (DataAccessException dataAccessException) {
             System.err.println(dataAccessException.getMessage());
         }
         return null;
     }
 
     @Override
-    public void updateClient(Client client){
+    public void updateClient(Client client) {
         String sql = "UPDATE Client Set email = ?, firstName = ?, insertion = ?, " +
                 "lastName = ?, dateOfBirth = ?, bsn = ?, passWord = ?, " +
                 "address = ? wallet = ?, WHERE email = ?;";
@@ -73,17 +76,17 @@ public class JdbcClientDAO implements IClientDAO{
             jdbcTemplate.update(sql, client.getEmail(), client.getFirstName(), client.getInsertion(),
                     client.getLastName(), client.getDateOfBirth(), client.getBsn(), client.getPassWord(),
                     client.getAddress(), client.getWallet());
-        } catch (DataAccessException dataAccessException){
+        } catch (DataAccessException dataAccessException) {
             System.err.println(dataAccessException.getMessage());
         }
     }
 
     @Override
-    public List<Client> findClientByLastName(String lastName){
+    public List<Client> findClientByLastName(String lastName) {
         String sql = "SELECT * FROM Client WHERE lastName = ?;";
         try {
             return jdbcTemplate.query(sql, new ClientRowMapper(), lastName);
-        } catch (DataAccessException dataAccessException){
+        } catch (DataAccessException dataAccessException) {
             System.err.println(dataAccessException.getMessage());
         }
         return null;

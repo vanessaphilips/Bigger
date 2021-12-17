@@ -39,7 +39,8 @@ public class JdbcWalletDAO implements IWalletDAO{
         try {
             wallet = jdbcTemplate.queryForObject(slq, new walletRowMapper(), iban);
         } catch (DataAccessException dataAccessException) {
-            System.err.println(dataAccessException.getMessage());
+            if (! dataAccessException.getMessage().toString().equals("Incorrect result size: expected 1, actual 0")) {
+            System.err.println(dataAccessException.getMessage());}
         }
         return wallet;
     }
