@@ -62,7 +62,7 @@ public class JdbcBankDAO implements IBankDAO{
         public Bank mapRow(ResultSet resultSet, int rowNumber) throws SQLException {
             return new Bank(resultSet.getString("name"),
                     resultSet.getString("code"),
-                    resultSet.getDouble("feePercentage"),
+                    resultSet.getDouble("transactioncosts"),
                     resultSet.getDouble("startingcapital"));
         }
     }

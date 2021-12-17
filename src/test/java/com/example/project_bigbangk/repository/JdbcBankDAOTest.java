@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -29,15 +30,15 @@ class JdbcBankDAOTest {
     @Test
     void findBank() {
         Bank actual = jdbcBankDAOTest.findBank("Big Bangk");
-        Bank expected = new Bank("Big Bangk", "BGBK", 5, 1000.00);
+        Bank expected = new Bank("Big Bangk", "BGBK", 5.0, 1000.00);
         assertThat(actual).isEqualTo(expected);
     }
 
     @Test
     void findAllBank() {
         List<Bank> actual = jdbcBankDAOTest.findAllBank();
-        List<Bank> expected = null;
-        expected.add(new Bank("Big Bangk", "BGBK", 5, 1000.00));
+        List<Bank> expected = new ArrayList<>();
+        expected.add(new Bank("Big Bangk", "BGBK", 5.0, 1000.00));
         assertThat(actual).isEqualTo(expected);
     }
 
