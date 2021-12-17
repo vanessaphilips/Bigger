@@ -11,24 +11,23 @@ public class WalletService {
 
     private final int START_CAPITAL_NEW_USER = 10000;
 
-    private JdbcWalletDAO jdbcWalletDAO;
     private RootRepository rootRepository;
     private IbanGeneratorService ibanGeneratorService;
 
-    public WalletService(JdbcWalletDAO jdbcWalletDAO, RootRepository rootRepository) {
-        this.jdbcWalletDAO = jdbcWalletDAO;
+    public WalletService(JdbcWalletDAO jdbcWalletDAO, RootRepository rootRepository, IbanGeneratorService ibanGeneratorService) {
         this.rootRepository = rootRepository;
+        this.ibanGeneratorService = ibanGeneratorService;
     }
 
-    public void createNewWalletWithAssets() {
+    public void saveNewWallet() {
         Wallet wallet = new Wallet(ibanGeneratorService.getIban(), START_CAPITAL_NEW_USER);
+        rootRepository.saveNewWallet(wallet);
     }
 
     public void updateWalletBalanceAndAsset(Wallet wallet, Asset asset) {
         rootRepository.updateWalletBalanceAndAsset(wallet, asset);
     }
 
-    //TODO deze is uitgecoment omdat de methode in de rootrepository nog niet klaar is
     public Wallet findWalletWithAssetByIban(String iban){
         return rootRepository.findWalletWithAssetByIban(iban);
     }

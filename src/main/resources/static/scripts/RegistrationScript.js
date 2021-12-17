@@ -18,12 +18,49 @@ class RegistrationDTO{
     }
 }
 
+const MIN_AGE = 18;
+const MAX_AGE = 150;
+
+document.getElementById('password').addEventListener('focusout', checkPassword);
+
 document.getElementById('postalCode').addEventListener('focusout', checkAddress);
 
 document.getElementById('number').addEventListener('focusout', checkAddress);
 
 document.getElementById('submitForm').addEventListener('click', prepareRegistration);
 
+//generates minimum and maximum date entry based on current date.
+window.onload = function() {
+    let inp = document.getElementById('dateOfBirth');
+    let maxday = new Date();
+    maxday.setFullYear(maxday.getFullYear() - MIN_AGE);
+    let minday = new Date();
+    minday.setFullYear(minday.getFullYear() -(MAX_AGE))
+    inp.max =  dateToString(maxday);
+    inp.min =  dateToString(minday);
+    inp.defaultValue = dateToString(new Date());
+    // Debug
+    console.log(inp.outerHTML);
+}
+
+function dateToString(date){
+    return date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
+}
+
+function checkPassword(){
+    let regex = new RegExp(/^\S.{8,}$/);
+    let password = document.getElementById('password').value;
+
+    if (regex.test(password)){
+        document.getElementById('password').classList.remove('error');
+        document.getElementById('passwordError').style.display = 'none';
+        document.getElementById('passwordOK').style.display = 'block';
+    }else{
+        document.getElementById('password').classList.add('error');
+        document.getElementById('passwordOK').style.display = 'none';
+        document.getElementById('passwordError').style.display = 'block';
+    }
+}
 
 function checkAddress(){
     let regex = new RegExp(/^[1-9][0-9]{3}[\s]?[A-Za-z]{2}$/i);
@@ -60,28 +97,27 @@ function processAddress(data) {
         document.getElementById('postalError').style.display = 'none';
         document.getElementById('city').value = addressPart.city; // zonder validatie
         document.getElementById('street').value = addressPart.street; // zonder validatie
-
         document.getElementById('postalCode').classList.remove('error');
         document.getElementById('number').classList.remove('error');
         }
 }
 
 function prepareRegistration() {
-    let registration = new RegistrationDTO(
-        document.getElementById('email').value,
+
+        let registration = new RegistrationDTO(
+        document.getElementById('email').value.trim(),
         document.getElementById('password').value,
-        document.getElementById('firstName').value,
-        document.getElementById('insertion').value,
-        document.getElementById('lastName').value,
-        document.getElementById('bsn').value,
-        document.getElementById('dateOfBirth').value,
-        document.getElementById('postalCode').value,
+        document.getElementById('firstName').value.trim(),
+        document.getElementById('insertion').value.trim(),
+        document.getElementById('lastName').value.trim(),
+        document.getElementById('bsn').value.trim(),
+        document.getElementById('dateOfBirth').value.trim(),
+        document.getElementById('postalCode').value.trim(),
         document.getElementById('street').value,
         parseInt(document.getElementById('number').value),
         document.getElementById('city').value,
         document.getElementById('country').value
     );
-    alert(JSON.stringify(registration));
     sendRegistrationData(registration);
 }
 
@@ -95,40 +131,17 @@ function sendRegistrationData(rData){
         body: JSON.stringify(rData)
     })
         .then(response => {
-            if(response.ok){
-                alert("ok");
+            if(response.status === 201){
+                return response.text()
+                    .then(text => {
+                        alert(text);
+                        //naar login pagina
+                    })
             }
-            else{
-                alert("niet ok");
-            }
+            else if(response.status === 409 || response.status === 406){
+                return response.text()
+                    .then(text => alert(text))
+            }else{alert('Unknown Error.')}
         })
         .catch((error) => {console.error('Error', error)});
 }
-
-//fetch("https://postcode.tech/api/v1/postcode?" + formData , {
-//             headers: {
-//                 'Authorization': 'Bearer 9565619a-9760-47d8-8f6d-e789d63b60ca',
-//             },
-//         })
-//             .then(response => response.json())//kan hier ook checken wat de response is.
-//             .then(json => {
-//                 processAddress(json)
-//             })
-//             .catch((error) => { console.error('Error', error) });
-//     }
-
-
-//voor later
-//$.ajax({
-//    type: "POST",
-//    url: "https://reqbin.com/echo/post/json",
-//    data: JSON.stringify({ "userName": userName, "password" : password }),
-//    contentType: "application/json",
-//    success: function (result) {
-//      console.log(result);
-//    },
-//    error: function (result, status) {
-//      console.log(result);
-//    }
-// });
-

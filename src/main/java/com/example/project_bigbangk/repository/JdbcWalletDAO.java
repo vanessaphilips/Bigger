@@ -7,11 +7,9 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
+
 
 @Repository
 public class JdbcWalletDAO implements IWalletDAO{
@@ -23,7 +21,7 @@ public class JdbcWalletDAO implements IWalletDAO{
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void createNewWallet(Wallet wallet) {
+    public void saveNewWallet(Wallet wallet) {
         String slq = "Insert into wallet values(?,?);";
         jdbcTemplate.update(slq, wallet.getIban(), wallet.getBalance());
     }
@@ -44,7 +42,7 @@ public class JdbcWalletDAO implements IWalletDAO{
         return wallet;
     }
 
-    public void updateWalletBalanceAndAsset(Wallet wallet, Asset asset) {
+    public void updateWalletAssets(Wallet wallet, Asset asset) {
         String sql = "Update wallet_has_asset Set amount = ? Where IBAN = ? And code = ?;";
         jdbcTemplate.update(sql, wallet.getIban(),asset.getAssetCodeName().getAssetCode());
     }

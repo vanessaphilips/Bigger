@@ -57,7 +57,7 @@ public class RootRepository {
      */
     public void createNewlyRegisteredClient(Client client) {
         addressDAO.saveAddress(client.getAddress());
-        walletDAO.createNewWallet(client.getWallet());
+        walletDAO.saveNewWallet(client.getWallet());
         clientDAO.saveClient(client);
     }
 
@@ -84,12 +84,17 @@ public class RootRepository {
     }
 
     // WALLET
+
+    public void saveNewWallet(Wallet wallet) {
+        walletDAO.saveNewWallet(wallet);
+    }
     public Wallet findWalletByIban(String iban) {
         return walletDAO.findWalletByIban(iban);
     }
 
     public void updateWalletBalanceAndAsset(Wallet wallet, Asset asset) {
-        walletDAO.updateWalletBalanceAndAsset(wallet, asset);
+        walletDAO.updateBalance(wallet);
+        walletDAO.updateWalletAssets(wallet, asset);
     }
 
     public Wallet findWalletWithAssetByIban(String iban) {
