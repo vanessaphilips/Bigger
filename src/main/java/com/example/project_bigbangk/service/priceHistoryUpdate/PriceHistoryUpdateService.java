@@ -16,7 +16,8 @@ import java.util.TimerTask;
 
 /**
  * Service for updating the current price of an Asset in Euro's
- * @author  Pieter Jan -Deek
+ *
+ * @author Pieter Jan -Deek
  */
 @Service
 public class PriceHistoryUpdateService {
@@ -35,13 +36,15 @@ public class PriceHistoryUpdateService {
     }
 
     /**
-     * calls the available CryptoAPiNegotiator (determined by the ICryptoApiNegotiatorStrategy) for cuurent prices 
+     * calls the available CryptoAPiNegotiator (determined by the ICryptoApiNegotiatorStrategy) for cuurent prices
      * and sends it to the rootrepository
      */
     public void updatePriceHistory() {
-        List<PriceHistory> priceHistories;
+        List<PriceHistory> priceHistories =null;
         cryptoNegotiatorService = cryptoApiNegotiatorStrategy.getAvailableCryptoService();
-        priceHistories = cryptoNegotiatorService.getPriceHistory();
+        if (cryptoNegotiatorService != null) {
+            priceHistories = cryptoNegotiatorService.getPriceHistory();
+        }
         if (priceHistories != null) {
             rootRepository.savePriceHistories(priceHistories);
             logger.info(String.format("Price history updated on %s", LocalDateTime.now()));

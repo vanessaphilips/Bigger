@@ -22,10 +22,12 @@ public class CryptoApiNegotiatorStrategy implements ICryptoApiNegotiatorStrategy
     private final Logger logger = LoggerFactory.getLogger(CryptoApiNegotiatorStrategy.class);
     private List<ICryptoApiNegotiatorService> cryptoApiNegotiatorServices;
 
+
     public CryptoApiNegotiatorStrategy() {
         super();
         logger.info("New CryptoNegotiatorStrategy");
         this.cryptoApiNegotiatorServices = new ArrayList<>();
+
     }
 
     /**

@@ -21,6 +21,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -33,7 +34,7 @@ import java.util.*;
  * @author Pieter Jan - Deek
  * Creation date 12/11/2021
  */
-
+@Service
 public class CoinMarketCapNegotiator implements ICryptoApiNegotiatorService {
 
     private static final String CURRENT_CURRENCY = "EUR";
@@ -47,10 +48,13 @@ public class CoinMarketCapNegotiator implements ICryptoApiNegotiatorService {
     private static final int STATUS_OK = 200;
     private final CloseableHttpClient HTTPClIENT;
 
-    public CoinMarketCapNegotiator() {
+    private ICryptoApiNegotiatorStrategy cryptoApiNegotiatorStrategy;
+
+        public CoinMarketCapNegotiator(ICryptoApiNegotiatorStrategy cryptoApiNegotiatorStrategy) {
         super();
         logger.info("New CoinMarketCapNegociator");
         HTTPClIENT = HttpClients.createDefault();
+        cryptoApiNegotiatorStrategy.addNegotiator(this);
     }
 
 
