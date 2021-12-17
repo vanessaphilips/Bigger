@@ -132,14 +132,14 @@ function sendRegistrationData(rData){
         body: JSON.stringify(rData)
     })
         .then(response => {
-            if(response.status == 201){
+            if(response.status === 201){
                 return response.text()
                     .then(text => {
                         alert(text);
                         //naar login pagina
                     })
             }
-            else if(response.status == 409 || response.status == 406){
+            else if(response.status === 409 || response.status === 406){
                 return response.text()
                     .then(text => alert(text))
             }else{alert('Unknown Error.')}
