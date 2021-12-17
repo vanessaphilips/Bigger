@@ -19,8 +19,6 @@ public class Transaction extends AbstractOrder{
         this.sellerWallet = sellerWallet;
     }
 
-    // TODO alle getters en setters aangemaakt. Als blijkt dat eea niet gebruikt wordt dan weghalen.
-
     public Wallet getBuyerWallet() {
         return buyerWallet;
     }
@@ -38,16 +36,10 @@ public class Transaction extends AbstractOrder{
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        Transaction that = (Transaction) o;
-        return Objects.equals(buyerWallet, that.buyerWallet) && Objects.equals(sellerWallet, that.sellerWallet);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), buyerWallet, sellerWallet);
+    public String toString() {
+        return "Transaction{" +
+                "buyerWallet=" + buyerWallet +
+                ", sellerWallet=" + sellerWallet +
+                '}';
     }
 }

@@ -78,6 +78,18 @@ abstract class AbstractOrder {
     }
 
     @Override
+    public String toString() {
+        return "AbstractOrder{" +
+                "orderId=" + orderId +
+                ", asset=" + asset +
+                ", requestedPrice=" + requestedPrice +
+                ", numberOfAssets=" + numberOfAssets +
+                ", date=" + date +
+                ", transactionFee=" + transactionFee +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
