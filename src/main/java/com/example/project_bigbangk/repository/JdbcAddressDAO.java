@@ -42,7 +42,8 @@ public class JdbcAddressDAO implements IAddressDAO {
         try {
             address = jdbcTemplate.queryForObject(sql, new JdbcAddressDAO.AddressRowMapper(), email);
         } catch (DataAccessException dataAccessException){
-            System.err.println(dataAccessException.getMessage());
+            if (! dataAccessException.getMessage().toString().equals("Incorrect result size: expected 1, actual 0")) {
+            System.err.println(dataAccessException.getMessage());}
         }
         return address;
     }
