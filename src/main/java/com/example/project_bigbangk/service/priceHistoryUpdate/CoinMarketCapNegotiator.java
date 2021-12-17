@@ -29,23 +29,25 @@ import java.util.*;
 
 /**
  * This class talks to the CoinMarketCap.com api and get information about assets and converts it to PriceHistory
+ *
  * @author Pieter Jan - Deek
  * Creation date 12/11/2021
  */
 
-public class CoinMarketCapNegociator implements ICryptoApiNegotiatorService {
+public class CoinMarketCapNegotiator implements ICryptoApiNegotiatorService {
 
-    private final Logger logger = LoggerFactory.getLogger(CoinMarketCapNegociator.class);
+    private static final String CURRENT_CURRENCY = "EUR";
+    private final Logger logger = LoggerFactory.getLogger(CoinMarketCapNegotiator.class);
     private final static String API_KEY = "9a38f7d6-3288-491a-8a0d-0338079527bc";
     private final static String ASSET_DATA_URL = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest";
     private final static String SERVER_INFO_URL = "https://pro-api.coinmarketcap.com/v1/key/info";
     private final static String ALLASSETS_URL = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest";
-    private final static int[] ASSET_IDS = new int[]{1, 1027, 1839, 825, 5426, 3408, 2010, 52, 6636, 74, 4172, 5805, 5994, 4687, 3635, 3890, 3717, 2, 7083, 1027, 4943,};
+    private final static int[] ASSET_IDS = new int[]{1, 1027, 1839, 825, 5426, 3408, 2010, 52, 6636, 74, 4172, 5805, 5994, 4687, 3635, 3890, 3717, 2, 7083, 1027, 4943};
     private final static int NUMBER_OF_ASSETS = 20;
     private static final int STATUS_OK = 200;
     private final CloseableHttpClient HTTPClIENT;
 
-    public CoinMarketCapNegociator() {
+    public CoinMarketCapNegotiator() {
         super();
         logger.info("New CoinMarketCapNegociator");
         HTTPClIENT = HttpClients.createDefault();
@@ -76,14 +78,14 @@ public class CoinMarketCapNegociator implements ICryptoApiNegotiatorService {
         String response_AssetListJSON = null;
         List<NameValuePair> parameters = new ArrayList<>();
         parameters.add(new BasicNameValuePair("id", getCoinIdsAsString()));
-        parameters.add(new BasicNameValuePair("convert", "EUR"));
+        parameters.add(new BasicNameValuePair("convert", CURRENT_CURRENCY));
         try {
             HttpGet request = makeApiRequest(ASSET_DATA_URL, parameters);
             response_AssetListJSON = makeAPiCall(request);
         } catch (IOException e) {
             logger.error("Error: cannont access content - " + e.getMessage());
         } catch (URISyntaxException e) {
-            logger.error("Error: Invalid URL " +e.getMessage());
+            logger.error("Error: Invalid URL " + e.getMessage());
         }
         if (response_AssetListJSON != null) {
             priceHistories = convertJSonToPriceHistory(response_AssetListJSON);

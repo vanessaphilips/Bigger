@@ -10,4 +10,6 @@ public interface IAssetDAO {
     void saveAsset(Asset asset);
 
     int getNumberOfAssets();
+
+    Asset findAssetByCode(String assetCode);
 }

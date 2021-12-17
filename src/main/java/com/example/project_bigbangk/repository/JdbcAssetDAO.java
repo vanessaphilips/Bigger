@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.support.AbstractLobStreamingResultSetExtractor;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
@@ -45,9 +44,8 @@ public class JdbcAssetDAO implements IAssetDAO {
     public void saveAsset(Asset asset) {
         String sql = "Insert into Asset values(?,?);";
         try {
-            jdbcTemplate.update(sql, asset.getCode(),
-                    asset.getName()
-            );
+            jdbcTemplate.update(sql, asset.getAssetCodeName().getAssetCode(),
+                    asset.getAssetCodeName().getAssetName());
         } catch (DataAccessException dataAccessException) {
             logger.info(dataAccessException.getMessage());
         }
@@ -68,6 +66,18 @@ public class JdbcAssetDAO implements IAssetDAO {
             logger.info(dataAccessException.getMessage());
         }
         return 0;
+    }
+
+    @Override
+    public Asset findAssetByCode(String assetCode) {
+        String slq = "SELECT * FROM Asset WHERE code = ?;";
+        Asset asset = null;
+        try {
+            asset = jdbcTemplate.queryForObject(slq, new AssetRowMapper(), assetCode);
+        } catch (DataAccessException dataAccessException) {
+            System.err.println(dataAccessException.getMessage());
+        }
+        return asset;
     }
 
     private class AssetRowMapper implements RowMapper<Asset> {

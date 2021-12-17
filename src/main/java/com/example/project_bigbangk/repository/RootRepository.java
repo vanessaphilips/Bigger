@@ -10,7 +10,9 @@ package com.example.project_bigbangk.repository;
 import com.example.project_bigbangk.model.*;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class RootRepository {
@@ -75,7 +77,7 @@ public class RootRepository {
         List<Asset> assets = assetDAO.getAllAssets();
         if (assets != null) {
             for (Asset asset : assets) {
-                asset.setCurrentPrice(priceHistoryDAO.getCurrentPriceByAssetCode(asset.getCode()));
+                asset.setCurrentPrice(priceHistoryDAO.getCurrentPriceByAssetCodeName(asset.getAssetCodeName()));
             }
         }
         return assets;
@@ -86,29 +88,20 @@ public class RootRepository {
         return walletDAO.findWalletByIban(iban);
     }
 
-    //TODO methode invullen
-    public void createNewWalletWithAssets() {
-    }
-
     public void updateWalletBalanceAndAsset(Wallet wallet, Asset asset) {
         walletDAO.updateWalletBalanceAndAsset(wallet, asset);
     }
 
-
-    //TODO methode invullen
-//   public Wallet findWalletWithAssetByIban(String iban) {
-//      Wallet wallet = walletDAO.findWalletByIban(iban);
-//      if (wallet == null) {
-//         return wallet;
-//      }
-//      Map<String, Double> assetMap = walletDAO.findAssetCodeWithAmount(iban);
-//      Map<Asset, Double> returnAssetMap = null;
-//      for ( String asset : assetMap.keySet()) {
-    //TODO AssetDOA functies aanmaken
-//         returnAssetMap.put(assetDOA.findAssetByCode(asset),assetMap.get(asset));
-//      }
-//      wallet.setAsset(returnAssetMap);
-//
-//      return wallet;
-//   }
+    public Wallet findWalletWithAssetByIban(String iban) {
+      Wallet wallet = walletDAO.findWalletByIban(iban);
+      if (wallet == null) {
+         return wallet;
+      }
+      Map<Asset, Double> assetWithAmountMap = new HashMap<>();
+      for (AssetCode_Name assetCode_name: AssetCode_Name.values()) {
+          assetWithAmountMap.put(assetDAO.findAssetByCode(assetCode_name.getAssetCode()), walletDAO.findAmountOfAsset(iban, assetCode_name.getAssetCode()));
+      }
+      wallet.setAsset(assetWithAmountMap);
+      return wallet;
+   }
 }

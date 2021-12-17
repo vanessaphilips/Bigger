@@ -29,8 +29,8 @@ public class WalletService {
     }
 
     //TODO deze is uitgecoment omdat de methode in de rootrepository nog niet klaar is
-//    public Wallet findWalletWithAssetByIban(String iban){
-//        return rootRepository.findWalletWithAssetByIban(iban);
-//    }
+    public Wallet findWalletWithAssetByIban(String iban){
+        return rootRepository.findWalletWithAssetByIban(iban);
+    }
 
 }
