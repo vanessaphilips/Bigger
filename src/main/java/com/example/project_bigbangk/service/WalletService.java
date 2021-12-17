@@ -15,9 +15,10 @@ public class WalletService {
     private RootRepository rootRepository;
     private IbanGeneratorService ibanGeneratorService;
 
-    public WalletService(JdbcWalletDAO jdbcWalletDAO, RootRepository rootRepository) {
+    public WalletService(JdbcWalletDAO jdbcWalletDAO, RootRepository rootRepository, IbanGeneratorService ibanGeneratorService) {
         this.jdbcWalletDAO = jdbcWalletDAO;
         this.rootRepository = rootRepository;
+        this.ibanGeneratorService = ibanGeneratorService;
     }
 
     public void createNewWalletWithAssets() {
@@ -28,7 +29,6 @@ public class WalletService {
         rootRepository.updateWalletBalanceAndAsset(wallet, asset);
     }
 
-    //TODO deze is uitgecoment omdat de methode in de rootrepository nog niet klaar is
     public Wallet findWalletWithAssetByIban(String iban){
         return rootRepository.findWalletWithAssetByIban(iban);
     }
