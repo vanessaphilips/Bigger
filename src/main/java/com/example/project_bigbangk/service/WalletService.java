@@ -11,12 +11,10 @@ public class WalletService {
 
     private final int START_CAPITAL_NEW_USER = 10000;
 
-    private JdbcWalletDAO jdbcWalletDAO;
     private RootRepository rootRepository;
     private IbanGeneratorService ibanGeneratorService;
 
     public WalletService(JdbcWalletDAO jdbcWalletDAO, RootRepository rootRepository, IbanGeneratorService ibanGeneratorService) {
-        this.jdbcWalletDAO = jdbcWalletDAO;
         this.rootRepository = rootRepository;
         this.ibanGeneratorService = ibanGeneratorService;
     }
