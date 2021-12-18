@@ -6,12 +6,16 @@ package com.example.project_bigbangk;
 import com.example.project_bigbangk.repository.RootRepository;
 import com.example.project_bigbangk.service.ClientFactory;
 import com.example.project_bigbangk.service.priceHistoryUpdate.*;
+import org.h2.util.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.NestedTransactionNotSupportedException;
 
+import java.util.Locale;
+import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -21,14 +25,10 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
     private final int UPDATE_INTERVAL_PRICEUPDATESERVICE = 300000;//5min
     private final int NUMBER_OF_CLIENTS_TO_SEED = 3000;
 
-
-    //ToDO Misschien nog een Singleton bank object hier instantieren? Zodat de bank er altijd is.
     private final PriceHistoryUpdateService priceHistoryUpdateService;
-    private final ICryptoApiNegotiatorStrategy cryptoApiNegotiatorStrategy;
     private ClientFactory clientFactory;
     private final Logger logger = LoggerFactory.getLogger(BigBangkApplicatie.class);
     private RootRepository rootRepository;
-
 
     public BigBangkApplicatie(PriceHistoryUpdateService priceHistoryUpdateService,
                               ICryptoApiNegotiatorStrategy cryptoApiNegotiatorStrategy,
@@ -37,7 +37,6 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
         super();
         logger.info("New BigBangkApplicatie");
         this.priceHistoryUpdateService = priceHistoryUpdateService;
-        this.cryptoApiNegotiatorStrategy = cryptoApiNegotiatorStrategy;
         this.clientFactory = clientFactory;
         this.rootRepository = rootrepository;
     }
@@ -45,14 +44,18 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         startPriceHistoryUpdateTimer();
-        //new SeedDatabse().run();
+        try {
+            SeedDatabse seedDatabse = new SeedDatabse();
+            seedDatabse.call();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
     }
 
     private void startPriceHistoryUpdateTimer() {
         Timer priceHistoryUpdateCallBack = new Timer(true);
         logger.info("priceHistoryUpdate in progress");
         priceHistoryUpdateCallBack.schedule(new UpdatePriceHisToryTask(), 1, UPDATE_INTERVAL_PRICEUPDATESERVICE);
-
     }
 
     class UpdatePriceHisToryTask extends TimerTask {
@@ -62,9 +65,16 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
         }
     }
 
-    class SeedDatabse extends TimerTask {
+    class SeedDatabse extends Task {
         @Override
-        public void run() {
+        //ToDo maak deze switch goed.
+        public void call() throws Exception {
+            Thread.sleep(3000);
+            System.out.print("Start database seeding? (Y/N): ");
+            Scanner scanner = new Scanner(System.in);
+            while (!scanner.nextLine().equalsIgnoreCase("N")) {
+                logger.info("Press Y or N");
+            }
             clientFactory.createClients(NUMBER_OF_CLIENTS_TO_SEED);
         }
     }

@@ -6,8 +6,6 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 
 @SpringBootApplication(exclude={SecurityAutoConfiguration.class})
 public class ProjectBigBangKApplication {
-
-
     public static void main(String[] args) {
         SpringApplication.run(ProjectBigBangKApplication.class, args);
     }

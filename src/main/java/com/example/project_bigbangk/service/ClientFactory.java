@@ -8,6 +8,7 @@ import com.example.project_bigbangk.model.Client;
 import com.example.project_bigbangk.model.DTO.RegistrationDTO;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.h2.util.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -46,6 +47,7 @@ public class ClientFactory {
 
 
     public void createClients(int numberOfClients) {
+        logger.info(String.format("Database seeding started for %s clients", numberOfClients));
         initializeNameArrays();
         initializeAdressArrays();
         List<Client> clients = new ArrayList<>();
@@ -55,21 +57,39 @@ public class ClientFactory {
             clients.add(client);
         }
         int i = 0;
-        for (Client client : clients) {
-            RegistrationDTO clientDTO = new RegistrationDTO(client.getEmail(),
-                    "password",
-                    client.getFirstName(),
-                    client.getInsertion(),
-                    client.getLastName(),
-                    client.getBsn(),
-                    createBirthDay(),
-                    client.getAddress().getPostalCode(),
-                    client.getAddress().getStreet(),
-                    client.getAddress().getNumber(),
-                    client.getAddress().getCity(),
-                    client.getAddress().getCountry());
-           registrationService.registerClient(clientDTO);
+        int taskNumber = 4;
+        for (int j = 0; j < taskNumber; j++) {
+            try {
+                final int x = j;
+                new Task() {
+                    int jInternal = x;
+
+                    @Override
+                    public void call() throws Exception {
+                        for (int k = (clients.size() / taskNumber) * jInternal; k < (clients.size() / taskNumber) * (jInternal + 1); k++) {
+
+                            RegistrationDTO clientDTO = new RegistrationDTO(clients.get(k).getEmail(),
+                                    "password",
+                                    clients.get(k).getFirstName(),
+                                    clients.get(k).getInsertion(),
+                                    clients.get(k).getLastName(),
+                                    clients.get(k).getBsn(),
+                                    createBirthDay(),
+                                    clients.get(k).getAddress().getPostalCode(),
+                                    clients.get(k).getAddress().getStreet(),
+                                    clients.get(k).getAddress().getNumber(),
+                                    clients.get(k).getAddress().getCity(),
+                                    clients.get(k).getAddress().getCountry());
+                            registrationService.registerClient(clientDTO);
+                        }
+                    }
+                }.call();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+
+        logger.info("Database seeding end");
     }
 
     private void initializeAdressArrays() {
@@ -167,7 +187,12 @@ public class ClientFactory {
             lastNamesNode = mapper.readTree(lastNamesFile);
             lastNamesNode = lastNamesNode.findValue("record");
             for (JsonNode lastNameJN : lastNamesNode) {
-                tempLastNames.put(lastNameJN.get("naam").asText(), lastNameJN.get("prefix").asText());
+                String lastName =lastNameJN.get("naam").asText();
+                String nameNorm = Normalizer.normalize(lastName, Normalizer.Form.NFD);
+                if (!lastName.equals(nameNorm)) {
+                    nameNorm = nameNorm.replaceAll("[^\\p{ASCII}]", "");
+                }
+                tempLastNames.put(nameNorm, lastNameJN.get("prefix").asText());
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -206,8 +231,9 @@ public class ClientFactory {
                 String nameNorm = Normalizer.normalize(firstName, Normalizer.Form.NFD);
                 if (!firstName.equals(nameNorm)) {
                     nameNorm = nameNorm.replaceAll("[^\\p{ASCII}]", "");
-                    tempListFirstNames.add(nameNorm);
+
                 }
+                tempListFirstNames.add(nameNorm);
             }
         } catch (IOException e) {
             e.printStackTrace();
