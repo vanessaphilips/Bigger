@@ -1,5 +1,6 @@
 package com.example.project_bigbangk.model;
 
+import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -9,7 +10,8 @@ import java.util.Objects;
  */
 
 abstract class AbstractOrder {
-    private int orderId;
+
+    private long orderId;
     private Asset asset;
     private double requestedPrice;
     private int numberOfAssets;
@@ -17,7 +19,7 @@ abstract class AbstractOrder {
     private double transactionFee;
     private static final double DEFAULT_TRANSACTIONFEE = 0.0025;
 
-    public AbstractOrder(int orderId, Asset asset, double requestedPrice, int numberOfAssets,
+    public AbstractOrder(long orderId, Asset asset, double requestedPrice, int numberOfAssets,
                          LocalDateTime date, double transactionFee) {
         this.orderId = orderId;
         this.asset = asset;
@@ -27,13 +29,16 @@ abstract class AbstractOrder {
         this.transactionFee = DEFAULT_TRANSACTIONFEE;
     }
 
-    // TODO alle getters en setters aangemaakt. Als blijkt dat eea niet gebruikt wordt dan weghalen.
+    public AbstractOrder(Asset asset, double requestedPrice, int numberOfAssets,
+                         LocalDateTime date, double transactionFee) {
+        this(0, asset, requestedPrice, numberOfAssets, date, DEFAULT_TRANSACTIONFEE);
+    }
 
-    public int getOrderId() {
+    public long getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(int orderId) {
+    public void setOrderId(long orderId) {
         this.orderId = orderId;
     }
 
@@ -61,7 +66,7 @@ abstract class AbstractOrder {
         this.numberOfAssets = numberOfAssets;
     }
 
-    public LocalDateTime getDate() {
+    public Date getDate() {
         return date;
     }
 

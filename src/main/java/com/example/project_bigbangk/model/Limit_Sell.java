@@ -3,9 +3,13 @@
 
 package com.example.project_bigbangk.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.time.LocalDateTime;
 
 public class Limit_Sell extends AbstractOrder{
+
+    private final Logger logger = LoggerFactory.getLogger(Limit_Sell.class);
 
     private Wallet sellerWallet;
 
@@ -13,6 +17,7 @@ public class Limit_Sell extends AbstractOrder{
                       LocalDateTime date, double transactionFee, Wallet sellerWallet) {
         super(orderId, asset, requestedPrice, numberOfAssets, date, transactionFee);
         this.sellerWallet = sellerWallet;
+        logger.info("New Limit_Sell");
     }
 
     public Wallet getSellerWallet() {
