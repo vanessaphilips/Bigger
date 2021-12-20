@@ -77,7 +77,7 @@ public class RootRepository {
         List<Asset> assets = assetDAO.getAllAssets();
         if (assets != null) {
             for (Asset asset : assets) {
-                asset.setCurrentPrice(priceHistoryDAO.getCurrentPriceByAssetCodeName(asset.getAssetCodeName()));
+                asset.setCurrentPrice(priceHistoryDAO.getCurrentPriceByAssetCode(asset.getCode()));
             }
         }
         return assets;
@@ -103,8 +103,9 @@ public class RootRepository {
          return wallet;
       }
       Map<Asset, Double> assetWithAmountMap = new HashMap<>();
-      for (AssetCode_Name assetCode_name: AssetCode_Name.values()) {
-          assetWithAmountMap.put(assetDAO.findAssetByCode(assetCode_name.getAssetCode()), walletDAO.findAmountOfAsset(iban, assetCode_name.getAssetCode()));
+      List<Asset> assets = assetDAO.getAllAssets();
+      for (Asset asset: assets) {
+          assetWithAmountMap.put(assetDAO.findAssetByCode(asset.getCode()), walletDAO.findAmountOfAsset(iban, asset.getCode()));
       }
       wallet.setAsset(assetWithAmountMap);
       return wallet;

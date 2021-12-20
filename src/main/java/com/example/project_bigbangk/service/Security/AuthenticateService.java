@@ -34,6 +34,7 @@ public class AuthenticateService {
     }
 
     public boolean authenticate(String token) {
+        token = token.replace("Bearer ", "");
         return tokenService.authenticateToken(token);
     }
 }

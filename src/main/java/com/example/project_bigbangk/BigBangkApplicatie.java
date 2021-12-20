@@ -45,7 +45,7 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
         startPriceHistoryUpdateTimer();
         try {
             SeedDatabse seedDatabse = new SeedDatabse();
-            seedDatabse.call();
+         // seedDatabse.call();
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -54,7 +54,7 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
     private void startPriceHistoryUpdateTimer() {
         Timer priceHistoryUpdateCallBack = new Timer(true);
         logger.info("priceHistoryUpdate in progress");
-        priceHistoryUpdateCallBack.schedule(new UpdatePriceHisToryTask(), 1, UPDATE_INTERVAL_PRICEUPDATESERVICE);
+        priceHistoryUpdateCallBack.schedule(new UpdatePriceHisToryTask(), 3000, UPDATE_INTERVAL_PRICEUPDATESERVICE);
     }
 
     class UpdatePriceHisToryTask extends TimerTask {
@@ -68,7 +68,6 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
         @Override
         //ToDo maak deze switch goed.
         public void call() throws Exception {
-            Thread.sleep(3000);
             System.out.print("Start database seeding? (Y/N): ");
             Scanner scanner = new Scanner(System.in);
             while (!scanner.nextLine().equalsIgnoreCase("Y")) {

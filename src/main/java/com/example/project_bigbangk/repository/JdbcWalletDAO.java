@@ -45,7 +45,7 @@ public class JdbcWalletDAO implements IWalletDAO{
 
     public void updateWalletAssets(Wallet wallet, Asset asset) {
         String sql = "Update wallet_has_asset Set amount = ? Where IBAN = ? And code = ?;";
-        jdbcTemplate.update(sql, wallet.getIban(),asset.getAssetCodeName().getAssetCode());
+        jdbcTemplate.update(sql, wallet.getIban(),asset.getCode());
     }
 
     @Override

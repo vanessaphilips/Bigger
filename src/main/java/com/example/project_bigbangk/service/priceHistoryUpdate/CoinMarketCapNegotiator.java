@@ -134,8 +134,10 @@ public class CoinMarketCapNegotiator implements ICryptoApiNegotiatorService {
             for (JsonNode json : node.findValues("data")) {
                 for (JsonNode coin : json) {
                     double price = Double.parseDouble(coin.get("quote").get("EUR").get("price").toString());
-                    AssetCode_Name assetCodeName = AssetCode_Name.valueOf(coin.get("symbol").textValue());
-                    PriceHistory priceHistory = new PriceHistory(LocalDateTime.now(), price, new Asset(assetCodeName, price));
+                    String assetCode  = coin.get("symbol").textValue();
+                    //Todo vind de key voor de afkorting
+                    String assetName = coin.get("name").textValue();
+                    PriceHistory priceHistory = new PriceHistory(LocalDateTime.now(), price, new Asset(assetCode,assetName, price));
                     priceHistories.add(priceHistory);
                 }
             }

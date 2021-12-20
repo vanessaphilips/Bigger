@@ -7,5 +7,5 @@ public interface IPriceHistoryDAO {
     public void savePriceHistory(PriceHistory priceHistory);
 
 
-    double getCurrentPriceByAssetCodeName(AssetCode_Name assetCodeName);
+    double getCurrentPriceByAssetCode(String assetCode);
 }
