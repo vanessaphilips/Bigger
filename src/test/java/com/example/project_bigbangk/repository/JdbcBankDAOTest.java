@@ -24,9 +24,8 @@ import static org.assertj.core.api.Assertions.*;
 @ActiveProfiles("test")
 class JdbcBankDAOTest {
 
-    private JdbcBankDAO jdbcBankDAOTest;
-    private Bank mockBank = Mockito.mock(Bank.class);
-    private Wallet mockWallet = Mockito.mock(Wallet.class);
+    private final JdbcBankDAO jdbcBankDAOTest;
+    private final Wallet mockWallet = Mockito.mock(Wallet.class);
     private Bank newBank;
     private Bank bigBangk;
     private Bank newBankUpdate;
@@ -34,7 +33,6 @@ class JdbcBankDAOTest {
     @BeforeEach
     public void startUp (){
         Mockito.when(mockWallet.getIban()).thenReturn("NL17 BGBK 7265511");
-        Mockito.when(mockBank.getWallet()).thenReturn(mockWallet);
         newBank = new Bank("Test bank", "TSBK", 3.0, 210.00);
         bigBangk = new Bank("Big Bangk", "BGBK", 5.0, 1000.00);
         newBankUpdate = new Bank("Test bank aangepast", "TSBK", 9.0, 6710.00);
@@ -67,8 +65,7 @@ class JdbcBankDAOTest {
         assertThat(actual).isEqualTo(expected);
 
         actual = jdbcBankDAOTest.findBank("Geen bank");
-        expected = null;
-        assertThat(actual).isEqualTo(expected);
+        assertThat(actual).isNull();
     }
 
     @Test
