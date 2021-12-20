@@ -35,7 +35,8 @@ public class Stoploss_Sell extends AbstractOrder{
 
     @Override
     public String toString() {
-        return "Stoploss_Sell{" +
+        return super.toString() +
+                "Stoploss_Sell{" +
                 "sellerWallet=" + sellerWallet +
                 ", lowerBound=" + lowerBound +
                 '}';

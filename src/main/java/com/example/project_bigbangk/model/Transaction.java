@@ -37,7 +37,8 @@ public class Transaction extends AbstractOrder{
 
     @Override
     public String toString() {
-        return "Transaction{" +
+        return super.toString() +
+                "Transaction{" +
                 "buyerWallet=" + buyerWallet +
                 ", sellerWallet=" + sellerWallet +
                 '}';
