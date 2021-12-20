@@ -24,7 +24,7 @@ public class DummyCryptoApiNegotiatorService2 implements ICryptoApiNegotiatorSer
     }
 
     @Override
-    public List<PriceHistory> getPriceHistory() {
+    public List<PriceHistory> getPriceHistory(String currency) {
         List<PriceHistory> priceHistorys = null;
         return priceHistorys;
 

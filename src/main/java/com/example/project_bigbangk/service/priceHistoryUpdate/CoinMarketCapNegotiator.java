@@ -37,7 +37,7 @@ import java.util.*;
 @Service
 public class CoinMarketCapNegotiator implements ICryptoApiNegotiatorService {
 
-    private static final String CURRENT_CURRENCY = "EUR";
+
     private final Logger logger = LoggerFactory.getLogger(CoinMarketCapNegotiator.class);
     private final static String API_KEY = "9a38f7d6-3288-491a-8a0d-0338079527bc";
     private final static String ASSET_DATA_URL = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest";
@@ -77,12 +77,12 @@ public class CoinMarketCapNegotiator implements ICryptoApiNegotiatorService {
 
 
     @Override
-    public List<PriceHistory> getPriceHistory() {
+    public List<PriceHistory> getPriceHistory(String currency) {
         List<PriceHistory> priceHistories = null;
         String response_AssetListJSON = null;
         List<NameValuePair> parameters = new ArrayList<>();
         parameters.add(new BasicNameValuePair("id", getCoinIdsAsString()));
-        parameters.add(new BasicNameValuePair("convert", CURRENT_CURRENCY));
+        parameters.add(new BasicNameValuePair("convert", currency));
         try {
             HttpGet request = makeApiRequest(ASSET_DATA_URL, parameters);
             response_AssetListJSON = makeAPiCall(request);

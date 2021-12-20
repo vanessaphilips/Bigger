@@ -22,6 +22,7 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
 
     private final int UPDATE_INTERVAL_PRICEUPDATESERVICE = 300000;//5min
     private final int NUMBER_OF_CLIENTS_TO_SEED = 3000;
+    private static final String CURRENT_CURRENCY = "EUR";
 
     private final PriceHistoryUpdateService priceHistoryUpdateService;
     private ClientFactory clientFactory;
@@ -59,7 +60,7 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
     class UpdatePriceHisToryTask extends TimerTask {
         @Override
         public void run() {
-            priceHistoryUpdateService.updatePriceHistory();
+            priceHistoryUpdateService.updatePriceHistory(CURRENT_CURRENCY);
         }
     }
 
