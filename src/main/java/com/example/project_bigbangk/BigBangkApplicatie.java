@@ -72,7 +72,7 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
             Thread.sleep(3000);
             System.out.print("Start database seeding? (Y/N): ");
             Scanner scanner = new Scanner(System.in);
-            while (!scanner.nextLine().equalsIgnoreCase("N")) {
+            while (!scanner.nextLine().equalsIgnoreCase("Y")) {
                 logger.info("Press Y or N");
             }
             clientFactory.createClients(NUMBER_OF_CLIENTS_TO_SEED);
