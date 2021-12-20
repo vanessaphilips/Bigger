@@ -37,8 +37,6 @@ public class OrderController{
     public ResponseEntity<String> placeOrder(@RequestBody OrderDTO orderDTO){
         orderservice.executeOrderByType(orderDTO);
 
-        //stuur door naar service
-
         //service:
         //als transactie type, gelijk kijken of je hem kan uitvoeren
         //bij transacties die niet kunnen, niet opslaan-alleen melding dat het niet kan
