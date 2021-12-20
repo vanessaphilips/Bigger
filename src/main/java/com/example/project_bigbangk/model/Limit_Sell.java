@@ -25,7 +25,8 @@ public class Limit_Sell extends AbstractOrder{
 
     @Override
     public String toString() {
-        return "Limit_Sell{" +
+        return super.toString() +
+                "Limit_Sell{" +
                 "sellerWallet=" + sellerWallet +
                 '}';
     }
