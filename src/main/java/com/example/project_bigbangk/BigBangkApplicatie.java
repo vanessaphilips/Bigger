@@ -22,6 +22,7 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
 
     private final int UPDATE_INTERVAL_PRICEUPDATESERVICE = 300000;//5min
     private final int NUMBER_OF_CLIENTS_TO_SEED = 3000;
+    private static final String CURRENT_CURRENCY = "EUR";
 
     private final PriceHistoryUpdateService priceHistoryUpdateService;
     private ClientFactory clientFactory;
@@ -44,7 +45,7 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
         startPriceHistoryUpdateTimer();
         try {
             SeedDatabse seedDatabse = new SeedDatabse();
-            seedDatabse.call();
+         // seedDatabse.call();
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -53,13 +54,13 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
     private void startPriceHistoryUpdateTimer() {
         Timer priceHistoryUpdateCallBack = new Timer(true);
         logger.info("priceHistoryUpdate in progress");
-        priceHistoryUpdateCallBack.schedule(new UpdatePriceHisToryTask(), 1, UPDATE_INTERVAL_PRICEUPDATESERVICE);
+        priceHistoryUpdateCallBack.schedule(new UpdatePriceHisToryTask(), 3000, UPDATE_INTERVAL_PRICEUPDATESERVICE);
     }
 
     class UpdatePriceHisToryTask extends TimerTask {
         @Override
         public void run() {
-            priceHistoryUpdateService.updatePriceHistory();
+            priceHistoryUpdateService.updatePriceHistory(CURRENT_CURRENCY);
         }
     }
 
@@ -67,7 +68,6 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
         @Override
         //ToDo maak deze switch goed.
         public void call() throws Exception {
-            Thread.sleep(3000);
             System.out.print("Start database seeding? (Y/N): ");
             Scanner scanner = new Scanner(System.in);
             while (!scanner.nextLine().equalsIgnoreCase("Y")) {

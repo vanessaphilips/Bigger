@@ -5,10 +5,8 @@ import com.example.project_bigbangk.model.AssetCode_Name;
 import com.example.project_bigbangk.model.PriceHistory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ActiveProfiles;
 
 import javax.annotation.Resource;
@@ -51,13 +49,13 @@ class JdbcPriceHistoryDAOTest {
         for (PriceHistory priceHistory : priceHistories) {
             priceHistoryDAO.savePriceHistory(priceHistory);
         }
-        double actual = priceHistoryDAO.getCurrentPriceByAssetCodeName(AssetCode_Name.BTC);
+        double actual = priceHistoryDAO.getCurrentPriceByAssetCode(AssetCode_Name.BTC.getAssetCode());
         double expected = 1.21;
         assertEquals(expected, actual);
-        actual = priceHistoryDAO.getCurrentPriceByAssetCodeName(AssetCode_Name.ETH);
+        actual = priceHistoryDAO.getCurrentPriceByAssetCode(AssetCode_Name.ETH.getAssetCode());
         expected = 6.3;
         assertEquals(expected, actual);
-            }
+    }
 
 
     private PriceHistory createPriceHisory(double currentprice, Asset asset) {
@@ -70,7 +68,8 @@ class JdbcPriceHistoryDAOTest {
 
     private Asset createAsset(AssetCode_Name assetCodeName) {
         Asset asset = Mockito.mock(Asset.class);
-        Mockito.when(asset.getAssetCodeName()).thenReturn(assetCodeName);
+        Mockito.when(asset.getName()).thenReturn(assetCodeName.getAssetName());
+        Mockito.when(asset.getCode()).thenReturn(assetCodeName.getAssetCode());
         Mockito.when(asset.getCurrentPrice()).thenReturn(1.0);
 
         return asset;

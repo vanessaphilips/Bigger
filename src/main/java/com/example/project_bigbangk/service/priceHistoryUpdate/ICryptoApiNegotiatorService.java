@@ -9,8 +9,9 @@ public interface ICryptoApiNegotiatorService {
      *
      * @return a list of currentPrices for the 20 most populair assets
      * as definied in AsseCode_Name
+     * @param currency
      */
-    List<PriceHistory> getPriceHistory();
+    List<PriceHistory> getPriceHistory(String currency);
 
     /**
      * checks if the API server is online

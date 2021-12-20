@@ -44,8 +44,8 @@ public class JdbcAssetDAO implements IAssetDAO {
     public void saveAsset(Asset asset) {
         String sql = "Insert into Asset values(?,?);";
         try {
-            jdbcTemplate.update(sql, asset.getAssetCodeName().getAssetCode(),
-                    asset.getAssetCodeName().getAssetName());
+            jdbcTemplate.update(sql, asset.getCode(),
+                    asset.getName());
         } catch (DataAccessException dataAccessException) {
             logger.info(dataAccessException.getMessage());
         }
@@ -84,7 +84,7 @@ public class JdbcAssetDAO implements IAssetDAO {
         @Override
         public Asset mapRow(ResultSet resultSet, int rowNumber) throws SQLException {
 
-            return new Asset(AssetCode_Name.valueOf(resultSet.getString("code")));
+            return new Asset(resultSet.getString("code"), resultSet.getString("name"));
         }
     }
 }

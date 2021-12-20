@@ -36,14 +36,14 @@ public class PriceHistoryUpdateService {
     }
 
     /**
-     * calls the available CryptoAPiNegotiator (determined by the ICryptoApiNegotiatorStrategy) for cuurent prices
+     * calls the available CryptoAPiNegotiator (determined by the ICryptoApiNegotiatorStrategy) for current prices
      * and sends it to the rootrepository
      */
-    public void updatePriceHistory() {
+    public void updatePriceHistory(String currency) {
         List<PriceHistory> priceHistories =null;
         cryptoNegotiatorService = cryptoApiNegotiatorStrategy.getAvailableCryptoService();
         if (cryptoNegotiatorService != null) {
-            priceHistories = cryptoNegotiatorService.getPriceHistory();
+            priceHistories = cryptoNegotiatorService.getPriceHistory(currency);
         }
         if (priceHistories != null) {
             rootRepository.savePriceHistories(priceHistories);
