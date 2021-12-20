@@ -1,5 +1,7 @@
 package com.example.project_bigbangk.model;
 
+import java.util.Objects;
+
 /**
  * Created by Karim Ajour on 3-12-2021 for Project_Big_Bangk
  */
@@ -25,6 +27,19 @@ public class Asset {
     @Override
     public String toString() {
         return String.format("%s (%s)", code, name);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Asset asset = (Asset) o;
+        return Double.compare(asset.currentPrice, currentPrice) == 0 && code.equals(asset.code) && name.equals(asset.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(code, name, currentPrice);
     }
 
     public double getCurrentPrice() {

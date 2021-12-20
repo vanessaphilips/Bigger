@@ -40,3 +40,11 @@ CREATE TABLE `wallet`
     `balance` DECIMAL(25,2) NOT NULL,
     PRIMARY KEY (`IBAN`)
 );
+
+CREATE TABLE `wallet_has_asset`
+(
+    `code` VARCHAR(5) NOT NULL,
+    `amount` DECIMAL(40,30) NOT NULL,
+    `IBAN` VARCHAR(45) NOT NULL,
+    PRIMARY KEY (`code`, `IBAN`)
+);
