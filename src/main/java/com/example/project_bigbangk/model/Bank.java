@@ -1,6 +1,7 @@
 package com.example.project_bigbangk.model;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Hier staat alle informatie waar een bank uit bestaat.
@@ -35,6 +36,19 @@ public class Bank {
                 ", feePercentage=" + feePercentage +
                 ", startingcapital='" + startingcapital + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Bank bank = (Bank) o;
+        return name.equals(bank.name) && code.equals(bank.code);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, code);
     }
 
     // Hieronder staan alle nodige getters en setters

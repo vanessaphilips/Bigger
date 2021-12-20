@@ -6,5 +6,8 @@ INSERT INTO `Client` VALUES
                             ('sander@deboer.nl', 'Sander', 'de', 'Boer', '1966-09-09', '123456789', 'sanderdeboer', null, null, null),
                             ('nicole@wong.nl', 'Nicole', NULL, 'Wong', '1973-01-01', '123456789', 'nicolewong', null, null, null);
 
+INSERT INTO `bank` VALUES
+  ('BGBK', 'Big Bangk', 'NL17 BGBK 7265511', 1000.00, 5.0);
+
 INSERT INTO `Wallet` VALUES
                             ('NL20BGBK0001234567', 10000.00);

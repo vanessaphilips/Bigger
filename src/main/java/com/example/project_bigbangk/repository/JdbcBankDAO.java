@@ -28,10 +28,14 @@ public class JdbcBankDAO implements IBankDAO{
     }
 
     public void saveBank(Bank bank) {
-        String sql = "INSERT INTO bank VALUES(?,?,?,?,?);";
-        jdbcTemplate.update(sql, bank.getCode(), bank.getName(),
-                bank.getWallet().getIban(), bank.getStartingcapital(),
-                bank.getFeePercentage());
+        try {
+            String sql = "INSERT INTO bank VALUES(?,?,?,?,?);";
+            jdbcTemplate.update(sql, bank.getCode(), bank.getName(),
+                    bank.getWallet().getIban(), bank.getStartingcapital(),
+                    bank.getFeePercentage());
+        } catch (Exception foutmelding){
+            System.out.println(foutmelding.getMessage());
+        }
     }
 
     public Bank findBank(String naam) {
@@ -51,10 +55,14 @@ public class JdbcBankDAO implements IBankDAO{
     }
 
     public void updateBank(Bank bank){
-        String sql = "UPDATE bank SET name = ?, feePercentage = ?, startingcapital = ? " +
-                "WHERE code = ?;";
-        jdbcTemplate.update(sql, bank.getName(), bank.getFeePercentage(),
-                bank.getStartingcapital(), bank.getCode());
+        try {
+            String sql = "UPDATE bank SET name = ?, transactioncosts = ?, startingcapital = ? " +
+                    "WHERE code = ?;";
+            jdbcTemplate.update(sql, bank.getName(), bank.getFeePercentage(),
+                    bank.getStartingcapital(), bank.getCode());
+        } catch (Exception foutmelding){
+            System.out.println(foutmelding.getMessage());
+        }
     }
 
     private class BankRowMapper implements RowMapper<Bank> {
@@ -62,7 +70,7 @@ public class JdbcBankDAO implements IBankDAO{
         public Bank mapRow(ResultSet resultSet, int rowNumber) throws SQLException {
             return new Bank(resultSet.getString("name"),
                     resultSet.getString("code"),
-                    resultSet.getDouble("feePercentage"),
+                    resultSet.getDouble("transactioncosts"),
                     resultSet.getDouble("startingcapital"));
         }
     }

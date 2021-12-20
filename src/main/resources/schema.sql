@@ -19,6 +19,15 @@ CREATE TABLE `client`
 -- FOREIGN KEY (`IBAN`)
 -- REFERENCES `bigbangk`.`wallet` (`IBAN`)
 
+CREATE TABLE `bank` (
+    `code` VARCHAR(45) NOT NULL,
+    `name` VARCHAR(64) NOT NULL,
+    `IBAN` VARCHAR(45) NULL,
+    `startingcapital` DECIMAL(10,3) NULL,
+    `transactioncosts` DECIMAL(10,3) NULL,
+    PRIMARY KEY (`code`)
+);
+
 CREATE TABLE `PriceHistory`
 (
     `dateTime` TIMESTAMP   NOT NULL,
