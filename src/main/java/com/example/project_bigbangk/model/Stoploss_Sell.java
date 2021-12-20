@@ -3,9 +3,13 @@
 
 package com.example.project_bigbangk.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.time.LocalDateTime;
 
 public class Stoploss_Sell extends AbstractOrder{
+
+    private final Logger logger = LoggerFactory.getLogger(Stoploss_Sell.class);
 
     private Wallet sellerWallet;
     private double lowerBound;
@@ -15,6 +19,7 @@ public class Stoploss_Sell extends AbstractOrder{
         super(orderId, asset, requestedPrice, numberOfAssets, date, transactionFee);
         this.sellerWallet = sellerWallet;
         this.lowerBound = lowerBound;
+        logger.info("New Stoploss_Sell");
     }
 
     public Wallet getSellerWallet() {

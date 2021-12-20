@@ -1,14 +1,18 @@
-// Created by vip
-// Creation date 02/12/2021
-
 package com.example.project_bigbangk.model;
 
-// Client object.
+/**
+ * Client object created by Vanessa Philips.
+ */
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.time.LocalDate;
 import java.util.Objects;
 
 public class Client {
+
+    private final Logger logger = LoggerFactory.getLogger(Client.class);
+
     private String email;
     private String firstName;
     private String insertion;
@@ -30,6 +34,7 @@ public class Client {
         this.passWord = passWord;
         this.address = address;
         this.wallet = wallet;
+        logger.info("New client using all-arg constructor");
     }
 
     public Client(String email, String firstName, String insertion, String lastName, LocalDate dateOfBirth,
@@ -41,13 +46,13 @@ public class Client {
         this.dateOfBirth = dateOfBirth;
         this.bsn = bsn;
         this.passWord = passWord;
+        logger.info("New client, without Address and wallet");
     }
 
     public Client(){
         this("", "", "", "", null, "", "", null, null);
+        logger.info("New client using no-arg constructor");
     }
-
-    // TODO alle getters en setters aangemaakt. Als blijkt dat eea niet gebruikt wordt dan weghalen.
 
     public String getEmail() {
         return email;

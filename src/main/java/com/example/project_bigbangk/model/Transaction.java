@@ -1,7 +1,8 @@
 package com.example.project_bigbangk.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 /**
  * Model created by Vanessa Philips.
@@ -9,6 +10,9 @@ import java.util.Objects;
  */
 
 public class Transaction extends AbstractOrder{
+
+    private final Logger logger = LoggerFactory.getLogger(Transaction.class);
+
     private Wallet buyerWallet;
     private Wallet sellerWallet;
 
@@ -17,6 +21,7 @@ public class Transaction extends AbstractOrder{
         super(orderId, asset, requestedPrice, numberOfAssets, date, transactionFee);
         this.buyerWallet = buyerWallet;
         this.sellerWallet = sellerWallet;
+        logger.info("New transaction");
     }
 
     public Wallet getBuyerWallet() {
