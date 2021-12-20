@@ -12,9 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.NestedTransactionNotSupportedException;
 
-import java.util.Locale;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -75,7 +73,7 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
             while (!scanner.nextLine().equalsIgnoreCase("Y")) {
                 logger.info("Press Y or N");
             }
-            clientFactory.createClients(NUMBER_OF_CLIENTS_TO_SEED);
+            clientFactory.seedDataBase(NUMBER_OF_CLIENTS_TO_SEED);
         }
     }
 }

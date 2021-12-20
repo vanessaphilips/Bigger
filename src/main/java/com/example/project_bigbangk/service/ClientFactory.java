@@ -8,7 +8,6 @@ import com.example.project_bigbangk.model.Client;
 import com.example.project_bigbangk.model.DTO.RegistrationDTO;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.h2.util.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -35,6 +34,7 @@ public class ClientFactory {
     private final String[] COUNTRIES = {"NLD", "BEL", "GER", "USA", "GBR", "FRA", "POL", "CHE"};
     private final Random RAND = new Random();
     private IbanGeneratorService ibanGeneratorService;
+    private final String PASSWORD = "password";
 
     public ClientFactory(IbanGeneratorService ibanGeneratorService, RegistrationService registrationService) {
         super();
@@ -44,51 +44,36 @@ public class ClientFactory {
         this.ibanGeneratorService = ibanGeneratorService;
         this.registrationService = registrationService;
     }
+    private RegistrationDTO createRegistrationDTO() {
 
+       String firstName = firstNames.get(RAND.nextInt(firstNames.size()));
+       String lastName=  (String)(lastNames.keySet().toArray()[RAND.nextInt(lastNames.size())]);
+        String insertion = lastNames.get(lastName);
+        LocalDate birthDay = LocalDate.parse(createBirthDay());
+      String email =  createEmail(firstName);
+        String BSN = creatBsn();
+        Address address = createAdress();
+        RegistrationDTO client = new RegistrationDTO(email,
+                PASSWORD,
+                firstName,
+                insertion,
+                lastName,BSN,
+                birthDay.toString(),
+                createAdress().getPostalCode(),
+                address.getStreet(),
+                address.getNumber(),
+                address.getCity(),
+                address.getCountry());
+        return client;
+    }
 
-    public void createClients(int numberOfClients) {
+    public void seedDataBase(int numberOfClients) {
         logger.info(String.format("Database seeding started for %s clients", numberOfClients));
         initializeNameArrays();
         initializeAdressArrays();
-        List<Client> clients = new ArrayList<>();
         for (int i = 0; i < numberOfClients; i++) {
-            Client client = createClient();
-            client.setAddress(createAdress());
-            clients.add(client);
+                     registrationService.registerClient(createRegistrationDTO());
         }
-        int i = 0;
-        int taskNumber = 4;
-        for (int j = 0; j < taskNumber; j++) {
-            try {
-                final int x = j;
-                new Task() {
-                    int jInternal = x;
-
-                    @Override
-                    public void call() throws Exception {
-                        for (int k = (clients.size() / taskNumber) * jInternal; k < (clients.size() / taskNumber) * (jInternal + 1); k++) {
-
-                            RegistrationDTO clientDTO = new RegistrationDTO(clients.get(k).getEmail(),
-                                    "password",
-                                    clients.get(k).getFirstName(),
-                                    clients.get(k).getInsertion(),
-                                    clients.get(k).getLastName(),
-                                    clients.get(k).getBsn(),
-                                    createBirthDay(),
-                                    clients.get(k).getAddress().getPostalCode(),
-                                    clients.get(k).getAddress().getStreet(),
-                                    clients.get(k).getAddress().getNumber(),
-                                    clients.get(k).getAddress().getCity(),
-                                    clients.get(k).getAddress().getCountry());
-                            registrationService.registerClient(clientDTO);
-                        }
-                    }
-                }.call();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
         logger.info("Database seeding end");
     }
 
@@ -130,17 +115,7 @@ public class ClientFactory {
                 Character.toUpperCase((char) (RAND.nextInt(26) + 65)));
     }
 
-    private Client createClient() {
-        Client client = new Client();
-        client.setFirstName(firstNames.get(RAND.nextInt(firstNames.size())));
-        client.setLastName((String) (lastNames.keySet().toArray()[RAND.nextInt(lastNames.size())]));
-        client.setInsertion(lastNames.get(client.getLastName()));
-        client.setDateOfBirth(LocalDate.parse(createBirthDay()));
-        client.setEmail(createEmail(client.getFirstName()));
-        client.setBsn(creatBsn());
-        client.setPassWord("password");
-        return client;
-    }
+
 
     private String createBirthDay() {
         int maand = RAND.nextInt(12) + 1;
@@ -187,7 +162,7 @@ public class ClientFactory {
             lastNamesNode = mapper.readTree(lastNamesFile);
             lastNamesNode = lastNamesNode.findValue("record");
             for (JsonNode lastNameJN : lastNamesNode) {
-                String lastName =lastNameJN.get("naam").asText();
+                String lastName = lastNameJN.get("naam").asText();
                 String nameNorm = Normalizer.normalize(lastName, Normalizer.Form.NFD);
                 if (!lastName.equals(nameNorm)) {
                     nameNorm = nameNorm.replaceAll("[^\\p{ASCII}]", "");
