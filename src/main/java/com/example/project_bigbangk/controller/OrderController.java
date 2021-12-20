@@ -3,15 +3,20 @@ package com.example.project_bigbangk.controller;
 @Author Philip Beeltje, Studentnummer: 500519452
 */
 
+import com.example.project_bigbangk.model.DTO.OrderDTO;
+import com.example.project_bigbangk.service.Orderservice;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin
+@RestController
 public class OrderController{
 
-    public OrderController(){
+    private Orderservice orderservice;
+
+    public OrderController(Orderservice orderservice){
         super();
+        this.orderservice = orderservice;
     }
 
     //als je vanuit marketplace of je portfolio op order knop drukt bij coin x, kom je hier aan.
@@ -29,7 +34,9 @@ public class OrderController{
 
     //in het scherm hierboven^ kan je alles van je order instellen, dat wordt hieronder opgevangen.
     @PostMapping("/placeorder")
-    public ResponseEntity<String> placeOrder() { //@Requestbody stop die JSON in abstract order of DTO!
+    public ResponseEntity<String> placeOrder(@RequestBody OrderDTO orderDTO){
+        orderservice.executeOrderByType(orderDTO);
+
         //stuur door naar service
 
         //service:
