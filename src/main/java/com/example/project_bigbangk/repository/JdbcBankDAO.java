@@ -51,7 +51,7 @@ public class JdbcBankDAO implements IBankDAO{
     }
 
     public void updateBank(Bank bank){
-        String sql = "UPDATE bank SET name = ?, feePercentage = ?, startingcapital = ? " +
+        String sql = "UPDATE bank SET name = ?, transactioncosts = ?, startingcapital = ? " +
                 "WHERE code = ?;";
         jdbcTemplate.update(sql, bank.getName(), bank.getFeePercentage(),
                 bank.getStartingcapital(), bank.getCode());
