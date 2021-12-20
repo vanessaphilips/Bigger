@@ -36,7 +36,10 @@ class JdbcWalletDAOTest {
     @Test
     @Order(2)
     void saveNewWallet() {
-
+        new Wallet("NL30BGBK0007654321", 20000.00);
+        Wallet actual = walletDAOUnderTest.findWalletByIban("NL30BGBK0007654321");
+        Wallet expected = new Wallet("NL32BGBK0007654321", 20000.00);
+        assertThat(expected).isEqualTo(actual);
     }
 
     @Test
