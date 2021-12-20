@@ -14,6 +14,12 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
+/**
+ * Hier wordt de JdbcBanckDOA gestest.
+ *
+ * @Author Kelly Speelman - de Jonge
+ */
+
 @SpringBootTest
 @ActiveProfiles("test")
 class JdbcBankDAOTest {
@@ -44,6 +50,10 @@ class JdbcBankDAOTest {
     void saveBank() {
         newBank.setWallet(mockWallet);
         jdbcBankDAOTest.saveBank(newBank);
+
+        // mis lukte save
+        newBankUpdate.setWallet(mockWallet);
+        jdbcBankDAOTest.saveBank(newBankUpdate);
     }
 
     @Test
@@ -55,11 +65,20 @@ class JdbcBankDAOTest {
         actual = jdbcBankDAOTest.findBank("Test bank");
         expected = newBank;
         assertThat(actual).isEqualTo(expected);
+
+        actual = jdbcBankDAOTest.findBank("Geen bank");
+        expected = null;
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
     void updateBank() {
         jdbcBankDAOTest.updateBank(newBankUpdate);
+
+        //mis lukte update
+        Bank bestaatNiet = new Bank("No bank", "NONO", 3.0, 2.0);
+        jdbcBankDAOTest.updateBank(bestaatNiet);
+        System.out.println(jdbcBankDAOTest.findAllBank());
     }
 
     @Test
@@ -69,5 +88,6 @@ class JdbcBankDAOTest {
         expected.add(bigBangk);
         expected.add(newBankUpdate);
         assertThat(actual).isEqualTo(expected);
+        assertThat(actual.size()).isEqualTo(expected.size());
     }
 }
