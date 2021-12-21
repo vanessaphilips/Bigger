@@ -1,3 +1,5 @@
+import {rootURL} from "./Root.js"
+import {getToken} from "./DummyLogin.js"
 "use strict"
 
 const assetList = document.getElementById("assetListContainer")
@@ -16,13 +18,14 @@ class Asset {
 
 }
 const gotoTransaction = (asset) => {
-     fetch(`http://localhost:8080/trade`, {
+     fetch(`${rootURL}trade`, {
         method: "POST",
         headers: {
             Accept: 'Application/json',
             "content-type": "application/json",
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': '*',
+             'X-Content-Type-Options': '*',
             'authorization': `test`
         },
         body: JSON.stringify(asset)
@@ -36,9 +39,8 @@ const gotoTransaction = (asset) => {
     }).then(json=>{
              assetList.innerText = json.code
      })
-
-
 }
+
 const createTradeButton = (asset) => {
     let tradeButton = document.createElement("button")
     tradeButton.className = "tradeButton"
@@ -83,8 +85,12 @@ const createAssetView = (jsonAssets) => {
     }
 }
 
-const assetsJson = () => {
-    fetch(`http://localhost:8080/marketplace`,
+const assetsJson = (token) => {
+
+
+
+    console.log("token in assetsJson" +token)
+    fetch(`${rootURL}marketplace`,
         {
             method: "GET",
             headers: {
@@ -92,7 +98,8 @@ const assetsJson = () => {
                 "content-type": "application/json",
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': '*',
-                'authorization': `test`
+                'X-Content-Type-Options': '*',
+                'authorization': token
             }
         }).then(promise => {
         if (promise.ok) {
@@ -107,6 +114,8 @@ const assetsJson = () => {
         console.log(reason)
     )
 }
-assetsJson()
+let token = await getToken()
+console.log(token)
+assetsJson(token)
 
 
