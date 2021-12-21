@@ -44,14 +44,15 @@ public class MarketPlaceController {
     }
 
     @GetMapping("/marketplace")
+    @ResponseBody
     public ResponseEntity<String> login(@RequestHeader String authorization) {
 //       String token = request.getLastHeader("Authorization").getValue();
-     //   String token = authorization;
+      String token = authorization;
         //check of authorisation in orde is-- check token
-       // if (authenticateService.authenticate(token)) {
+     if (authenticateService.authenticate(token)) {
             List<Asset> assets = marketPlaceService.getAllAssets();
             ObjectMapper mapper = new ObjectMapper();
-            //Converting the Object to JSONString
+
             String jsonAssets = null;
             try {
                 jsonAssets = mapper.writeValueAsString(assets);
@@ -59,10 +60,10 @@ public class MarketPlaceController {
                 e.printStackTrace();
             }
             return ResponseEntity.ok().body(jsonAssets);
-      //  } else {
-     //       //ToDo om refreshtoken vragen
-      //      return ResponseEntity.status(401).body("token expired");
-      //  }
+        } else {
+            //ToDo om refreshtoken vragen
+            return ResponseEntity.status(401).body("token expired");
+        }
     }
     @PostMapping("/trade")
     @ResponseBody

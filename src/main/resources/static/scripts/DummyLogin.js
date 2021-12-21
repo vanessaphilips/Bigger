@@ -1,4 +1,4 @@
-let token;
+import {rootURL} from "./Root.js";
 
 class LoginDTO {
     constructor(email, password) {
@@ -6,10 +6,13 @@ class LoginDTO {
         this.password = password;
     }
 }
-const loginDTO = new LoginDTO("henk@unicom.nl", "password1234345")
-export const getToken = () => {
 
-    fetch("http://localhost:8080/login",
+
+const loginDTO = new LoginDTO("henk@unicom.nl", "password1234345")
+
+export async function getToken() {
+let token;
+    await fetch(`${rootURL}login`,
         {
             method: "POST",
             headers: {
@@ -17,29 +20,25 @@ export const getToken = () => {
                 "Content-type": "application/json",
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': '*',
+                'X-Content-Type-Options': '*',
                 //"Access-Control-Expose-Headers": "authorization"
             },
             body: JSON.stringify(loginDTO)
         })
         .then(response => {
             if (response.ok) {
-                console.log("login succes");
-                // for (const header of response.headers) {
-                //     console.log(header);
-                // }
-                return response.text()
-
+                console.log("login succes" + loginDTO.email);
+                return response.json()
             } else {
-
                 console.log("login failed");
             }
-        }).then(json => {
-
-        token = json;
-
-        console.log("hier moet de token staan " + token)
-        return token
-    }).catch()
+        }).then((json) => {
+            token = json.authorization
+        }
+    )
+    console.log("fetchToken : " + token)
+    return token
 }
+
 
 

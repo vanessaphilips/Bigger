@@ -2,6 +2,9 @@ package com.example.project_bigbangk.controller;
 
 import com.example.project_bigbangk.model.DTO.LoginDTO;
 import com.example.project_bigbangk.service.LoginService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.coyote.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,12 +34,19 @@ public class LoginController {
 
     @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity login(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<String> login(@RequestBody LoginDTO loginDTO) {
         String token = loginService.login(loginDTO.getEmail(), loginDTO.getPassword());
         if (token != null) {
-            return ResponseEntity.ok().contentType(MediaType.valueOf("Application/jwt")).body(token);
-        } else {
-            return ResponseEntity.status(401).body("Username or password not valid");
+            ObjectMapper mapper = new ObjectMapper();
+            ObjectNode returnToken = mapper.createObjectNode();
+            returnToken.put("authorization", token);
+            try {
+                return ResponseEntity.ok().contentType(MediaType.valueOf("Application/jwt")).body(mapper.writeValueAsString(returnToken));
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
         }
+        return ResponseEntity.status(401).body("Username or password not valid");
+
     }
 }

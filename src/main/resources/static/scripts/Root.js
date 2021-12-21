@@ -1,1 +1,1 @@
-const rootURL = "loacalhost:8080/"
+export const rootURL = "http://localhost:8080/"
