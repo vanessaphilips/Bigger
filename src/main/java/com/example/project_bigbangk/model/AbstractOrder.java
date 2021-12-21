@@ -34,8 +34,6 @@ abstract class AbstractOrder {
         this(0, asset, requestedPrice, numberOfAssets, date, DEFAULT_TRANSACTIONFEE);
     }
 
-    public AbstractOrder() {}
-
     public long getOrderId() {
         return orderId;
     }
@@ -68,7 +66,7 @@ abstract class AbstractOrder {
         this.numberOfAssets = numberOfAssets;
     }
 
-    public LocalDateTime getDate(Class<LocalDateTime> localDateTimeClass) {
+    public LocalDateTime getDate() {
         return date;
     }
 

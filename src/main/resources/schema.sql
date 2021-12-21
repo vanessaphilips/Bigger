@@ -1,3 +1,5 @@
+-- noinspection SqlNoDataSourceInspectionForFile
+
 CREATE TABLE `client`
 (
     `email`       VARCHAR(45)  NOT NULL,
@@ -38,8 +40,8 @@ CREATE TABLE `PriceHistory`
 
 CREATE TABLE `Asset`
 (
-    `name` VARCHAR(45) NOT NULL,
     `code` VARCHAR(45) NOT NULL,
+    `name` VARCHAR(45) NOT NULL,
     PRIMARY KEY (`code`)
 );
 
