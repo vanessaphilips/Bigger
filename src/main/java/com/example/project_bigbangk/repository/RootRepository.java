@@ -115,6 +115,10 @@ public class RootRepository {
 
    //ORDER > TRANSACTION
 
+    /**
+     * Saves Transaction, including asset, sellerWallet and buyerWallet seperately in database.
+     * @param transaction
+     */
     public void createNewTransaction(Transaction transaction) {
         orderDAO.saveTransaction(transaction);
         assetDAO.saveAsset(transaction.getAsset());
