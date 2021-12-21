@@ -27,16 +27,22 @@ class JdbcWalletDAOTest {
     @Order(1)
     void findWalletByIban() {
         Wallet actual = walletDAOUnderTest.findWalletByIban("NL20BGBK0001234567");
-        System.out.println(actual);
+
         Wallet expected = new Wallet("NL20BGBK0001234567", 10000.00);
+
         assertThat(expected).isEqualTo(actual);
     }
 
-    //TODO test maken
     @Test
     @Order(2)
     void saveNewWallet() {
+        Wallet savedWallet = new Wallet("NL30BGBK0007654321", 20000.00);
+        walletDAOUnderTest.saveNewWallet(savedWallet);
 
+        Wallet actual = walletDAOUnderTest.findWalletByIban("NL30BGBK0007654321");
+
+        Wallet expected = new Wallet("NL30BGBK0007654321", 20000.00);
+        assertThat(expected).isEqualTo(actual);
     }
 
     @Test
@@ -56,6 +62,7 @@ class JdbcWalletDAOTest {
     @Test
     @Order(4)
     void updateWalletAssets() {
+        fail("Nog te maken test");
 
     }
 
@@ -63,5 +70,7 @@ class JdbcWalletDAOTest {
     @Test
     @Order(5)
     void findAmountOfAsset() {
+        fail("Nog te maken test");
+
     }
 }

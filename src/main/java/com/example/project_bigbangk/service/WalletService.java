@@ -24,8 +24,8 @@ public class WalletService {
         rootRepository.saveNewWallet(wallet);
     }
 
-    public void updateWalletBalanceAndAsset(Wallet wallet, Asset asset) {
-        rootRepository.updateWalletBalanceAndAsset(wallet, asset);
+    public void updateWalletBalanceAndAsset(Wallet wallet, Asset asset, double amount) {
+        rootRepository.updateWalletBalanceAndAsset(wallet, asset, amount);
     }
 
     public Wallet findWalletWithAssetByIban(String iban){

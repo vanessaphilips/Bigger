@@ -92,9 +92,9 @@ public class RootRepository {
         return walletDAO.findWalletByIban(iban);
     }
 
-    public void updateWalletBalanceAndAsset(Wallet wallet, Asset asset) {
+    public void updateWalletBalanceAndAsset(Wallet wallet, Asset asset, double amount) {
         walletDAO.updateBalance(wallet);
-        walletDAO.updateWalletAssets(wallet, asset);
+        walletDAO.updateWalletAssets(wallet, asset, amount);
     }
 
     public Wallet findWalletWithAssetByIban(String iban) {

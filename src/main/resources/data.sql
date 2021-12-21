@@ -11,3 +11,10 @@ INSERT INTO `bank` VALUES
 
 INSERT INTO `Wallet` VALUES
                             ('NL20BGBK0001234567', 10000.00);
+
+INSERT INTO `wallet_has_asset` VALUES
+                            ('BTC', 10, 'NL20BGBK0001234567'),
+                            ('ADA', 10, 'NL20BGBK0001234567'),
+                            ('ETH', 10, 'NL20BGBK0001234567'),
+                            ('DOGE', 10, 'NL20BGBK0001234567'),
+                            ('LUNA', 10, 'NL20BGBK0001234567');
