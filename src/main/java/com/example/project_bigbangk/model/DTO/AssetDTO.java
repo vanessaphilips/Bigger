@@ -1,23 +1,19 @@
-package com.example.project_bigbangk.model;
+package com.example.project_bigbangk.model.DTO;
 
 /**
- * Created by Karim Ajour on 3-12-2021 for Project_Big_Bangk
+ * Created by Pieter Jan
  */
 
-public class Asset {
+public class AssetDTO {
 
     private String code;
     private String name;
     private double currentPrice;
 
-    public Asset( String code,String name, double currentPrice) {
-        this.currentPrice = currentPrice;
-        this.name = name;
-        this.code = code;
-
+    public AssetDTO() {
     }
 
-    public Asset( String code, String name) {
+    public AssetDTO(String code, String name) {
         this.name = name;
         this.code = code;
     }

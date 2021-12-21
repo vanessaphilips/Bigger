@@ -30,6 +30,8 @@ class LoginControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
+    MarketPlaceController marketPlaceController;
+    @MockBean
     private LoginService loginService;
 
     @MockBean

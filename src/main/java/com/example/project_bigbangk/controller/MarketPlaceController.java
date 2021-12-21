@@ -4,12 +4,17 @@
 package com.example.project_bigbangk.controller;
 
 import com.example.project_bigbangk.model.Asset;
+import com.example.project_bigbangk.model.DTO.AssetDTO;
 import com.example.project_bigbangk.model.DTO.LoginDTO;
 import com.example.project_bigbangk.service.MarketPlaceService;
 import com.example.project_bigbangk.service.Security.AuthenticateService;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.core.json.JsonWriteContext;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.mysql.cj.x.protobuf.Mysqlx;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
@@ -23,7 +28,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
-
+@CrossOrigin
 @RestController
 public class MarketPlaceController {
 
@@ -40,10 +45,10 @@ public class MarketPlaceController {
 
     @GetMapping("/marketplace")
     public ResponseEntity<String> login(@RequestHeader String authorization) {
-      // String token = request.getLastHeader("Authorization").getValue();
-        String token = authorization;
+//       String token = request.getLastHeader("Authorization").getValue();
+     //   String token = authorization;
         //check of authorisation in orde is-- check token
-        if (authenticateService.authenticate(token)) {
+       // if (authenticateService.authenticate(token)) {
             List<Asset> assets = marketPlaceService.getAllAssets();
             ObjectMapper mapper = new ObjectMapper();
             //Converting the Object to JSONString
@@ -53,10 +58,24 @@ public class MarketPlaceController {
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
-            System.out.println(jsonAssets);
             return ResponseEntity.ok().body(jsonAssets);
-        } else {
-            return ResponseEntity.status(401).body("token expired");
+      //  } else {
+     //       //ToDo om refreshtoken vragen
+      //      return ResponseEntity.status(401).body("token expired");
+      //  }
+    }
+    @PostMapping("/trade")
+    @ResponseBody
+    public ResponseEntity<String> transaction(@RequestBody AssetDTO assetDTO){
+
+        ObjectMapper mapper = new ObjectMapper();
+        String json = null;
+        try {
+            json = mapper.writeValueAsString(assetDTO);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
         }
+
+        return ResponseEntity.ok().body(json);
     }
 }
