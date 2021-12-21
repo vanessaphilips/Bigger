@@ -9,7 +9,6 @@ package com.example.project_bigbangk.repository;
 
 import com.example.project_bigbangk.model.*;
 import org.springframework.stereotype.Repository;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,15 +20,18 @@ public class RootRepository {
     private IAddressDAO addressDAO;
     private IWalletDAO walletDAO;
     private IAssetDAO assetDAO;
+    private JdbcOrderDAO orderDAO;
     private final IPriceHistoryDAO priceHistoryDAO;
     private final int AMOUNT_OF_ASSETS = 20;
 
-    public RootRepository(IClientDAO clientDAO, IAddressDAO addressDAO, IWalletDAO walletDAO, IPriceHistoryDAO priceHistoryDAO, IAssetDAO assetDAO) {
+    public RootRepository(IClientDAO clientDAO, IAddressDAO addressDAO, IWalletDAO walletDAO,
+                          IPriceHistoryDAO priceHistoryDAO, IAssetDAO assetDAO, JdbcOrderDAO orderDAO) {
         this.clientDAO = clientDAO;
         this.addressDAO = addressDAO;
         this.walletDAO = walletDAO;
         this.priceHistoryDAO = priceHistoryDAO;
         this.assetDAO = assetDAO;
+        this.orderDAO = orderDAO;
     }
 
     // CLIENT
@@ -39,11 +41,9 @@ public class RootRepository {
         if (client != null) {
             Address adress = findAddressByEmail(email);
             client.setAddress(adress);
-            //ToDO findWalletByEmail
         }
         return client;
     }
-
 
     public Address findAddressByEmail(String email) {
         Address address = addressDAO.findAddressByEmail(email);
@@ -85,6 +85,8 @@ public class RootRepository {
 
     // WALLET
 
+    //ToDO findWalletByEmail
+
     public void saveNewWallet(Wallet wallet) {
         walletDAO.saveNewWallet(wallet);
     }
@@ -110,4 +112,13 @@ public class RootRepository {
       wallet.setAsset(assetWithAmountMap);
       return wallet;
    }
+
+   //ORDER > TRANSACTION
+
+    public void createNewTransaction(Transaction transaction) {
+        orderDAO.saveTransaction(transaction);
+        assetDAO.saveAsset(transaction.getAsset());
+        walletDAO.saveNewWallet(transaction.getSellerWallet());
+        walletDAO.saveNewWallet(transaction.getBuyerWallet());
+    }
 }

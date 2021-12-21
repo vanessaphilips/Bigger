@@ -8,7 +8,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-
 import java.sql.*;
 import java.util.List;
 
@@ -93,7 +92,6 @@ public class JdbcClientDAO implements IClientDAO {
     }
 
     // Note: in RowMapper alleen de attributen uit Client (dus niet Address en Wallet)
-
     private class ClientRowMapper implements RowMapper<Client> {
         @Override
         public Client mapRow(ResultSet resultSet, int rowNumber) throws SQLException {
