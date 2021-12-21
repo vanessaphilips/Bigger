@@ -1,6 +1,5 @@
 package com.example.project_bigbangk.model;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -66,7 +65,7 @@ abstract class AbstractOrder {
         this.numberOfAssets = numberOfAssets;
     }
 
-    public LocalDateTime getDate() {
+    public LocalDateTime getDate(Class<LocalDateTime> localDateTimeClass) {
         return date;
     }
 
