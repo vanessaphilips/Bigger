@@ -21,7 +21,12 @@ public class Transaction extends AbstractOrder{
         super(orderId, asset, requestedPrice, numberOfAssets, date, transactionFee);
         this.buyerWallet = buyerWallet;
         this.sellerWallet = sellerWallet;
-        logger.info("New transaction");
+        logger.info("New transaction using all-arg constructor");
+    }
+
+    public Transaction() {
+        this(0, null, 0, 0, null, 0, null, null);
+        logger.info("New transaction using no-arg constructor");
     }
 
     public Wallet getBuyerWallet() {
