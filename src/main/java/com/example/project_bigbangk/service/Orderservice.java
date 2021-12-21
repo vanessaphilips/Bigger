@@ -5,6 +5,7 @@ package com.example.project_bigbangk.service;
 */
 
 import com.example.project_bigbangk.model.DTO.OrderDTO;
+import com.example.project_bigbangk.model.Wallet;
 import com.example.project_bigbangk.repository.RootRepository;
 import org.springframework.stereotype.Service;
 
@@ -28,27 +29,36 @@ public class Orderservice {
         // Limit_Sell                   code: Lsell
         // Stoploss_Sell                code: Sloss
 
-        if(order.getType() == "Buy"){
+        if(order.getType().equals("Buy")){
             executeBuyOrder(order);
         }
-        if(order.getType() == "Sell"){
+        if(order.getType().equals("Sell")){
             executeSellOrder(order);
         }
 
     }
 
     public void executeBuyOrder(OrderDTO order){
-        //bereken hoeveel asset de gebruiker moet krijgen voor zijn geld met laatste koers.(ook al op front-end maar voor veiligheid hier ook)
 
-        //check of mogelijk: gebruiker heeft voldoende balans, bank heeft voldoende asset, optioneel: coinprijs is up to date (volgens onze standaard)
-        //^krijg je problemen als bank meerdere orders tegelijk doet?
+        double currentPrice = 0;
+        //double boughtAssetAmount = order.getAmount() / currentPrice;
 
+        //email uit token of waar we ook loggedin user bewaren.
+        String email= "philip.beeltje@gmail.com";
+
+        //client client = rootrepo get client
+        //Wallet bankWallet = rootRepository.getWalletByBankCode (met assets)
+
+        //if(client.getWallet.getbalance >= order.getAmount && bankWallet.asset.getvalue(order.code) >= boughtAssetAmount){
+        //
         //creër order object
-
         // UPDATE balans en asset van bank en klant
-
         //sla order op in database
-        // ^^ als dit niet lukt is de order alsnog uitgevoerd...misschien raar?
+        //// ^^ als dit niet lukt is de order alsnog uitgevoerd...misschien raar?
+        //
+        // }
+
+        //^krijg je problemen als bank meerdere orders tegelijk doet?
 
         //return 1. of specifiek error/success bericht terug naar executeOrderbyType.
     }
