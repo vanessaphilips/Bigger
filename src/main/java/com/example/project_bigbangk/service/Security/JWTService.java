@@ -24,7 +24,7 @@ import java.util.Date;
 public class JWTService implements ITokenService {
 
     private final Logger logger = LoggerFactory.getLogger(JWTService.class);
-    private final long EXPIRATION_TIME = 1200 * 1000;  //milliseconds
+    private final long EXPIRATION_TIME = 1200000;  //milliseconds
     private final String ISSUER = "BigBangk";  //milliseconds
     private ISecretKeyService secretKeyService;
     private Algorithm ALGORITHM;
