@@ -70,6 +70,7 @@ class JdbcWalletDAOTest {
     @Test
     @Order(5)
     void findAmountOfAsset() {
+        fail("Nog te maken test");
 
     }
 }
