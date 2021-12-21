@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
+
 @CrossOrigin
 @RestController
 public class MarketPlaceController {
@@ -47,9 +48,9 @@ public class MarketPlaceController {
     @ResponseBody
     public ResponseEntity<String> login(@RequestHeader String authorization) {
 //       String token = request.getLastHeader("Authorization").getValue();
-      String token = authorization;
+        String token = authorization;
         //check of authorisation in orde is-- check token
-     if (authenticateService.authenticate(token)) {
+        if (authenticateService.authenticate(token)) {
             List<Asset> assets = marketPlaceService.getAllAssets();
             ObjectMapper mapper = new ObjectMapper();
 
@@ -65,18 +66,21 @@ public class MarketPlaceController {
             return ResponseEntity.status(401).body("token expired");
         }
     }
+
     @PostMapping("/trade")
     @ResponseBody
-    public ResponseEntity<String> transaction(@RequestBody AssetDTO assetDTO){
+    public ResponseEntity<String> transaction(@RequestHeader String authorization, @RequestBody AssetDTO assetDTO) {
+        if (authenticateService.authenticate(authorization)) {
+            ObjectMapper mapper = new ObjectMapper();
+            String json = null;
+            try {
+                json = mapper.writeValueAsString(assetDTO);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
 
-        ObjectMapper mapper = new ObjectMapper();
-        String json = null;
-        try {
-            json = mapper.writeValueAsString(assetDTO);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            return ResponseEntity.ok().body(json);
         }
-
-        return ResponseEntity.ok().body(json);
+        return ResponseEntity.badRequest().body("authorization failed");
     }
 }

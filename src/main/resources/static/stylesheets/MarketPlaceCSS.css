@@ -1,3 +1,9 @@
+:root {
+    --orange: #ff8034;
+    --blue: #83a0ea;
+    --fullwidth: 100%;
+}
+
 #assetListContainer {
     font-family: Calibri;
     display: flex;
@@ -21,24 +27,25 @@
 
 #assetListContainer > div > label {
     background-color: #ffffff;
-    border: 1px black;
-    border-bottom-style: dashed;
-    margin: 5px;
+    border-bottom-style: solid;
+    border-width: thin;
+    border-color: var(--blue);
+    margin: 1px;
     padding: 5px;
-    font-size: 25px;
-    width: 30%;
+    font-size: 125%;
+    width: 100%;
     text-align: left;
 }
-.tradeButton{
+
+.tradeButton {
     color: white;
-    background-color: #53cc52;
-    border-color:white ;
+    background-color: var(--blue);
+    border-color: white;
     width: 10%;
     height: fit-content;
-
 }
 
-.tradeButton > hoover{
+.tradeButton > hoover {
     background-color: #d0cb96;
 }
 
@@ -48,10 +55,10 @@
 }
 
 #code {
-    color: #ff6f1d;
+    color: var(--orange);
 }
 
 #currentPrice {
-    background-color: #abdcef;
+    background-color: #ffffff;
     flex-grow: 1.2;
 }
