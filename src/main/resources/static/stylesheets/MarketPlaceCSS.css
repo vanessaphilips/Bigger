@@ -26,7 +26,7 @@
 }
 
 #assetListContainer > div > label {
-    background-color: #ffffff;
+    background-color: white;
     border-bottom-style: solid;
     border-width: thin;
     border-color: var(--blue);
@@ -36,15 +36,40 @@
     width: 100%;
     text-align: left;
 }
+#assetListContainer > div > div {
+    background-color: white;
+    border-bottom-style: solid;
+    border-width: thin;
+    border-color: var(--blue);
+    width:100%;
+
+
+    /*max-width: 20%;*/
+    /*max-height: 100%;*/
+
+}
+#assetListContainer > div > div > canvas {
+    background-color: white;
+    font-size: 0;
+
+    /*max-width: 20%;*/
+    /*max-height: 100%;*/
+
+}
 
 .tradeButton {
-    color: white;
-    background-color: var(--blue);
-    border-color: white;
+    color: var(--blue);
+    background-color:white;
+    border-style: groove;
+    border-color: var(--blue);
+    border-width: 1px;
+    border-radius: 10%;
     width: 10%;
     height: fit-content;
 }
-
+.tradeButton.text{
+    color:  black;
+}
 .tradeButton > hoover {
     background-color: #d0cb96;
 }

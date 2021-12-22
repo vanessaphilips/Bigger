@@ -3,7 +3,6 @@
 
 package com.example.project_bigbangk.repository;
 
-import com.example.project_bigbangk.model.AssetCode_Name;
 import com.example.project_bigbangk.model.PriceHistory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
 public class JdbcPriceHistoryDAO implements IPriceHistoryDAO {
@@ -48,7 +48,7 @@ public class JdbcPriceHistoryDAO implements IPriceHistoryDAO {
         double currentprice = 0;
         try {
             PriceHistory priceHistory = jdbcTemplate.queryForObject(sql,
-                    new PiceHistoryRowMapper(), assetCode);
+                    new PriceHistoryRowMapper(), assetCode);
             currentprice = priceHistory.getPrice();
         } catch (DataAccessException dataAccessException) {
             logger.info(dataAccessException.getMessage());
@@ -56,7 +56,19 @@ public class JdbcPriceHistoryDAO implements IPriceHistoryDAO {
         return currentprice;
     }
 
-    private class PiceHistoryRowMapper implements RowMapper<PriceHistory> {
+    @Override
+    public List<PriceHistory> getPriceHistoriesByCodeFromDate(LocalDateTime date, String assetCode){
+        String sql = "SELECT * FROM pricehistory where dateTime> ? and code = ?;";
+        List<PriceHistory> priceHistories = null;
+        try{
+           priceHistories =  jdbcTemplate.query(sql, new PriceHistoryRowMapper(), date, assetCode);
+        } catch (DataAccessException dataAccessException) {
+            logger.info(dataAccessException.getMessage());
+        }
+        return priceHistories;
+    }
+
+    private class PriceHistoryRowMapper implements RowMapper<PriceHistory> {
         @Override
         public PriceHistory mapRow(ResultSet resultSet, int rowNumber) throws SQLException {
             LocalDate localDate = resultSet.getDate("datetime").toLocalDate();
