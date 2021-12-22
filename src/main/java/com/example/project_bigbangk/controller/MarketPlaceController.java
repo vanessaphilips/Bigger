@@ -5,28 +5,18 @@ package com.example.project_bigbangk.controller;
 
 import com.example.project_bigbangk.model.Asset;
 import com.example.project_bigbangk.model.DTO.AssetDTO;
-import com.example.project_bigbangk.model.DTO.LoginDTO;
+import com.example.project_bigbangk.model.DTO.PriceHistoryDTO;
+import com.example.project_bigbangk.model.PriceHistory;
 import com.example.project_bigbangk.service.MarketPlaceService;
 import com.example.project_bigbangk.service.Security.AuthenticateService;
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.core.json.JsonWriteContext;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import com.mysql.cj.x.protobuf.Mysqlx;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.methods.HttpGet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @CrossOrigin
@@ -34,8 +24,9 @@ import java.util.List;
 public class MarketPlaceController {
 
     private final Logger logger = LoggerFactory.getLogger(MarketPlaceController.class);
-    private AuthenticateService authenticateService;
-    private MarketPlaceService marketPlaceService;
+    private final AuthenticateService authenticateService;
+    private final MarketPlaceService marketPlaceService;
+    private final ObjectMapper MAPPER = new ObjectMapper();
 
     public MarketPlaceController(AuthenticateService authenticateService, MarketPlaceService marketPlaceService) {
         super();
@@ -52,35 +43,48 @@ public class MarketPlaceController {
         //check of authorisation in orde is-- check token
         if (authenticateService.authenticate(token)) {
             List<Asset> assets = marketPlaceService.getAllAssets();
-            ObjectMapper mapper = new ObjectMapper();
-
-            String jsonAssets = null;
             try {
-                jsonAssets = mapper.writeValueAsString(assets);
+                String jsonAssets = MAPPER.writeValueAsString(assets);
+                return ResponseEntity.ok().body(jsonAssets);
             } catch (JsonProcessingException e) {
-                e.printStackTrace();
+                logger.error(e.getMessage());
             }
-            return ResponseEntity.ok().body(jsonAssets);
-        } else {
-            //ToDo om refreshtoken vragen
-            return ResponseEntity.status(401).body("token expired");
+
         }
+        //ToDo om refreshtoken vragen
+        return ResponseEntity.status(401).body("token expired");
+
     }
 
     @PostMapping("/trade")
     @ResponseBody
     public ResponseEntity<String> transaction(@RequestHeader String authorization, @RequestBody AssetDTO assetDTO) {
         if (authenticateService.authenticate(authorization)) {
-            ObjectMapper mapper = new ObjectMapper();
-            String json = null;
             try {
-                json = mapper.writeValueAsString(assetDTO);
+                String json = MAPPER.writeValueAsString(assetDTO);
+                return ResponseEntity.ok().body(json);
             } catch (JsonProcessingException e) {
-                e.printStackTrace();
+                logger.error(e.getMessage());
             }
-
-            return ResponseEntity.ok().body(json);
         }
-        return ResponseEntity.badRequest().body("authorization failed");
+        return ResponseEntity.status(401).body("token expired");
+    }
+
+    @PostMapping("/priceHistories")
+    @ResponseBody
+    public ResponseEntity<String> getPriceHistories(@RequestHeader String authorization, @RequestBody String date) {
+
+        if (authenticateService.authenticate(authorization)) {
+            LocalDateTime dateTime = LocalDateTime.parse(date);
+            List<List<PriceHistoryDTO>> priceHistoriesByAssetDTO;
+            priceHistoriesByAssetDTO = marketPlaceService.getAllAssetsWithPriceHistoryFromDate(dateTime);
+            try {
+                String jsonPriceHistoriesByAsset = MAPPER.writeValueAsString(priceHistoriesByAssetDTO);
+                return ResponseEntity.ok().body(jsonPriceHistoriesByAsset);
+            } catch (JsonProcessingException e) {
+                logger.error(e.getMessage());
+            }
+        }
+        return ResponseEntity.status(401).body("token expired");
     }
 }

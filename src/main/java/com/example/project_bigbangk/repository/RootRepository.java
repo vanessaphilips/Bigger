@@ -9,9 +9,10 @@ package com.example.project_bigbangk.repository;
 
 import com.example.project_bigbangk.model.*;
 import org.springframework.stereotype.Repository;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 public class RootRepository {
@@ -83,6 +84,24 @@ public class RootRepository {
         return assets;
     }
 
+    public List<List<PriceHistory>> getAllPriceHistroriesWithAsset(LocalDateTime dateTime) {
+        List<Asset> assets = assetDAO.getAllAssets();
+        List<List<PriceHistory>> priceHistoriesAllAssets = new ArrayList<>();
+        if (assets != null) {
+            for (Asset asset : assets) {
+                List<PriceHistory> priceHistories = priceHistoryDAO.getPriceHistoriesByCodeFromDate(dateTime, asset.getCode());
+                asset.setCurrentPrice(Collections.max(priceHistories).getPrice());
+                for (PriceHistory priceHistory : priceHistories) {
+                    priceHistory.setAsset(asset);
+                }
+                priceHistoriesAllAssets.add(priceHistories);
+            }
+        }
+        if (priceHistoriesAllAssets.size() != 0) {
+            return priceHistoriesAllAssets;
+        }
+        return null;
+    }
     // WALLET
 
     //ToDO findWalletByEmail
@@ -90,6 +109,7 @@ public class RootRepository {
     public void saveNewWallet(Wallet wallet) {
         walletDAO.saveNewWallet(wallet);
     }
+
     public Wallet findWalletByIban(String iban) {
         return walletDAO.findWalletByIban(iban);
     }
@@ -100,20 +120,20 @@ public class RootRepository {
     }
 
     public Wallet findWalletWithAssetByIban(String iban) {
-      Wallet wallet = walletDAO.findWalletByIban(iban);
-      if (wallet == null) {
-         return wallet;
-      }
-      Map<Asset, Double> assetWithAmountMap = new HashMap<>();
-      List<Asset> assets = assetDAO.getAllAssets();
-      for (Asset asset: assets) {
-          assetWithAmountMap.put(assetDAO.findAssetByCode(asset.getCode()), walletDAO.findAmountOfAsset(iban, asset.getCode()));
-      }
-      wallet.setAsset(assetWithAmountMap);
-      return wallet;
-   }
+        Wallet wallet = walletDAO.findWalletByIban(iban);
+        if (wallet == null) {
+            return wallet;
+        }
+        Map<Asset, Double> assetWithAmountMap = new HashMap<>();
+        List<Asset> assets = assetDAO.getAllAssets();
+        for (Asset asset : assets) {
+            assetWithAmountMap.put(assetDAO.findAssetByCode(asset.getCode()), walletDAO.findAmountOfAsset(iban, asset.getCode()));
+        }
+        wallet.setAsset(assetWithAmountMap);
+        return wallet;
+    }
 
-   //ORDER > TRANSACTION
+    //ORDER > TRANSACTION
 
     /**
      * Saves Transaction, including asset, sellerWallet and buyerWallet seperately in database.
