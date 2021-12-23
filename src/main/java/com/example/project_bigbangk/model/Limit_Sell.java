@@ -11,13 +11,23 @@ public class Limit_Sell extends AbstractOrder{
 
     private final Logger logger = LoggerFactory.getLogger(Limit_Sell.class);
 
+    private double transactionFee;
     private Wallet sellerWallet;
 
     public Limit_Sell(int orderId, Asset asset, double requestedPrice, int numberOfAssets,
                       LocalDateTime date, double transactionFee, Wallet sellerWallet) {
-        super(orderId, asset, requestedPrice, numberOfAssets, date, transactionFee);
+        super(orderId, asset, requestedPrice, numberOfAssets, date);
+        this.transactionFee = transactionFee;
         this.sellerWallet = sellerWallet;
         logger.info("New Limit_Sell");
+    }
+
+    public double getTransactionFee() {
+        return transactionFee;
+    }
+
+    public void setTransactionFee(double transactionFee) {
+        this.transactionFee = transactionFee;
     }
 
     public Wallet getSellerWallet() {
@@ -32,7 +42,8 @@ public class Limit_Sell extends AbstractOrder{
     public String toString() {
         return super.toString() +
                 "Limit_Sell{" +
-                "sellerWallet=" + sellerWallet +
+                "transactionFee=" + transactionFee +
+                ", sellerWallet=" + sellerWallet +
                 '}';
     }
 }
