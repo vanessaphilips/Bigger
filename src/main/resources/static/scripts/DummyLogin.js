@@ -1,4 +1,4 @@
-import {rootURL} from "./Root.js";
+//import {rootURL} from "./URLs.js";
 
 class LoginDTO {
     constructor(email, password) {
@@ -10,7 +10,7 @@ class LoginDTO {
 
 const loginDTO = new LoginDTO("henk@unicom.nl", "password1234345")
 
-export async function getToken() {
+ async function getToken() {
 
     await fetch(`${rootURL}login`,
         {

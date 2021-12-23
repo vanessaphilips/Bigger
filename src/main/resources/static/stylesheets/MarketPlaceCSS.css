@@ -36,40 +36,55 @@
     width: 100%;
     text-align: left;
 }
-#assetListContainer > div > div {
-    background-color: white;
+
+#graphContainer {
+    background-color: #ffffff;
     border-bottom-style: solid;
     border-width: thin;
     border-color: var(--blue);
-    width:100%;
+    width: 100%;
 
+    /*max-height: 5%;*/
+    /*height: 5%;*/
 
     /*max-width: 20%;*/
     /*max-height: 100%;*/
 
 }
-#assetListContainer > div > div > canvas {
+
+#graphContainer > div > div {
     background-color: white;
-    font-size: 0;
-
-    /*max-width: 20%;*/
-    /*max-height: 100%;*/
-
-}
-
-.tradeButton {
     color: var(--blue);
-    background-color:white;
-    border-style: groove;
+    max-height: 50%;
+    height: 5%;
+    font-size: 0;
+    max-height: 20%;
+}
+
+#assetListContainer .tradeButton {
+    color: var(--blue);
+    background-color: white;
+    border-style: solid;
     border-color: var(--blue);
-    border-width: 1px;
+    border-width: 3px;
     border-radius: 10%;
-    width: 10%;
     height: fit-content;
+    width: fit-content;
+    font-size: 90%;
 }
-.tradeButton.text{
-    color:  black;
+
+#kolomnamen .tradeButton {
+    border-width: 0px;
 }
+
+#kolomnamen {
+    color: var(--blue);
+}
+
+.tradeButton.text {
+    color: black;
+}
+
 .tradeButton > hoover {
     background-color: #d0cb96;
 }
@@ -80,7 +95,7 @@
 }
 
 #code {
-    color: var(--orange);
+    color: var(--blue);
 }
 
 #currentPrice {
