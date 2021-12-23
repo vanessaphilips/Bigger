@@ -13,12 +13,14 @@ public class Transaction extends AbstractOrder{
 
     private final Logger logger = LoggerFactory.getLogger(Transaction.class);
 
+    private double transactionFee;
     private Wallet buyerWallet;
     private Wallet sellerWallet;
 
     public Transaction(int orderId, Asset asset, double requestedPrice, int numberOfAssets,
                        LocalDateTime date, double transactionFee, Wallet buyerWallet, Wallet sellerWallet) {
-        super(orderId, asset, requestedPrice, numberOfAssets, date, transactionFee);
+        super(orderId, asset, requestedPrice, numberOfAssets, date);
+        this.transactionFee = transactionFee;
         this.buyerWallet = buyerWallet;
         this.sellerWallet = sellerWallet;
         logger.info("New transaction using all-arg constructor");
@@ -27,6 +29,14 @@ public class Transaction extends AbstractOrder{
     public Transaction() {
         this(0, null, 0, 0, null, 0, null, null);
         logger.info("New transaction using no-arg constructor");
+    }
+
+    public double getTransactionFee() {
+        return transactionFee;
+    }
+
+    public void setTransactionFee(double transactionFee) {
+        this.transactionFee = transactionFee;
     }
 
     public Wallet getBuyerWallet() {
@@ -49,7 +59,8 @@ public class Transaction extends AbstractOrder{
     public String toString() {
         return super.toString() +
                 "Transaction{" +
-                "buyerWallet=" + buyerWallet +
+                "transactionFee=" + transactionFee +
+                ", buyerWallet=" + buyerWallet +
                 ", sellerWallet=" + sellerWallet +
                 '}';
     }

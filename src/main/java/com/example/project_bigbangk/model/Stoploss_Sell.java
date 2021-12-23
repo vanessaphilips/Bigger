@@ -13,13 +13,23 @@ public class Stoploss_Sell extends AbstractOrder{
 
     private Wallet sellerWallet;
     private double lowerBound;
+    private double transactionFee;
 
     public Stoploss_Sell(int orderId, Asset asset, double requestedPrice, int numberOfAssets, LocalDateTime date,
                          double transactionFee, Wallet sellerWallet, double lowerBound) {
-        super(orderId, asset, requestedPrice, numberOfAssets, date, transactionFee);
+        super(orderId, asset, requestedPrice, numberOfAssets, date);
+        this.transactionFee = transactionFee;
         this.sellerWallet = sellerWallet;
         this.lowerBound = lowerBound;
         logger.info("New Stoploss_Sell");
+    }
+
+    public double getTransactionFee() {
+        return transactionFee;
+    }
+
+    public void setTransactionFee(double transactionFee) {
+        this.transactionFee = transactionFee;
     }
 
     public Wallet getSellerWallet() {
@@ -44,6 +54,7 @@ public class Stoploss_Sell extends AbstractOrder{
                 "Stoploss_Sell{" +
                 "sellerWallet=" + sellerWallet +
                 ", lowerBound=" + lowerBound +
+                ", transactionFee=" + transactionFee +
                 '}';
     }
 }

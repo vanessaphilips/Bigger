@@ -15,22 +15,17 @@ abstract class AbstractOrder {
     private double requestedPrice;
     private int numberOfAssets;
     private LocalDateTime date;
-    private double transactionFee;
-    private static final double DEFAULT_TRANSACTIONFEE = 0.0025;
 
-    public AbstractOrder(long orderId, Asset asset, double requestedPrice, int numberOfAssets,
-                         LocalDateTime date, double transactionFee) {
+    public AbstractOrder(long orderId, Asset asset, double requestedPrice, int numberOfAssets, LocalDateTime date) {
         this.orderId = orderId;
         this.asset = asset;
         this.requestedPrice = requestedPrice;
         this.numberOfAssets = numberOfAssets;
         this.date = date;
-        this.transactionFee = DEFAULT_TRANSACTIONFEE;
     }
 
-    public AbstractOrder(Asset asset, double requestedPrice, int numberOfAssets,
-                         LocalDateTime date, double transactionFee) {
-        this(0, asset, requestedPrice, numberOfAssets, date, DEFAULT_TRANSACTIONFEE);
+    public AbstractOrder(Asset asset, double requestedPrice, int numberOfAssets, LocalDateTime date) {
+        this(0, asset, requestedPrice, numberOfAssets, date);
     }
 
     public long getOrderId() {
@@ -73,14 +68,6 @@ abstract class AbstractOrder {
         this.date = date;
     }
 
-    public double getTransactionFee() {
-        return transactionFee;
-    }
-
-    public void setTransactionFee(double transactionFee) {
-        this.transactionFee = transactionFee;
-    }
-
     @Override
     public String toString() {
         return "AbstractOrder{" +
@@ -89,7 +76,6 @@ abstract class AbstractOrder {
                 ", requestedPrice=" + requestedPrice +
                 ", numberOfAssets=" + numberOfAssets +
                 ", date=" + date +
-                ", transactionFee=" + transactionFee +
                 '}';
     }
 

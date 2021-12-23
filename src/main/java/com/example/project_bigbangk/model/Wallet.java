@@ -14,24 +14,24 @@ public class Wallet {
     private double balance;
     private Map<Asset, Double> asset;
     private List<Transaction> transaction;
-    private List<SellOrder> sellOrder;
-    private List<BuyOrder> buyOrder;
-    private List<PendingOrder> pendingOrder;
+    private List<Limit_Sell> limitSell;
+    private List<Limit_Buy> limitBuy;
+    private List<Stoploss_Sell> stoplossSell;
     private ICanTrade owner;
 
     //Is het niet handiger om het type er achter te zetten zoals buyOrderList of assetMap, transactionList?
 
     public Wallet(String bank, String iban, double balance, Map<Asset, Double> asset, List<Transaction> transaction,
-                  List<SellOrder> sellOrder, List<BuyOrder> buyOrder, List<PendingOrder> pendingOrder,
+                  List<Limit_Sell> limitSell, List<Limit_Buy> limnitBuy, List<Stoploss_Sell> stoplossSell,
                   ICanTrade owner) {
         this.bank = bank;
         this.iban = iban;
         this.balance = balance;
         this.asset = asset;
         this.transaction = transaction;
-        this.sellOrder = sellOrder;
-        this.buyOrder = buyOrder;
-        this.pendingOrder = pendingOrder;
+        this.limitSell = limitSell;
+        this.limitBuy = limnitBuy;
+        this.stoplossSell = stoplossSell;
         this.owner = owner;
     }
 
@@ -48,9 +48,9 @@ public class Wallet {
                 ", balance=" + balance +
                 ", assets=" + asset +
                 ", transactions=" + transaction +
-                ", sellOrders=" + sellOrder +
-                ", buyOrders=" + buyOrder +
-                ", pendingOrders=" + pendingOrder +
+                ", limitSell=" + limitSell +
+                ", limitBuy=" + limitBuy +
+                ", stoplossSell=" + stoplossSell +
                 ", owner=" + owner +
                 '}';
     }
@@ -108,28 +108,28 @@ public class Wallet {
         this.transaction = transaction;
     }
 
-    public List<SellOrder> getSellOrder() {
-        return sellOrder;
+    public List<Limit_Sell> getLimitSell() {
+        return limitSell;
     }
 
-    public void setSellOrder(List<SellOrder> sellOrder) {
-        this.sellOrder = sellOrder;
+    public void setLimitSell(List<Limit_Sell> limitSell) {
+        this.limitSell = limitSell;
     }
 
-    public List<BuyOrder> getBuyOrder() {
-        return buyOrder;
+    public List<Limit_Buy> getLimitBuy() {
+        return limitBuy;
     }
 
-    public void setBuyOrder(List<BuyOrder> buyOrder) {
-        this.buyOrder = buyOrder;
+    public void setLimitBuy(List<Limit_Buy> limitBuy) {
+        this.limitBuy = limitBuy;
     }
 
-    public List<PendingOrder> getPendingOrder() {
-        return pendingOrder;
+    public List<Stoploss_Sell> getStoplossSell() {
+        return stoplossSell;
     }
 
-    public void setPendingOrder(List<PendingOrder> pendingOrder) {
-        this.pendingOrder = pendingOrder;
+    public void setStoplossSell(List<Stoploss_Sell> stoplossSell) {
+        this.stoplossSell = stoplossSell;
     }
 
     public ICanTrade getOwner() {
