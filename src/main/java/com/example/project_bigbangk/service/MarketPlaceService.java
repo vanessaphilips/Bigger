@@ -32,7 +32,7 @@ public class MarketPlaceService {
     }
 
     public List<List<PriceHistoryDTO>> getAllAssetsWithPriceHistoryFromDate(LocalDateTime localDateTime){
-        List<List<PriceHistory>> priceHistoriesByAssets = rootRepository.getAllPriceHistroriesWithAsset(localDateTime);
+        List<List<PriceHistory>> priceHistoriesByAssets = rootRepository.getAllPriceHistroriesByAssets(localDateTime);
         List<List<PriceHistoryDTO>> priceHistoriesByAssetsDTO = new ArrayList<>();
 
         for(List<PriceHistory> priceHistoriesOfAsset :priceHistoriesByAssets ){
