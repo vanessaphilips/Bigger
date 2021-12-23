@@ -73,18 +73,7 @@ public class RootRepository {
         }
     }
 
-    //Asset
-    public List<Asset> getAllAssets() {
-        List<Asset> assets = assetDAO.getAllAssets();
-        if (assets != null) {
-            for (Asset asset : assets) {
-                asset.setCurrentPrice(priceHistoryDAO.getCurrentPriceByAssetCode(asset.getCode()));
-            }
-        }
-        return assets;
-    }
-
-    public List<List<PriceHistory>> getAllPriceHistroriesWithAsset(LocalDateTime dateTime) {
+    public List<List<PriceHistory>> getAllPriceHistroriesByAssets(LocalDateTime dateTime) {
         List<Asset> assets = assetDAO.getAllAssets();
         List<List<PriceHistory>> priceHistoriesAllAssets = new ArrayList<>();
         if (assets != null) {
@@ -102,6 +91,19 @@ public class RootRepository {
         }
         return null;
     }
+
+    //Asset
+    public List<Asset> getAllAssets() {
+        List<Asset> assets = assetDAO.getAllAssets();
+        if (assets != null) {
+            for (Asset asset : assets) {
+                asset.setCurrentPrice(priceHistoryDAO.getCurrentPriceByAssetCode(asset.getCode()));
+            }
+        }
+        return assets;
+    }
+
+
     // WALLET
 
     //ToDO findWalletByEmail
@@ -137,6 +139,7 @@ public class RootRepository {
 
     /**
      * Saves Transaction, including asset, sellerWallet and buyerWallet seperately in database.
+     *
      * @param transaction
      */
     public void createNewTransaction(Transaction transaction) {
