@@ -4,10 +4,17 @@
     <meta charset="UTF-8">
     <title>MarketPlace</title>
     <link rel="stylesheet" href="stylesheets/MarketPlaceCSS.css">
-    <!--    <script-->
-    <!--        src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">-->
-    <!--</script>-->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!--    GraphJs  verwijder degene die niet gbruikt wordt-->
+    <!--    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
+    <!--    <script src="scripts/Graphjs.js"> </script>-->
+    <!--    Goole graph verwijder degene die niet gbruikt wordt-->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="scripts/GoogleGraph.js"></script>
+
+    <script defer src="scripts/URLs.js"></script>
+    <!-- ToDO   Dummy login verwijderen bij online gaan-->
+    <script defer src="scripts/DummyLogin.js"></script>
+
     <script type="module" defer src="scripts/MarketPlace.js"></script>
 
 
@@ -19,10 +26,10 @@
         <label id="name">Code</label>
         <label>Name</label>
         <label>Price in Euro's</label>
-        <div>
-            <canvas height="5%">graph</canvas>
+        <div id="graphContainer">
+            <div></div>
         </div>
-        <label hidden>trade</label>
+        <div class="tradeButton"></div>
     </div>
 </div>
 
