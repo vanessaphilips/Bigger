@@ -3,6 +3,11 @@
 
 package com.example.project_bigbangk.model;
 
+import com.example.project_bigbangk.model.Orders.Limit_Buy;
+import com.example.project_bigbangk.model.Orders.Limit_Sell;
+import com.example.project_bigbangk.model.Orders.Stoploss_Sell;
+import com.example.project_bigbangk.model.Orders.Transaction;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;

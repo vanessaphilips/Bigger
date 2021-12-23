@@ -1,7 +1,7 @@
 // Created by vip
 // Creation date 16/12/2021
 
-package com.example.project_bigbangk.model;
+package com.example.project_bigbangk.model.Orders;
 
 /**
  * Enum created by Vanessa Philips.

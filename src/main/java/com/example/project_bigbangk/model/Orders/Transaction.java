@@ -1,12 +1,14 @@
-package com.example.project_bigbangk.model;
+package com.example.project_bigbangk.model.Orders;
 
+import com.example.project_bigbangk.model.Asset;
+import com.example.project_bigbangk.model.Wallet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.time.LocalDateTime;
 
 /**
  * Model created by Vanessa Philips.
- * Object "Transaction" for "regular" transactions.
+ * Object "Transaction" > for "regular" transactions.
  */
 
 public class Transaction extends AbstractOrder{
@@ -17,18 +19,20 @@ public class Transaction extends AbstractOrder{
     private Wallet buyerWallet;
     private Wallet sellerWallet;
 
-    public Transaction(int orderId, Asset asset, double requestedPrice, int numberOfAssets,
-                       LocalDateTime date, double transactionFee, Wallet buyerWallet, Wallet sellerWallet) {
-        super(orderId, asset, requestedPrice, numberOfAssets, date);
+    public Transaction(int orderId, double requestedPrice, int numberOfAssets,
+                       LocalDateTime date, double transactionFee) {
+        super(orderId, requestedPrice, numberOfAssets, date);
+        this.transactionFee = transactionFee;
+        logger.info("New transaction, without Asset and Wallets");
+    }
+
+    public Transaction(Asset asset, double requestedPrice, int numberOfAssets, LocalDateTime date,
+                       double transactionFee, Wallet buyerWallet, Wallet sellerWallet) {
+        super(asset, requestedPrice, numberOfAssets, date);
         this.transactionFee = transactionFee;
         this.buyerWallet = buyerWallet;
         this.sellerWallet = sellerWallet;
-        logger.info("New transaction using all-arg constructor");
-    }
-
-    public Transaction() {
-        this(0, null, 0, 0, null, 0, null, null);
-        logger.info("New transaction using no-arg constructor");
+        logger.info("New transaction, without id");
     }
 
     public double getTransactionFee() {
