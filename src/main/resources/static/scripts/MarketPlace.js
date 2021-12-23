@@ -64,41 +64,25 @@ const createTradeButton = (asset) => {
     return tradeButton
 }
 
-const createGraph=(priceHistory, dates ,prices)=>{
+const createGraph = (priceHistory, dates, prices) => {
     new Chart(priceHistory, {
         type: "line",
         data: {
             labels: dates,
             datasets: [{
-
-                pointBackgroundColor: "rgba(0,0,0,1)",
-                backgroundColor: "rgba(0,0,0,1.0)",
-                borderColor: "rgba(0,0,0,0.3)",
+                legend: {display: false},
+                pointBackgroundColor: "white",
+                backgroundColor: "white",
+                borderColor: "rgba(0,0,0,0.5)",
                 data: prices,
                 fill: false
             }]
         },
         options: {
-            label: {display: false},
-            interaction: {
-                // Overrides the global setting
-                mode: 'index'
-            },
-            animation: false,
-            legend: {display: false},
-            // easing: 'linear',
-            maintainAspectRatio: true,
-            title: {display: false},
-            subtitle: {display: false},
             spanGaps: true,
             datasets: {
                 line: {
                     pointRadius: 0 // disable for all `'line'` datasets
-                }
-            },
-            elements: {
-                point: {
-                    radius: 0 // default to disabled in all datasets
                 }
             }
         }
@@ -125,7 +109,7 @@ const createAssetDiv = (priceHistoriesOfAsset) => {
     let prices = priceHistoriesOfAsset.map(ph => ph.price)
     console.log(dates)
     console.log(prices)
-    createGraph(priceHistory, dates , prices)
+    createGraph(priceHistory, dates, prices)
 
     assetCodeLabel.innerHTML = asset.code
     assetNameLabel.innerHTML = asset.name
