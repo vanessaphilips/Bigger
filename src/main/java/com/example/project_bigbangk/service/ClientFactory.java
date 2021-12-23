@@ -83,7 +83,7 @@ public class ClientFactory {
     }
 
     private List<String> initializeStreetNames() {
-        File streetNames = new File("src/main/resources/straatnamen.txt");
+        File streetNames = new File("src/main/resources/ClientFactoryResources/straatnamen.txt");
         List<String> tempStreetNames = new ArrayList<>();
         try {
             Scanner scanner = new Scanner(streetNames);
@@ -154,7 +154,7 @@ public class ClientFactory {
     }
 
     public Map<String, String> initializeLastNames() {
-        File lastNamesFile = new File("src/main/resources/LastNames.json");
+        File lastNamesFile = new File("src/main/resources/ClientFactoryResources/LastNames.json");
         Map<String, String> tempLastNames = new HashMap<>();
         JsonNode lastNamesNode;
         ObjectMapper mapper = new ObjectMapper();
@@ -176,7 +176,7 @@ public class ClientFactory {
     }
 
     private Set<String> initializePlaatsnamen() {
-        File cityFile = new File("src/main/resources/metatopos-places.json");
+        File cityFile = new File("src/main/resources/ClientFactoryResources/metatopos-places.json");
         Set<String> tempCities = new HashSet<>();
         JsonNode cityNodes;
         ObjectMapper mapper = new ObjectMapper();
@@ -193,7 +193,7 @@ public class ClientFactory {
     }
 
     public List<String> initializeFirstNames() {
-        File lastNamesFile = new File("src/main/resources/FirstNames.json");
+        File lastNamesFile = new File("src/main/resources/ClientFactoryResources/FirstNames.json");
         List<String> tempListFirstNames = new ArrayList<>();
         JsonNode lastNamesNode;
         ObjectMapper mapper = new ObjectMapper();
