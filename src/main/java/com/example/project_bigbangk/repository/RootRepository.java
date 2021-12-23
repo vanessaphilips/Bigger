@@ -8,11 +8,10 @@
 package com.example.project_bigbangk.repository;
 
 import com.example.project_bigbangk.model.*;
+import com.example.project_bigbangk.model.Orders.Transaction;
 import org.springframework.stereotype.Repository;
-
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Repository
 public class RootRepository {
@@ -135,17 +134,21 @@ public class RootRepository {
         return wallet;
     }
 
+    //TODO onderstaande methode maken!
+
+    private void updateWallet(Wallet sellerWallet) {
+    }
+
+
     //ORDER > TRANSACTION
 
     /**
-     * Saves Transaction, including asset, sellerWallet and buyerWallet seperately in database.
-     *
+     * Saves Transaction, including sellerWallet and buyerWallet in database.
      * @param transaction
      */
-    public void createNewTransaction(Transaction transaction) {
+    public void saveNewTransaction(Transaction transaction) {
         orderDAO.saveTransaction(transaction);
-        assetDAO.saveAsset(transaction.getAsset());
-        walletDAO.saveNewWallet(transaction.getSellerWallet());
-        walletDAO.saveNewWallet(transaction.getBuyerWallet());
+        updateWallet(transaction.getSellerWallet());
+        updateWallet(transaction.getBuyerWallet());
     }
 }

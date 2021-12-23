@@ -1,6 +1,6 @@
 package com.example.project_bigbangk.repository;
 
-import com.example.project_bigbangk.model.Transaction;
+import com.example.project_bigbangk.model.Orders.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,14 +76,12 @@ public class JdbcOrderDAO {
 
         @Override
         public Transaction mapRow(ResultSet resultSet, int rowNum) throws SQLException {
-            long orderId = resultSet.getInt("orderId");
+            int orderId = resultSet.getInt("orderId");
             Double requestedPrice = resultSet.getDouble("requestedPrice");
             Integer numberOfAssets = resultSet.getInt("numberOfAssets");
             LocalDateTime date = resultSet.getObject("date", LocalDateTime.class);
             Double transactionFee = resultSet.getDouble("transactionFee");
-            Transaction transaction = new Transaction();
-            transaction.setOrderId(orderId);
-            return transaction;
+            return new Transaction(orderId, requestedPrice, numberOfAssets, date, transactionFee);
         }
     }
 

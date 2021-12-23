@@ -1,4 +1,6 @@
-package com.example.project_bigbangk.model;
+package com.example.project_bigbangk.model.Orders;
+
+import com.example.project_bigbangk.model.Asset;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -22,6 +24,10 @@ abstract class AbstractOrder {
         this.requestedPrice = requestedPrice;
         this.numberOfAssets = numberOfAssets;
         this.date = date;
+    }
+
+    public AbstractOrder(long orderId, double requestedPrice, int numberOfAssets, LocalDateTime date) {
+        this(orderId, null, requestedPrice, numberOfAssets, date);
     }
 
     public AbstractOrder(Asset asset, double requestedPrice, int numberOfAssets, LocalDateTime date) {

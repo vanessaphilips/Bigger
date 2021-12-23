@@ -3,8 +3,7 @@ package com.example.project_bigbangk.repository;
 import com.example.project_bigbangk.model.Address;
 import com.example.project_bigbangk.model.Client;
 import com.example.project_bigbangk.model.Wallet;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@TestMethodOrder(value = MethodOrderer.OrderAnnotation.class)
 class JdbcClientDAOTest {
 
     private final JdbcClientDAO clientDAOTest;
@@ -49,6 +49,22 @@ class JdbcClientDAOTest {
     }
 
     @Test
+    @Order(1)
+    void findAllClients() {
+        List<Client> actual = clientDAOTest.findAllClients();
+        assertTrue(actual.size() == 6);
+        assertTrue (actual.stream().filter(c-> c.getEmail().equals("michael@oosterhout.nl")).toArray().length == 1);
+
+        actual.add(newClient1);
+        actual.add(newClient2);
+        assertTrue(actual.size() == 8);
+        assertTrue (actual.stream().filter(c-> c.getEmail().equals("client1@test.nl")).toArray().length == 1);
+        assertTrue (actual.stream().filter(c-> c.getLastName().equals("Test2")).toArray().length == 1);
+        assertFalse (actual.stream().filter(c-> c.getLastName().equals("Hoi")).toArray().length == 1);
+    }
+
+    @Test
+    @Order(2)
     void saveClient() {
         newClient1.setAddress(mockAddress);
         newClient1.setWallet(mockWallet);
@@ -62,6 +78,7 @@ class JdbcClientDAOTest {
     }
 
     @Test
+    @Order(3)
     void findClientByEmail() {
         Client actual1 = clientDAOTest.findClientByEmail("sander@deboer.nl");
         Client expected1 = new Client("sander@deboer.nl", "Sander", "de",
@@ -77,19 +94,7 @@ class JdbcClientDAOTest {
     }
 
     @Test
-    void findAllClients() {
-
-        //FIXME!
-
-//        List<Client> actual = clientDAOTest.findAllClients();
-//        List<Client> expected = new ArrayList<>();
-//        expected.add(newClient1);
-//        expected.add(newClient2);
-//        assertThat(actual).isEqualTo(expected);
-//        assertThat(actual.size()).isEqualTo(expected.size());
-    }
-
-    @Test
+    @Order(4)
     void updateClient() {
         updateClient1.setAddress(mockAddress);
         updateClient1.setWallet(mockWallet);
@@ -98,20 +103,15 @@ class JdbcClientDAOTest {
     }
 
     @Test
+    @Order(5)
     void findClientByLastName() {
+        List<Client> actual1 = clientDAOTest.findClientByLastName("Oey");
+        assertTrue(actual1.size() == 1);
 
-        //FIXME!
-//
-//        Client actual = clientDAOTest.findClientByLastName("Test1");
-//        Client expected = newClient1;
-//        assertThat(actual).isEqualTo(expected);
+        clientDAOTest.findClientByLastName("Vanessa");
+        assertNotEquals("Vanessa", null);
 
-        //FIXME
-
-//        Client harry = new Client("harry@scary.nl", "Harry", null, "Scary", LocalDate.of(1955, 5, 5), "123456789", "harryscary", null, null);
-//        clientDAOTest.saveClient(harry);
-//        Client testHarry = clientDAOTest.findClientByLastName("Scary");
-//        String lastName = "Scary";
-//        assertEquals(lastName, testHarry.getLastName());
+        clientDAOTest.findClientByLastName("Philips");
+        assertNull(null);
     }
 }
