@@ -91,9 +91,8 @@ public class ClientFactory {
                 tempStreetNames.add(streetname);
             }
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            logger.info(e.getMessage());
         }
-
         return tempStreetNames;
     }
 
@@ -173,13 +172,12 @@ public class ClientFactory {
                 String lastName = lastNameJN.get("naam").asText();
                 String nameNorm = Normalizer.normalize(lastName, Normalizer.Form.NFD);
                 if (!lastName.equals(nameNorm)) {
-                    nameNorm = nameNorm.replaceAll("[^\\p{ASCII}]",
-                            "");
+                    nameNorm = nameNorm.replaceAll("[^\\p{ASCII}]", "");
                 }
                 tempLastNames.put(nameNorm, lastNameJN.get("prefix").asText());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.info(e.getMessage());
         }
         return tempLastNames;
     }
@@ -196,7 +194,7 @@ public class ClientFactory {
                 tempCities.add(cityname.get("municipality").asText());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.info(e.getMessage());
         }
         return tempCities;
     }
@@ -215,12 +213,11 @@ public class ClientFactory {
                 String nameNorm = Normalizer.normalize(firstName, Normalizer.Form.NFD);
                 if (!firstName.equals(nameNorm)) {
                     nameNorm = nameNorm.replaceAll("[^\\p{ASCII}]", "");
-
                 }
                 tempListFirstNames.add(nameNorm);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.info(e.getMessage());
         }
         return tempListFirstNames;
     }
