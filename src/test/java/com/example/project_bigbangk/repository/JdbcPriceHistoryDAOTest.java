@@ -1,5 +1,6 @@
 package com.example.project_bigbangk.repository;
 
+import com.example.project_bigbangk.BigBangkApplicatie;
 import com.example.project_bigbangk.model.Asset;
 import com.example.project_bigbangk.model.AssetCode_Name;
 import com.example.project_bigbangk.model.PriceHistory;
@@ -7,6 +8,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ActiveProfiles;
 
 import javax.annotation.Resource;
@@ -14,11 +17,13 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
 class JdbcPriceHistoryDAOTest {
+
 
     @Resource
     JdbcPriceHistoryDAO priceHistoryDAO;
@@ -29,20 +34,24 @@ class JdbcPriceHistoryDAOTest {
 
     @BeforeEach
     public void setup() {
-        priceHistories.add(createPriceHisory(0.7, createAsset(AssetCode_Name.BTC)));
-        priceHistories.add(createPriceHisory(1.3, createAsset(AssetCode_Name.BTC)));
-        priceHistories.add(createPriceHisory(1.1, createAsset(AssetCode_Name.BTC)));
-        priceHistories.add(createPriceHisory(1.21, createAsset(AssetCode_Name.BTC)));
-        priceHistories.add(createPriceHisory(1.3, createAsset(AssetCode_Name.ETH)));
-        priceHistories.add(createPriceHisory(4.3, createAsset(AssetCode_Name.ETH)));
-        priceHistories.add(createPriceHisory(2.3, createAsset(AssetCode_Name.ETH)));
-        priceHistories.add(createPriceHisory(6.3, createAsset(AssetCode_Name.ETH)));
-        priceHistories.add(createPriceHisory(1.5, createAsset(AssetCode_Name.ADA)));
-        priceHistories.add(createPriceHisory(5.5, createAsset(AssetCode_Name.ADA)));
-        priceHistories.add(createPriceHisory(2.5, createAsset(AssetCode_Name.ADA)));
-        priceHistories.add(createPriceHisory(0.5, createAsset(AssetCode_Name.ADA)));
+        priceHistories.add(createPriceHistory(0.7, createAsset(AssetCode_Name.BTC)));
+        priceHistories.add(createPriceHistory(1.3, createAsset(AssetCode_Name.BTC)));
+        priceHistories.add(createPriceHistory(1.1, createAsset(AssetCode_Name.BTC)));
+        priceHistories.add(createPriceHistory(1.21, createAsset(AssetCode_Name.BTC)));
+        priceHistories.add(createPriceHistory(1.3, createAsset(AssetCode_Name.ETH)));
+        priceHistories.add(createPriceHistory(4.3, createAsset(AssetCode_Name.ETH)));
+        priceHistories.add(createPriceHistory(2.3, createAsset(AssetCode_Name.ETH)));
+        priceHistories.add(createPriceHistory(6.3, createAsset(AssetCode_Name.ETH)));
+        priceHistories.add(createPriceHistory(1.5, createAsset(AssetCode_Name.ADA)));
+        priceHistories.add(createPriceHistory(5.5, createAsset(AssetCode_Name.ADA)));
+        priceHistories.add(createPriceHistory(2.5, createAsset(AssetCode_Name.ADA)));
+        priceHistories.add(createPriceHistory(0.5, createAsset(AssetCode_Name.ADA)));
     }
-
+@Test
+void getAllPriceHistory(){
+      List<PriceHistory> actual = priceHistoryDAO.getPriceHistoriesByCodeFromDate(LocalDateTime.now().minusSeconds(15), "BTC");
+      assertThat(actual.size()).isEqualTo(4);
+}
 
     @Test
     void savePriceHistory() {
@@ -58,7 +67,8 @@ class JdbcPriceHistoryDAOTest {
     }
 
 
-    private PriceHistory createPriceHisory(double currentprice, Asset asset) {
+
+    private PriceHistory createPriceHistory(double currentprice, Asset asset) {
         PriceHistory priceHistory = Mockito.mock(PriceHistory.class);
         Mockito.when(priceHistory.getPrice()).thenReturn(currentprice);
         Mockito.when(priceHistory.getDateTime()).thenReturn(LocalDateTime.now());
