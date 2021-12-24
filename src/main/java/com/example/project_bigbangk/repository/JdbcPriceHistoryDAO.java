@@ -38,30 +38,30 @@ public class JdbcPriceHistoryDAO implements IPriceHistoryDAO {
                     priceHistory.getAsset().getCode(),
                     priceHistory.getPrice());
         } catch (DataAccessException dataAccessException) {
-           logger.info(dataAccessException.getMessage());
+            logger.info(dataAccessException.getMessage());
         }
     }
 
     @Override
-    public double getCurrentPriceByAssetCode(String assetCode){
+    public double getCurrentPriceByAssetCode(String assetCode) {
         String sql = "Select * from (SELECT * FROM pricehistory where code = ? )as priceHisotryByCoin ORDER BY dateTime DESC LIMIT 1;";
-        double currentprice = 0;
+        double currentPrice = 0;
         try {
             PriceHistory priceHistory = jdbcTemplate.queryForObject(sql,
                     new PriceHistoryRowMapper(), assetCode);
-            currentprice = priceHistory.getPrice();
+            currentPrice = priceHistory==null?-1:  priceHistory.getPrice();
         } catch (DataAccessException dataAccessException) {
             logger.info(dataAccessException.getMessage());
         }
-        return currentprice;
+        return currentPrice;
     }
 
     @Override
-    public List<PriceHistory> getPriceHistoriesByCodeFromDate(LocalDateTime date, String assetCode){
+    public List<PriceHistory> getPriceHistoriesByCodeFromDate(LocalDateTime date, String assetCode) {
         String sql = "SELECT * FROM pricehistory where dateTime> ? and code = ?;";
         List<PriceHistory> priceHistories = null;
-        try{
-           priceHistories =  jdbcTemplate.query(sql, new PriceHistoryRowMapper(), date, assetCode);
+        try {
+            priceHistories = jdbcTemplate.query(sql, new PriceHistoryRowMapper(), date, assetCode);
         } catch (DataAccessException dataAccessException) {
             logger.info(dataAccessException.getMessage());
         }

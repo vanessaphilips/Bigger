@@ -33,7 +33,6 @@ public class ClientFactory {
     private List<String> EMAIL_EXTENSIONS = Arrays.asList("nl", "com", "de", "be", "biz", "fr", "vs", "org", "uk");
     private final String[] COUNTRIES = {"NLD", "BEL", "GER", "USA", "GBR", "FRA", "POL", "CHE"};
     private final Random RAND = new Random();
-    private IbanGeneratorService ibanGeneratorService;
     private final String PASSWORD = "password";
 
     public ClientFactory(IbanGeneratorService ibanGeneratorService, RegistrationService registrationService) {
@@ -41,30 +40,29 @@ public class ClientFactory {
         logger.info("New ClientFactory");
         firstNames = new ArrayList<>();
         lastNames = new HashMap<>();
-        this.ibanGeneratorService = ibanGeneratorService;
         this.registrationService = registrationService;
     }
+
     private RegistrationDTO createRegistrationDTO() {
 
-       String firstName = firstNames.get(RAND.nextInt(firstNames.size()));
-       String lastName=  (String)(lastNames.keySet().toArray()[RAND.nextInt(lastNames.size())]);
+        String firstName = firstNames.get(RAND.nextInt(firstNames.size()));
+        String lastName = (String) (lastNames.keySet().toArray()[RAND.nextInt(lastNames.size())]);
         String insertion = lastNames.get(lastName);
         LocalDate birthDay = LocalDate.parse(createBirthDay());
-      String email =  createEmail(firstName);
+        String email = createEmail(firstName);
         String BSN = creatBsn();
         Address address = createAdress();
-        RegistrationDTO client = new RegistrationDTO(email,
+        return new RegistrationDTO(email,
                 PASSWORD,
                 firstName,
                 insertion,
-                lastName,BSN,
+                lastName, BSN,
                 birthDay.toString(),
                 createAdress().getPostalCode(),
                 address.getStreet(),
                 address.getNumber(),
                 address.getCity(),
                 address.getCountry());
-        return client;
     }
 
     public void seedDataBase(int numberOfClients) {
@@ -72,7 +70,7 @@ public class ClientFactory {
         initializeNameArrays();
         initializeAdressArrays();
         for (int i = 0; i < numberOfClients; i++) {
-                     registrationService.registerClient(createRegistrationDTO());
+            registrationService.registerClient(createRegistrationDTO());
         }
         logger.info("Database seeding end");
     }
@@ -103,6 +101,7 @@ public class ClientFactory {
     private Address createAdress() {
         String postalCode = createPostalCode();
         String street = streetNames.get(RAND.nextInt(streetNames.size()));
+//        number tot 300, omdat er een grens moet zijn
         int number = RAND.nextInt(300) + 1;
         String country = COUNTRIES[RAND.nextInt(COUNTRIES.length)];
         String city = (String) cities.toArray()[RAND.nextInt(cities.size())];
@@ -110,17 +109,26 @@ public class ClientFactory {
     }
 
     private String createPostalCode() {
+        //getal van vier cijfers
         return String.format("%s%s%s", (RAND.nextInt(9000) + 1000),
                 Character.toUpperCase((char) (RAND.nextInt(26) + 65)),
                 Character.toUpperCase((char) (RAND.nextInt(26) + 65)));
     }
 
-
-
     private String createBirthDay() {
+        //vanaf 1 tot 13
+        //leeftijd max 88 jaar
+        int jaar = RAND.nextInt(70) + 1932;
+        // 4, maar niet door 100 – tenzij het jaartal restloos deelbaar door 400 is. 2020
         int maand = RAND.nextInt(12) + 1;
-        int dag = RAND.nextInt(maand == 2 ? 28 : 30) + 1;
-        return String.format("%s-%s-%s", RAND.nextInt(70) + 1932, makeDoubleNumber(maand), makeDoubleNumber(dag));
+        int dag;
+        //bepaal jaar==schrikkeljaar
+        if ((jaar % 4 == 0 && jaar % 100 != 0) || jaar % 400 == 0) {
+            dag = RAND.nextInt(29) + 1;
+        } else {
+            dag = RAND.nextInt(28) + 1;
+        }
+        return String.format("%s-%s-%s", jaar, makeDoubleNumber(maand), makeDoubleNumber(dag));
     }
 
     private String makeDoubleNumber(int number) {
@@ -131,20 +139,20 @@ public class ClientFactory {
     }
 
     private String creatBsn() {
-        String firsthalf = String.valueOf(RAND.nextInt(9000) + 1000);
-        String reversed = "";
-        for (int i = firsthalf.length() - 1; i >= 0; i--) {
-            reversed += firsthalf.charAt(i);
+        //getal vanaf 1000 tot 10000
+        String firstHalf = String.valueOf(RAND.nextInt(9000) + 1000);
+        StringBuilder reversed = new StringBuilder();
+        for (int i = firstHalf.length() - 1; i >= 0; i--) {
+            reversed.append(firstHalf.charAt(i));
         }
-        return String.format("%s%s%s", firsthalf, reversed, "0");
+        return String.format("%s%s%s", firstHalf, reversed, "0");
     }
 
     private String createEmail(String firstName) {
-        String email = String.format("%s@%s.%s", firstName,
+        return String.format("%s@%s.%s", firstName,
                 providers.get(RAND.nextInt(providers.size())),
                 EMAIL_EXTENSIONS.get(RAND.nextInt(EMAIL_EXTENSIONS.size()))
         );
-        return email;
     }
 
     private void initializeNameArrays() {
@@ -165,7 +173,8 @@ public class ClientFactory {
                 String lastName = lastNameJN.get("naam").asText();
                 String nameNorm = Normalizer.normalize(lastName, Normalizer.Form.NFD);
                 if (!lastName.equals(nameNorm)) {
-                    nameNorm = nameNorm.replaceAll("[^\\p{ASCII}]", "");
+                    nameNorm = nameNorm.replaceAll("[^\\p{ASCII}]",
+                            "");
                 }
                 tempLastNames.put(nameNorm, lastNameJN.get("prefix").asText());
             }

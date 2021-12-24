@@ -47,9 +47,9 @@ public class CoinMarketCapNegotiator implements ICryptoApiNegotiatorService {
     private static final int STATUS_OK = 200;
     private final CloseableHttpClient HTTPClIENT;
 
-    private ICryptoApiNegotiatorStrategy cryptoApiNegotiatorStrategy;
+    private ICryptoApiSwitcherStrategy cryptoApiNegotiatorStrategy;
 
-        public CoinMarketCapNegotiator(ICryptoApiNegotiatorStrategy cryptoApiNegotiatorStrategy) {
+        public CoinMarketCapNegotiator(ICryptoApiSwitcherStrategy cryptoApiNegotiatorStrategy) {
         super();
         logger.info("New CoinMarketCapNegociator");
         HTTPClIENT = HttpClients.createDefault();

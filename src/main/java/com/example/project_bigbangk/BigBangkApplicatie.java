@@ -20,8 +20,8 @@ import java.util.TimerTask;
 @Component
 public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedEvent> {
 
-    private final int UPDATE_INTERVAL_PRICEUPDATESERVICE = 300000;//5min
-    private final int NUMBER_OF_CLIENTS_TO_SEED = 3000;
+    private static final int UPDATE_INTERVAL_PRICEUPDATESERVICE = 300000;//5min
+    private static final int NUMBER_OF_CLIENTS_TO_SEED = 3000;
     private static final String CURRENT_CURRENCY = "EUR";
 
     private final PriceHistoryUpdateService priceHistoryUpdateService;
@@ -30,7 +30,6 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
     private RootRepository rootRepository;
 
     public BigBangkApplicatie(PriceHistoryUpdateService priceHistoryUpdateService,
-                              ICryptoApiNegotiatorStrategy cryptoApiNegotiatorStrategy,
                               ClientFactory clientFactory,
                               RootRepository rootrepository) {
         super();
@@ -44,8 +43,8 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
     public void onApplicationEvent(ContextRefreshedEvent event) {
         startPriceHistoryUpdateTimer();
         try {
-            SeedDatabse seedDatabse = new SeedDatabse();
-         // seedDatabse.call();
+            seedDatabase seedDatabase = new seedDatabase();
+            seedDatabase.call();
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -64,7 +63,7 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
         }
     }
 
-    class SeedDatabse extends Task {
+    class seedDatabase extends Task {
         @Override
         //ToDo maak deze switch goed.
         public void call() throws Exception {

@@ -1,6 +1,3 @@
-// Created by Deek
-// Creation date 12/11/2021
-
 package com.example.project_bigbangk.service.priceHistoryUpdate;
 
 import com.example.project_bigbangk.model.PriceHistory;
@@ -11,24 +8,23 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Service for updating the current price of an Asset in Euro's
  *
  * @author Pieter Jan -Deek
+ * Creation date 12/11/2021
  */
 @Service
 public class PriceHistoryUpdateService {
 
     private final Logger logger = LoggerFactory.getLogger(PriceHistoryUpdateService.class);
-    private ICryptoApiNegotiatorStrategy cryptoApiNegotiatorStrategy;
+    private ICryptoApiSwitcherStrategy cryptoApiNegotiatorStrategy;
     private ICryptoApiNegotiatorService cryptoNegotiatorService;
     private RootRepository rootRepository;
 
 
-    public PriceHistoryUpdateService(ICryptoApiNegotiatorStrategy cryptoApiNegotiatorStrategy, RootRepository rootRepository) {
+    public PriceHistoryUpdateService(ICryptoApiSwitcherStrategy cryptoApiNegotiatorStrategy, RootRepository rootRepository) {
         super();
         logger.info("New PriceHistoryUpdateService");
         this.cryptoApiNegotiatorStrategy = cryptoApiNegotiatorStrategy;
@@ -36,7 +32,7 @@ public class PriceHistoryUpdateService {
     }
 
     /**
-     * calls the available CryptoAPiNegotiator (determined by the ICryptoApiNegotiatorStrategy) for current prices
+     * calls the available CryptoAPiNegotiator (determined by the ICryptoApiSwitcherStrategy) for current prices
      * and sends it to the rootrepository
      */
     public void updatePriceHistory(String currency) {
