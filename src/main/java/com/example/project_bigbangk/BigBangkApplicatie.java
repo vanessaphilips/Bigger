@@ -42,7 +42,6 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
     }
 
     @Override
-    @Lazy
     public  void onApplicationEvent(ContextRefreshedEvent event) {
         startPriceHistoryUpdateTimer();
         startDateBaseSeeding();
