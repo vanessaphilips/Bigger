@@ -45,7 +45,7 @@ public class JdbcPriceHistoryDAO implements IPriceHistoryDAO {
     @Override
     public double getCurrentPriceByAssetCode(String assetCode) {
         String sql = "Select * from (SELECT * FROM pricehistory where code = ? )as priceHisotryByCoin ORDER BY dateTime DESC LIMIT 1;";
-        double currentPrice = 0;
+        double currentPrice = -1;
         try {
             PriceHistory priceHistory = jdbcTemplate.queryForObject(sql,
                     new PriceHistoryRowMapper(), assetCode);
@@ -62,6 +62,9 @@ public class JdbcPriceHistoryDAO implements IPriceHistoryDAO {
         List<PriceHistory> priceHistories = null;
         try {
             priceHistories = jdbcTemplate.query(sql, new PriceHistoryRowMapper(), date, assetCode);
+            if(priceHistories.size()==0){
+                priceHistories = null;
+            }
         } catch (DataAccessException dataAccessException) {
             logger.info(dataAccessException.getMessage());
         }

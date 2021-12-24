@@ -4,10 +4,8 @@ import com.example.project_bigbangk.BigBangkApplicatie;
 import com.example.project_bigbangk.model.Asset;
 import com.example.project_bigbangk.model.AssetCode_Name;
 import com.example.project_bigbangk.model.PriceHistory;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import org.junit.runner.OrderWith;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -25,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@TestMethodOrder(value = MethodOrderer.OrderAnnotation.class)
 class JdbcPriceHistoryDAOTest {
 
 
@@ -36,6 +35,7 @@ class JdbcPriceHistoryDAOTest {
 
 
     @BeforeEach
+
     public void setup() {
         priceHistories.add(createPriceHistory(0.7, createAsset(AssetCode_Name.BTC)));
         priceHistories.add(createPriceHistory(1.3, createAsset(AssetCode_Name.BTC)));
@@ -50,41 +50,46 @@ class JdbcPriceHistoryDAOTest {
         priceHistories.add(createPriceHistory(2.5, createAsset(AssetCode_Name.ADA)));
         priceHistories.add(createPriceHistory(0.5, createAsset(AssetCode_Name.ADA)));
     }
-
-
     @Test
-    void getCurrentPriceByAssetCode() {
+    @Order(1)
+    void savePriceHistory() {
         for (PriceHistory priceHistory : priceHistories) {
             priceHistoryDAO.savePriceHistory(priceHistory);
         }
+    }
+    @Test
+    @Order(2)
+    void getCurrentPriceByAssetCode() {
+
         double actual = priceHistoryDAO.getCurrentPriceByAssetCode(AssetCode_Name.BTC.getAssetCode());
         double expected = 1.21;
         assertEquals(expected, actual);
         actual = priceHistoryDAO.getCurrentPriceByAssetCode(AssetCode_Name.ETH.getAssetCode());
         expected = 6.3;
         assertEquals(expected, actual);
+        //find asset with no PriceHistory
         actual = priceHistoryDAO.getCurrentPriceByAssetCode(AssetCode_Name.BUSD.getAssetCode());
-        expected = 0;
+        expected = -1;
+        assertEquals(expected, actual);
+        //find asset that doesn't exist
+        actual = priceHistoryDAO.getCurrentPriceByAssetCode("SDFSS");
         assertEquals(expected, actual);
     }
 
     @Test
+    @Order(3)
     void getAllPriceHistory() {
         List<PriceHistory> actual = priceHistoryDAO.getPriceHistoriesByCodeFromDate(LocalDateTime.now().minusYears(20), "BTC");
-        assertThat(actual.size()).isEqualTo(5);
-        for (PriceHistory priceHistory : priceHistories) {
-            priceHistoryDAO.savePriceHistory(priceHistory);
-        }
+        assertThat(actual.size()).isEqualTo(9);
         actual = priceHistoryDAO.getPriceHistoriesByCodeFromDate(LocalDateTime.now().minusSeconds(20), "BTC");
         assertThat(actual.size()).isEqualTo(4);
+        //find asset with no PriceHistory
         actual = priceHistoryDAO.getPriceHistoriesByCodeFromDate(LocalDateTime.now().minusSeconds(20), "BIC");
         assertNull(actual);
-    }
-    @Test
-    void getAllPriceHistoryFail() {
-        List<PriceHistory>  actual = priceHistoryDAO.getPriceHistoriesByCodeFromDate(LocalDateTime.now().minusSeconds(20), "BIC");
-        assertEquals(actual.size(),0);
-    }
+        //find asset that doesn't exist
+        actual = priceHistoryDAO.getPriceHistoriesByCodeFromDate(LocalDateTime.now().minusSeconds(20), "asfsg");
+        assertNull(actual);
+    }   
 
     private PriceHistory createPriceHistory(double currentprice, Asset asset) {
         PriceHistory priceHistory = Mockito.mock(PriceHistory.class);
