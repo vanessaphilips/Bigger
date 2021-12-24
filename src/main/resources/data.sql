@@ -20,7 +20,7 @@ VALUES ('BTC', 10, 'NL20BGBK0001234567'),
        ('DOGE', 10, 'NL20BGBK0001234567'),
        ('LUNA', 10, 'NL20BGBK0001234567');
 
-INSERT INTO `PriceHistory`
+INSERT INTO `pricehistory`
 VALUES ('2005-12-31 21:00:59Z', 'BTC', 44000),
        ('2005-12-31 21:05:59Z', 'BTC', 44200),
        ('2005-12-31 21:10:59Z', 'BTC', 44370),
@@ -31,4 +31,7 @@ VALUES ('2005-12-31 21:00:59Z', 'BTC', 44000),
        ('2005-12-31 21:10:59Z', 'ETH', 2.7),
        ('2005-12-31 21:15:59Z', 'ETH', 2.0),
        ('2005-12-31 21:20:59Z', 'ETH', 2.5);
+INSERT INTO `asset`
+VALUES('BTC', 'Bitcoin'),
+       ('ETH', 'Ethereal')
 
