@@ -3,7 +3,6 @@
 package com.example.project_bigbangk.service.priceHistoryUpdate;
 
 import com.example.project_bigbangk.model.Asset;
-import com.example.project_bigbangk.model.AssetCode_Name;
 import com.example.project_bigbangk.model.PriceHistory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -48,9 +47,9 @@ public class CoinMarketCapNegotiator implements ICryptoApiNegotiatorService {
     private static final int STATUS_OK = 200;
     private final CloseableHttpClient HTTPClIENT;
 
-    private ICryptoApiNegotiatorStrategy cryptoApiNegotiatorStrategy;
+    private ICryptoApiSwitcherStrategy cryptoApiNegotiatorStrategy;
 
-        public CoinMarketCapNegotiator(ICryptoApiNegotiatorStrategy cryptoApiNegotiatorStrategy) {
+        public CoinMarketCapNegotiator(ICryptoApiSwitcherStrategy cryptoApiNegotiatorStrategy) {
         super();
         logger.info("New CoinMarketCapNegociator");
         HTTPClIENT = HttpClients.createDefault();
@@ -68,7 +67,7 @@ public class CoinMarketCapNegotiator implements ICryptoApiNegotiatorService {
             HttpGet request = makeApiRequest(SERVER_INFO_URL, parameters);
             return getStatusCode(request) == STATUS_OK;
         } catch (IOException e) {
-            System.out.println("Error: cannont access content - " + e.getMessage());
+            System.out.println("Error: can not access content - " + e.getMessage());
         } catch (URISyntaxException e) {
             System.out.println("Error: Invalid URL " + e.getMessage());
         }
@@ -87,7 +86,7 @@ public class CoinMarketCapNegotiator implements ICryptoApiNegotiatorService {
             HttpGet request = makeApiRequest(ASSET_DATA_URL, parameters);
             response_AssetListJSON = makeAPiCall(request);
         } catch (IOException e) {
-            logger.error("Error: cannont access content - " + e.getMessage());
+            logger.error("Error: can not access content - " + e.getMessage());
         } catch (URISyntaxException e) {
             logger.error("Error: Invalid URL " + e.getMessage());
         }
@@ -135,7 +134,6 @@ public class CoinMarketCapNegotiator implements ICryptoApiNegotiatorService {
                 for (JsonNode coin : json) {
                     double price = Double.parseDouble(coin.get("quote").get("EUR").get("price").toString());
                     String assetCode  = coin.get("symbol").textValue();
-                    //Todo vind de key voor de afkorting
                     String assetName = coin.get("name").textValue();
                     PriceHistory priceHistory = new PriceHistory(LocalDateTime.now(), price, new Asset(assetCode,assetName, price));
                     priceHistories.add(priceHistory);

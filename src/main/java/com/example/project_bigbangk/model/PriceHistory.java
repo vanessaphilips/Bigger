@@ -1,13 +1,15 @@
 // Created by Deek
-// Creation date 12/12/2021
+//
 
 package com.example.project_bigbangk.model;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.time.LocalDateTime;
 
+/**
+ *
+ * @author Pieter Jan Bleichrodt
+ * Creation date 12/12/2021
+ */
 public class PriceHistory implements Comparable<PriceHistory> {
 
 

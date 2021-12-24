@@ -17,15 +17,15 @@ import java.util.Optional;
  * PriceHistoryUpdateService
  */
 @Service
-public class CryptoApiNegotiatorStrategy implements ICryptoApiNegotiatorStrategy {
+public class CryptoApiSwitcherService implements ICryptoApiSwitcherStrategy {
 
-    private final Logger logger = LoggerFactory.getLogger(CryptoApiNegotiatorStrategy.class);
+    private final Logger logger = LoggerFactory.getLogger(CryptoApiSwitcherService.class);
     private List<ICryptoApiNegotiatorService> cryptoApiNegotiatorServices;
 
 
-    public CryptoApiNegotiatorStrategy() {
+    public CryptoApiSwitcherService() {
         super();
-        logger.info("New CryptoNegotiatorStrategy");
+        logger.info("New CryptoApiSwitcherService");
         this.cryptoApiNegotiatorServices = new ArrayList<>();
 
     }
