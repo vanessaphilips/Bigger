@@ -1,15 +1,11 @@
 package com.example.project_bigbangk.repository;
 
-import com.example.project_bigbangk.BigBangkApplicatie;
 import com.example.project_bigbangk.model.Asset;
 import com.example.project_bigbangk.model.AssetCode_Name;
 import com.example.project_bigbangk.model.PriceHistory;
 import org.junit.jupiter.api.*;
-import org.junit.runner.OrderWith;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ActiveProfiles;
 
 import javax.annotation.Resource;
@@ -18,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatNoException;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -57,6 +53,7 @@ class JdbcPriceHistoryDAOTest {
             priceHistoryDAO.savePriceHistory(priceHistory);
         }
     }
+
     @Test
     @Order(2)
     void getCurrentPriceByAssetCode() {
@@ -104,6 +101,7 @@ class JdbcPriceHistoryDAOTest {
         Mockito.when(asset.getName()).thenReturn(assetCodeName.getAssetName());
         Mockito.when(asset.getCode()).thenReturn(assetCodeName.getAssetCode());
         Mockito.when(asset.getCurrentPrice()).thenReturn(1.0);
+
 
         return asset;
     }
