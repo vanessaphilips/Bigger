@@ -86,8 +86,7 @@ const setHtmlElementAssetList = (priceHistoriesByAssets) => {
 
 function parseDate(localDateTimeString) {
     const dateTime = localDateTimeString.substring(0, 10) + " " + localDateTimeString.substring(11)
-    const date = new Date(dateTime);
-    return date
+    return new Date(dateTime)
 }
 
 function jsonToPriceHistoriesByAssets(json) {
@@ -102,32 +101,34 @@ function jsonToPriceHistoriesByAssets(json) {
     return priceHistoriesByAssets
 }
 
-const getPriceHistoriesByAsset = (token) => {
-    const dateNow = new Date()
+function createDateInPast(monthsBack) {
     const date = new Date()
-    console.log(date)
-    date.setMonth(dateNow.getMonth() - 1)
-    var dateString = date.toISOString().substring(0, 23);
+    date.setMonth(date.getMonth() - monthsBack)
+    return date.toISOString().substring(0, 23);
+}
 
+function acceptHeaders(token) {
+    const accept = []
+    accept.push(['Accept', 'Application/json'])
+    accept.push(["content-type", "application/json"])
+    accept.push(['Access-Control-Allow-Origin', '*'])
+    accept.push(['Access-Control-Allow-Methods', '*'])
+    accept.push(['authorization', token])
+    return accept
+}
+
+const getPriceHistoriesByAsset = (token) => {
     return fetch(`${rootURL}priceHistories`,
         {
             method: 'POST',
-            headers: {
-                Accept: 'Application/json',
-                "content-type": "application/json",
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': '*',
-                'X-Content-Type-Options': '*',
-                'authorization': token
-            },
-            body: dateString
-
+            headers: acceptHeaders(token),
+            body: createDateInPast(1)
         }).then(promise => {
         if (promise.ok) {
             return promise.json()
         } else {
             console.log("Couldn't retrieve pricehistory from the server")
-            return promise
+            // return promise
         }
     }).then(json =>
         json
@@ -135,9 +136,11 @@ const getPriceHistoriesByAsset = (token) => {
 }
 
 
-const json = await getPriceHistoriesByAsset(token)
-const priceHistoriesByAssets = jsonToPriceHistoriesByAssets(json)
-setHtmlElementAssetList(priceHistoriesByAssets)
+const jsonPriceHistories = await getPriceHistoriesByAsset(token)
+if (jsonPriceHistories !== undefined) {
+    const priceHistoriesByAssets = jsonToPriceHistoriesByAssets(jsonPriceHistories)
+    setHtmlElementAssetList(priceHistoriesByAssets)
+}
 
 
 
