@@ -37,11 +37,8 @@ public class MarketPlaceController {
 
     @GetMapping("/marketplace")
     @ResponseBody
-    public ResponseEntity<String> login(@RequestHeader String authorization) {
-//       String token = request.getLastHeader("Authorization").getValue();
-        String token = authorization;
-        //check of authorisation in orde is-- check token
-        if (authenticateService.authenticate(token)) {
+    public ResponseEntity<String> getAllAssets(@RequestHeader String authorization) {
+        if (authenticateService.authenticate(authorization)) {
             List<Asset> assets = marketPlaceService.getAllAssets();
             try {
                 String jsonAssets = MAPPER.writeValueAsString(assets);
@@ -49,11 +46,8 @@ public class MarketPlaceController {
             } catch (JsonProcessingException e) {
                 logger.error(e.getMessage());
             }
-
         }
-        //ToDo om refreshtoken vragen
         return ResponseEntity.status(401).body("token expired");
-
     }
 
     @PostMapping("/trade")
