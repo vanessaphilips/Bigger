@@ -122,7 +122,7 @@ const getPriceHistoriesByAsset = (token) => {
         {
             method: 'POST',
             headers: acceptHeaders(token),
-            body: createDateInPast(1)
+            body: createDateInPast(0)
         }).then(promise => {
         if (promise.ok) {
             return promise.json()

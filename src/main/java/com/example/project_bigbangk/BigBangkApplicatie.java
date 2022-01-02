@@ -27,6 +27,7 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
     private static final int NUMBER_OF_CLIENTS_TO_SEED = 3000;
     private static final int DELAY_PRICEHISTORYUPDATE = 3000;
     private static final int DELAY_DATABASES_SEEDING = 6000;
+    public static final int DAYS_OF_PRICEHISTORY_CACHE = 30;
 
     private final PriceHistoryUpdateService priceHistoryUpdateService;
     private final ClientFactory clientFactory;
@@ -42,7 +43,7 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
     }
 
     @Override
-    public  void onApplicationEvent(ContextRefreshedEvent event) {
+    public void onApplicationEvent(ContextRefreshedEvent event) {
         startPriceHistoryUpdateTimer();
         startDateBaseSeeding();
     }
@@ -59,7 +60,8 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
             priceHistoryUpdateService.updatePriceHistory(CURRENT_CURRENCY);
         }
     }
-    private void startDateBaseSeeding(){
+
+    private void startDateBaseSeeding() {
         Timer seedDatabaseTimer = new Timer(true);
         seedDatabaseTimer.schedule(new SeedDatabase(), DELAY_DATABASES_SEEDING);
     }
@@ -67,10 +69,10 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
     class SeedDatabase extends TimerTask {
 
         @Override
-         public void run() {
+        public void run() {
             logger.info("Start database seeding? (Y/N): ");
             Scanner scanner = new Scanner(System.in);
-            if(scanner.nextLine().equalsIgnoreCase("Y")) {
+            if (scanner.nextLine().equalsIgnoreCase("Y")) {
                 clientFactory.seedDataBase(NUMBER_OF_CLIENTS_TO_SEED);
             }
         }
