@@ -1,5 +1,3 @@
-//import {rootURL} from "./URLs.js";
-
 class LoginDTO {
     constructor(email, password) {
         this.email = email;
@@ -7,21 +5,12 @@ class LoginDTO {
     }
 }
 
-
 const loginDTO = new LoginDTO("henk@unicom.nl", "password1234345")
 
- async function getToken() {
-
-    await fetch(`${rootURL}login`,
-        {
+async function getToken() {
+ fetch(`${rootURL}login`,{
             method: "POST",
-            headers: {
-                Accept: 'Application/json',
-                "Content-type": "application/json",
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': '*',
-                'X-Content-Type-Options': '*'
-            },
+            headers: acceptHeaders(),
             body: JSON.stringify(loginDTO)
         })
         .then(response => {
@@ -32,11 +21,10 @@ const loginDTO = new LoginDTO("henk@unicom.nl", "password1234345")
                 console.log("login failed");
             }
         }).then((json) => {
-                localStorage.setItem("jwtToken", json.authorization)
-            }
-        )
-
-
+                if (json.authorization === true) {
+                    localStorage.setItem("jwtToken", json.authorization)
+                }
+            })
 }
 
 

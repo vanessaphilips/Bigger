@@ -1,7 +1,3 @@
-// import {rootURL} from "./URLs.js"
-// import {getToken} from "./DummyLogin.js"
-// import  "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"
-
 "use strict"
 
 const assetDivList = document.getElementById("assetListContainer")
