@@ -15,10 +15,10 @@ abstract class AbstractOrder {
     private long orderId;
     private Asset asset;
     private double requestedPrice;
-    private int numberOfAssets;
+    private double numberOfAssets;
     private LocalDateTime date;
 
-    public AbstractOrder(long orderId, Asset asset, double requestedPrice, int numberOfAssets, LocalDateTime date) {
+    public AbstractOrder(long orderId, Asset asset, double requestedPrice, double numberOfAssets, LocalDateTime date) {
         this.orderId = orderId;
         this.asset = asset;
         this.requestedPrice = requestedPrice;
@@ -26,11 +26,11 @@ abstract class AbstractOrder {
         this.date = date;
     }
 
-    public AbstractOrder(long orderId, double requestedPrice, int numberOfAssets, LocalDateTime date) {
+    public AbstractOrder(long orderId, double requestedPrice, double numberOfAssets, LocalDateTime date) {
         this(orderId, null, requestedPrice, numberOfAssets, date);
     }
 
-    public AbstractOrder(Asset asset, double requestedPrice, int numberOfAssets, LocalDateTime date) {
+    public AbstractOrder(Asset asset, double requestedPrice, double numberOfAssets, LocalDateTime date) {
         this(0, asset, requestedPrice, numberOfAssets, date);
     }
 
@@ -58,7 +58,7 @@ abstract class AbstractOrder {
         this.requestedPrice = requestedPrice;
     }
 
-    public int getNumberOfAssets() {
+    public double getNumberOfAssets() {
         return numberOfAssets;
     }
 

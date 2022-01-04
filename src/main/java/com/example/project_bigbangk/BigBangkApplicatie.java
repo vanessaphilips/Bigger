@@ -27,6 +27,9 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
     private static final int NUMBER_OF_CLIENTS_TO_SEED = 3000;
     private static final int DELAY_PRICEHISTORYUPDATE = 3000;
     private static final int DELAY_DATABASES_SEEDING = 6000;
+    //bankinfo
+    public static final String bankCode = "BGBK";
+    public static final double orderFeePercentage = 0.01;
 
     private final PriceHistoryUpdateService priceHistoryUpdateService;
     private final ClientFactory clientFactory;
