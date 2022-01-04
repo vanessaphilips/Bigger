@@ -19,12 +19,12 @@ import java.util.List;
 public class PriceHistoryUpdateService {
 
     private final Logger logger = LoggerFactory.getLogger(PriceHistoryUpdateService.class);
-    private ICryptoApiSwitcherStrategy cryptoApiNegotiatorStrategy;
-    private ICryptoApiNegotiatorService cryptoNegotiatorService;
+    private ICryptoApiSwitcher cryptoApiNegotiatorStrategy;
+    private ICryptoApiNegotiator cryptoNegotiatorService;
     private RootRepository rootRepository;
 
 
-    public PriceHistoryUpdateService(ICryptoApiSwitcherStrategy cryptoApiNegotiatorStrategy, RootRepository rootRepository) {
+    public PriceHistoryUpdateService(ICryptoApiSwitcher cryptoApiNegotiatorStrategy, RootRepository rootRepository) {
         super();
         logger.info("New PriceHistoryUpdateService");
         this.cryptoApiNegotiatorStrategy = cryptoApiNegotiatorStrategy;
@@ -32,12 +32,12 @@ public class PriceHistoryUpdateService {
     }
 
     /**
-     * calls the available CryptoAPiNegotiator (determined by the ICryptoApiSwitcherStrategy) for current prices
+     * calls the available CryptoAPiNegotiator (determined by the ICryptoApiSwitcher) for current prices
      * and sends it to the rootrepository
      */
     public void updatePriceHistory(String currency) {
         List<PriceHistory> priceHistories =null;
-        cryptoNegotiatorService = cryptoApiNegotiatorStrategy.getAvailableCryptoService();
+        cryptoNegotiatorService = cryptoApiNegotiatorStrategy.getAvailableNegotiator();
         if (cryptoNegotiatorService != null) {
             priceHistories = cryptoNegotiatorService.getPriceHistory(currency);
         }

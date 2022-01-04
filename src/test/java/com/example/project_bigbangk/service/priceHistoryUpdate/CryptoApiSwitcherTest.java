@@ -10,16 +10,16 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CryptoApiSwitcherServiceTest {
+class CryptoApiSwitcherTest {
 
-    private ICryptoApiSwitcherStrategy cryptoApiSwitcherService = new CryptoApiSwitcherService();
+    private ICryptoApiSwitcher cryptoApiSwitcherService = new CryptoApiSwitcher();
 
     @BeforeEach
     void setup() {
-        ICryptoApiNegotiatorService cryptoApiNegotiatorService1 = Mockito.mock(ICryptoApiNegotiatorService.class);
-        ICryptoApiNegotiatorService cryptoApiNegotiatorService2 = Mockito.mock(ICryptoApiNegotiatorService.class);
-        ICryptoApiNegotiatorService cryptoApiNegotiatorService3 = Mockito.mock(ICryptoApiNegotiatorService.class);
-        ICryptoApiNegotiatorService cryptoApiNegotiatorService4 = Mockito.mock(ICryptoApiNegotiatorService.class);
+        ICryptoApiNegotiator cryptoApiNegotiatorService1 = Mockito.mock(ICryptoApiNegotiator.class);
+        ICryptoApiNegotiator cryptoApiNegotiatorService2 = Mockito.mock(ICryptoApiNegotiator.class);
+        ICryptoApiNegotiator cryptoApiNegotiatorService3 = Mockito.mock(ICryptoApiNegotiator.class);
+        ICryptoApiNegotiator cryptoApiNegotiatorService4 = Mockito.mock(ICryptoApiNegotiator.class);
         cryptoApiSwitcherService.addNegotiator(cryptoApiNegotiatorService1);
         cryptoApiSwitcherService.addNegotiator(cryptoApiNegotiatorService2);
         cryptoApiSwitcherService.addNegotiator(cryptoApiNegotiatorService3);
@@ -53,7 +53,7 @@ class CryptoApiSwitcherServiceTest {
 
     @Test
     void getAvailableCryptoService() {
-        ICryptoApiNegotiatorService actual = cryptoApiSwitcherService.getAvailableCryptoService();
+        ICryptoApiNegotiator actual = cryptoApiSwitcherService.getAvailableNegotiator();
         assertEquals(2, actual.getPriceHistory("EUR").size());
     }
 }
