@@ -19,12 +19,10 @@ public class Orderservice {
 
     double currentAssetPrice;
     private RootRepository rootRepository;
-    private BigBangkApplicatie bigBangkApplicatie;
 
 
     public Orderservice(RootRepository rootRepository, BigBangkApplicatie bigBangkApplicatie) {
         this.rootRepository = rootRepository;
-        this.bigBangkApplicatie = bigBangkApplicatie;
     }
 
     public void executeOrderByType(OrderDTO order){
@@ -53,7 +51,7 @@ public class Orderservice {
         //email uit token
         String email= "Aad@Yahoo.fr";//temp email
         Wallet clientWallet = rootRepository.findWalletByEmail(email);
-        Wallet bankWallet = rootRepository.findWalletbyBankCode(bigBangkApplicatie.bigBangk.getCode());
+        Wallet bankWallet = rootRepository.findWalletbyBankCode(BigBangkApplicatie.bigBangk.getCode());
         Asset asset = rootRepository.findAssetByCode(order.getCode());
 
         if(clientWallet.getBalance() >= (order.getAmount()+orderFee)){

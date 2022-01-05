@@ -3,6 +3,7 @@ package com.example.project_bigbangk.service;
 @Author Bigbangk
 */
 
+import com.example.project_bigbangk.BigBangkApplicatie;
 import com.example.project_bigbangk.model.*;
 import com.example.project_bigbangk.model.DTO.RegistrationDTO;
 import com.example.project_bigbangk.repository.RootRepository;
@@ -76,7 +77,7 @@ public class RegistrationService {
         String checkRegMessage = (checkRegistrationInput(registrationDTO));
         inputErrorMessage = "";
         if(checkRegMessage.equals(Messages.NoInputErrors.getBody())){
-            Wallet wallet = new Wallet(ibanGenerator.getIban(),10000);
+            Wallet wallet = new Wallet(ibanGenerator.getIban(),BigBangkApplicatie.bigBangk.getStartingcapital());
             Address address = new Address(registrationDTO.getPostalCode(),registrationDTO.getStreet(), registrationDTO.getNumber(), registrationDTO.getCity(),
                     registrationDTO.getCountry());
             Client client = new Client(registrationDTO.getEmail(), registrationDTO.getFirstName(), registrationDTO.getInsertion(), registrationDTO.getLastName(), convertedDateOfBirth,
@@ -127,10 +128,7 @@ public class RegistrationService {
             return true;
         }
         int yearsBetween = Period.between(convertedDateOfBirth, LocalDate.now()).getYears();
-        if(yearsBetween < AGE_LIMIT || yearsBetween > UPPER_AGE_LIMIT){
-            return true;
-        }
-        return false;
+        return yearsBetween < AGE_LIMIT || yearsBetween > UPPER_AGE_LIMIT;
     }
 
     //voegt alle input die strings zijn aan een list toe en loopt er doorheen om te kijken of ze niet leeg zijn. (behalve insertion die mag leeg zijn)
