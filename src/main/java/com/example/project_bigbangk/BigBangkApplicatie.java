@@ -3,6 +3,7 @@
 
 package com.example.project_bigbangk;
 
+import com.example.project_bigbangk.model.Bank;
 import com.example.project_bigbangk.repository.RootRepository;
 import com.example.project_bigbangk.service.ClientFactory;
 import com.example.project_bigbangk.service.priceHistoryUpdate.*;
@@ -28,8 +29,7 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
     private static final int DELAY_PRICEHISTORYUPDATE = 3000;
     private static final int DELAY_DATABASES_SEEDING = 6000;
     //bankinfo
-    public static final String bankCode = "BGBK";
-    public static final double orderFeePercentage = 0.01;
+    public static final Bank bigBangk = new Bank("BigBangk", "BGBK", 0.01, 10000);
 
     private final PriceHistoryUpdateService priceHistoryUpdateService;
     private final ClientFactory clientFactory;

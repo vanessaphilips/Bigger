@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 @Service
 public class Orderservice {
 
+    double currentAssetPrice;
     private RootRepository rootRepository;
     private BigBangkApplicatie bigBangkApplicatie;
 
@@ -27,6 +28,7 @@ public class Orderservice {
     }
 
     public void executeOrderByType(OrderDTO order){
+        currentAssetPrice = rootRepository.getCurrentPriceByAssetCode(order.getCode());
         //if type = x y z bla bla, stuur naar andere methode.
 
         //types:
@@ -44,17 +46,14 @@ public class Orderservice {
         }
 
     }
-
     public String executeBuyOrder(OrderDTO order){
-
-        double currentAssetPrice = 1;  //hier laatste price history van asset.
         double boughtAssetAmount = order.getAmount() / currentAssetPrice;
-        double orderFee = order.getAmount() * BigBangkApplicatie.orderFeePercentage;
+        double orderFee = order.getAmount() * BigBangkApplicatie.bigBangk.getFeePercentage();
 
         //email uit token
         String email= "Aad@Yahoo.fr";//temp email
         Wallet clientWallet = rootRepository.findWalletByEmail(email);
-        Wallet bankWallet = rootRepository.findWalletbyBankCode(bigBangkApplicatie.bankCode);
+        Wallet bankWallet = rootRepository.findWalletbyBankCode(bigBangkApplicatie.bigBangk.getCode());
         Asset asset = rootRepository.findAssetByCode(order.getCode());
 
         if(clientWallet.getBalance() >= (order.getAmount()+orderFee)){

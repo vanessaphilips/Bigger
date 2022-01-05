@@ -71,6 +71,10 @@ public class RootRepository {
         }
     }
 
+    public double getCurrentPriceByAssetCode(String assetCode) {
+        return priceHistoryDAO.getCurrentPriceByAssetCode(assetCode);
+    }
+
     public List<List<PriceHistory>> getAllPriceHistroriesByAssets(LocalDateTime dateTime) {
         List<Asset> assets = assetDAO.getAllAssets();
         List<List<PriceHistory>> priceHistoriesAllAssets = new ArrayList<>();
