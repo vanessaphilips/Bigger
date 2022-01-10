@@ -8,14 +8,14 @@ public class OrderDTO {
 
     private String code; //automatisch ingevuld veld.
     private String type; //dropdown menu of zoiets.
-    private double limit; //de trigger voor alle orders behalve transacties met bank. Sprint 3
-    private double amount; //dit is de hoeveelheid coin
+    private double limit; //de trigger voor alle orders behalve transacties met bank. Sprint 3 default 0 of -1 bij transacties? (BUY SELL als type)
+    private double amount; //hoeveelheid coin of hoeveelheid geld(alleen in het geval dat je van de bank koopt. dan koop je 100€ aan bitcoin ipv 0.0004 bitcoin.
 
     public OrderDTO(String code, String type, double limit, double amount) {
         this.code = code;
         this.type = type;
         this.limit = limit;
-        this.amount = amount; //hoeveelheid coin of hoeveelheid geld(alleen in het geval dat je van de bank koopt. dan koop je 100€ aan bitcoin ipv 0.0004 bitcoin.
+        this.amount = amount;
     }
 
     public String getCode() {

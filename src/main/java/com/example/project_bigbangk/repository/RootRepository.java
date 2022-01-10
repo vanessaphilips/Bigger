@@ -57,6 +57,9 @@ public class RootRepository {
     public void createNewlyRegisteredClient(Client client) {
         addressDAO.saveAddress(client.getAddress());
         walletDAO.saveNewWallet(client.getWallet());
+        for (Asset asset : client.getWallet().getAsset().keySet()) {
+            walletDAO.createWalletAsset(client.getWallet(), asset, client.getWallet().getAsset().get(asset));
+        }
         clientDAO.saveClient(client);
     }
 

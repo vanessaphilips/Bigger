@@ -52,7 +52,7 @@ public class Orderservice {
         double totalCost = order.getAmount() + orderFee;
 
         //email uit token
-        String email= "Aad@Yahoo.fr";//temp email
+        String email= "Aisha@Gmail.de";//temp email
         Wallet clientWallet = rootRepository.findWalletByEmail(email);
         Wallet bankWallet = rootRepository.findWalletbyBankCode(BigBangkApplicatie.bigBangkSingleton().getCode());
 
