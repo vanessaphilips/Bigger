@@ -15,14 +15,16 @@ async function getToken() {
         })
         .then(response => {
             if (response.ok) {
-                console.log("login succes" + loginDTO.email);
                 return response.json()
             } else {
                 console.log("login failed");
             }
         }).then((json) => {
-                if (json.authorization === true) {
+                if (json.authorization !== undefined) {
                     localStorage.setItem("jwtToken", json.authorization)
+                    console.log("login succes" + loginDTO.email);
+                }else{
+                    console.log("login failed");
                 }
             })
 }
