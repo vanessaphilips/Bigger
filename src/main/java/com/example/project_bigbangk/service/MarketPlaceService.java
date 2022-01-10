@@ -42,6 +42,11 @@ public class MarketPlaceService {
         } else {
           priceHistoriesByAssets  = rootRepository.getAllPriceHistroriesByAssets(localDateTime);
         }
+
+        return convertPriceHistroyToDTO(priceHistoriesByAssets);
+    }
+
+    private List<List<PriceHistoryDTO>> convertPriceHistroyToDTO(List<List<PriceHistory>> priceHistoriesByAssets) {
         List<List<PriceHistoryDTO>> priceHistoriesByAssetsDTO = new ArrayList<>();
 
         for (List<PriceHistory> priceHistoriesOfAsset : priceHistoriesByAssets) {

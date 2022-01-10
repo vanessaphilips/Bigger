@@ -5,9 +5,34 @@
 "use strict"
 
 const assetDivList = document.getElementById("assetListContainer")
-
+const MAX_DAYS_BACK = 60
 await getToken()
 let token = localStorage.getItem("jwtToken")
+let daysBackInputField = document.getElementById("daysBack");
+let daysBack = 30;
+
+function updatePriceHistoryGraphs(priceHistoriesByAssets) {
+    for (const priceHistoriesOfAsset of priceHistoriesByAssets) {
+        const asset = priceHistoriesOfAsset[0].asset
+        let priceHistoryContainer = document.getElementById("graphContainer" + asset.code)
+        while (priceHistoryContainer.firstChild) {
+            priceHistoryContainer.removeChild(priceHistoryContainer.firstChild);
+        }
+        let  priceHistoryGraph = createGraph(priceHistoriesOfAsset)
+        priceHistoryGraph.id = "priceHistory" + asset.code
+        priceHistoryGraph.className = "priceHistoryGraph"
+        priceHistoryContainer.appendChild(priceHistoryGraph)
+    }
+}
+
+daysBackInputField.addEventListener("focusout", async (event) => {
+    console.log("field is veranderd")
+    daysBack = daysBackInputField.value
+    const jsonPriceHistories = await getPriceHistoriesByAsset(token)
+    if (jsonPriceHistories !== undefined) {
+        updatePriceHistoryGraphs(jsonToPriceHistoriesByAssets(jsonPriceHistories));
+    }
+})
 
 
 class Asset {
@@ -57,7 +82,7 @@ const createDivPerAsset = (priceHistoriesOfAsset) => {
         let assetCurrentPriceLabel = document.createElement("label");
         let priceHistoryGraph = createGraph(priceHistoriesOfAsset)
 
-        graphContainer.id = "graphContainer"
+        graphContainer.id = "graphContainer" + asset.code
         assetDivElement.id = asset.code;
         assetCodeLabel.id = "code"
         assetNameLabel.id = "name"
@@ -101,9 +126,10 @@ function jsonToPriceHistoriesByAssets(json) {
     return priceHistoriesByAssets
 }
 
-function createDateInPast(monthsBack) {
-    const date = new Date()
-    date.setMonth(date.getMonth() - monthsBack)
+function createDateInPast() {
+    console.log(daysBack)
+    const date = new Date(new Date().valueOf() - daysBack * 86400000)
+    console.log(date)
     return date.toISOString().substring(0, 23);
 }
 
@@ -118,17 +144,17 @@ function acceptHeaders(token) {
 }
 
 const getPriceHistoriesByAsset = (token) => {
+    console.log(token)
     return fetch(`${rootURL}priceHistories`,
         {
             method: 'POST',
             headers: acceptHeaders(token),
-            body: createDateInPast(0)
+            body: createDateInPast()
         }).then(promise => {
         if (promise.ok) {
             return promise.json()
         } else {
             console.log("Couldn't retrieve pricehistory from the server")
-            // return promise
         }
     }).then(json =>
         json
@@ -141,6 +167,7 @@ if (jsonPriceHistories !== undefined) {
     const priceHistoriesByAssets = jsonToPriceHistoriesByAssets(jsonPriceHistories)
     setHtmlElementAssetList(priceHistoriesByAssets)
 }
+
 
 
 

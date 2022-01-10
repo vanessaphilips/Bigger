@@ -30,7 +30,7 @@
     border-bottom-style: solid;
     border-width: thin;
     border-color: var(--blue);
-    margin: 1px;
+    margin: 0px;
     padding: 5px;
     font-size: 125%;
     width: 100%;
@@ -57,7 +57,7 @@
     color: var(--blue);
     max-height: 50%;
     height: 5%;
-    font-size: 0;
+    font-size: 16px;
     max-height: 20%;
 }
 
@@ -102,3 +102,4 @@
     background-color: #ffffff;
     flex-grow: 1.2;
 }
+
