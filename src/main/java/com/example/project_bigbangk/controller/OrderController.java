@@ -21,7 +21,8 @@ public class OrderController{
 
     //als je vanuit marketplace of je portfolio op order knop drukt bij coin x, kom je hier aan.
     @PostMapping("/orderscreen")
-    public ResponseEntity<String> gotoOrderScreen(){ //@Requestbody jason -> dto? of alleen coin x code in de body kan ook goed.
+    public ResponseEntity<String> gotoOrderScreen(){
+        //@Requestbody jason -> dto? of alleen coin x code in de body kan ook goed.
         //ga naar orderpagina voor coin x <- eigelijk het enige dat deze method doet.
         // (kan misschien deze methode overslaan en in portfolio en market service doen maar minder netjes)
 

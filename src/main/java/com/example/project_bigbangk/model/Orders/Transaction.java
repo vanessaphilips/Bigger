@@ -19,14 +19,14 @@ public class Transaction extends AbstractOrder{
     private Wallet buyerWallet;
     private Wallet sellerWallet;
 
-    public Transaction(int orderId, double requestedPrice, int numberOfAssets,
+    public Transaction(int orderId, double requestedPrice, double numberOfAssets,
                        LocalDateTime date, double transactionFee) {
         super(orderId, requestedPrice, numberOfAssets, date);
         this.transactionFee = transactionFee;
         logger.info("New transaction, without Asset and Wallets");
     }
 
-    public Transaction(Asset asset, double requestedPrice, int numberOfAssets, LocalDateTime date,
+    public Transaction(Asset asset, double requestedPrice, double numberOfAssets, LocalDateTime date,
                        double transactionFee, Wallet buyerWallet, Wallet sellerWallet) {
         super(asset, requestedPrice, numberOfAssets, date);
         this.transactionFee = transactionFee;

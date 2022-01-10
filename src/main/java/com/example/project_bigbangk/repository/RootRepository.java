@@ -35,19 +35,18 @@ public class RootRepository {
     }
 
     // CLIENT
-
+    //heb wallet ook ingezet. -philip
     public Client findClientByEmail(String email) {
         Client client = clientDAO.findClientByEmail(email);
         if (client != null) {
-            Address adress = findAddressByEmail(email);
-            client.setAddress(adress);
+            client.setAddress(findAddressByEmail(email));
+            client.setWallet(findWalletByEmail(email));
         }
         return client;
     }
 
     public Address findAddressByEmail(String email) {
-        Address address = addressDAO.findAddressByEmail(email);
-        return address;
+        return addressDAO.findAddressByEmail(email);
     }
 
     /**
@@ -70,6 +69,10 @@ public class RootRepository {
             }
             priceHistoryDAO.savePriceHistory(priceHistory);
         }
+    }
+
+    public double getCurrentPriceByAssetCode(String assetCode) {
+        return priceHistoryDAO.getCurrentPriceByAssetCode(assetCode);
     }
 
     public List<List<PriceHistory>> getAllPriceHistroriesByAssets(LocalDateTime dateTime) {
@@ -102,10 +105,21 @@ public class RootRepository {
         return assets;
     }
 
+    public Asset findAssetByCode(String code){
+        return assetDAO.findAssetByCode(code);
+    }
 
     // WALLET
-
-    //ToDO findWalletByEmail
+    //ongetest as of yet - philip
+    public Wallet findWalletByEmail(String email){
+        Wallet wallet = walletDAO.findWalletByEmail(email);
+        return findWalletWithAssetByIban(wallet.getIban());
+    }
+    //ditto
+    public Wallet findWalletbyBankCode(String bankCode){
+        Wallet wallet = walletDAO.findWalletByBankCode(bankCode);
+        return findWalletWithAssetByIban(wallet.getIban());
+    }
 
     public void saveNewWallet(Wallet wallet) {
         walletDAO.saveNewWallet(wallet);
@@ -148,7 +162,7 @@ public class RootRepository {
      */
     public void saveNewTransaction(Transaction transaction) {
         orderDAO.saveTransaction(transaction);
-        updateWallet(transaction.getSellerWallet());
-        updateWallet(transaction.getBuyerWallet());
+        //updateWallet(transaction.getSellerWallet());
+        //updateWallet(transaction.getBuyerWallet());
     }
 }
