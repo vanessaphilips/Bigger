@@ -48,13 +48,13 @@ public class Orderservice {
     }
     public String executeBuyOrder(OrderDTO order){
         double boughtAssetAmount = order.getAmount() / currentAssetPrice;
-        double orderFee = order.getAmount() * BigBangkApplicatie.bigBangk.getFeePercentage();
+        double orderFee = order.getAmount() * BigBangkApplicatie.bigBangkSingleton().getFeePercentage();
         double totalCost = order.getAmount() + orderFee;
 
         //email uit token
         String email= "Aad@Yahoo.fr";//temp email
         Wallet clientWallet = rootRepository.findWalletByEmail(email);
-        Wallet bankWallet = rootRepository.findWalletbyBankCode(BigBangkApplicatie.bigBangk.getCode());
+        Wallet bankWallet = rootRepository.findWalletbyBankCode(BigBangkApplicatie.bigBangkSingleton().getCode());
 
         if(clientWallet.getBalance() >= totalCost){
             if(bankWallet.getAsset().get(asset) >= boughtAssetAmount){
@@ -80,13 +80,13 @@ public class Orderservice {
     }
 
     public String executeSellOrder(OrderDTO order){
-        double orderFee = order.getAmount() * currentAssetPrice * BigBangkApplicatie.bigBangk.getFeePercentage();
+        double orderFee = order.getAmount() * currentAssetPrice * BigBangkApplicatie.bigBangkSingleton().getFeePercentage();
         double totalPayout = order.getAmount() * currentAssetPrice - orderFee;
 
         //email uit token
         String email= "Aad@Yahoo.fr";//temp email
         Wallet clientWallet = rootRepository.findWalletByEmail(email);
-        Wallet bankWallet = rootRepository.findWalletbyBankCode(BigBangkApplicatie.bigBangk.getCode());
+        Wallet bankWallet = rootRepository.findWalletbyBankCode(BigBangkApplicatie.bigBangkSingleton().getCode());
 
         if(bankWallet.getBalance() >= totalPayout) {
             if (clientWallet.getAsset().get(asset) >= order.getAmount()) {

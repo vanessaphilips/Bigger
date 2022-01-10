@@ -11,7 +11,9 @@ import org.h2.util.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Scope;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
@@ -28,13 +30,16 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
     private static final int NUMBER_OF_CLIENTS_TO_SEED = 3000;
     private static final int DELAY_PRICEHISTORYUPDATE = 3000;
     private static final int DELAY_DATABASES_SEEDING = 6000;
-    //bankinfo
-    public static final Bank bigBangk = new Bank("BigBangk", "BGBK", 0.01, 10000);
-
     private final PriceHistoryUpdateService priceHistoryUpdateService;
     private final ClientFactory clientFactory;
     private final Logger logger = LoggerFactory.getLogger(BigBangkApplicatie.class);
 
+
+    @Bean
+    @Scope("singleton")
+    public static Bank bigBangkSingleton(){
+        return  new Bank("BigBangk", "BGBK", 0.01, 10000);
+    }
 
     public BigBangkApplicatie(PriceHistoryUpdateService priceHistoryUpdateService,
                               ClientFactory clientFactory) {
