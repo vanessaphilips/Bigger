@@ -40,6 +40,12 @@ public class Wallet {
         this.owner = owner;
     }
 
+    public Wallet(String iban, double balance, Map<Asset, Double> asset) {
+        this.iban = iban;
+        this.balance = balance;
+        this.asset = asset;
+    }
+
     public Wallet(String iban, double balance) {
         this.iban = iban;
         this.balance = balance;
