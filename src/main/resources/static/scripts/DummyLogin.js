@@ -16,9 +16,7 @@ async function getToken() {
         .then(response => {
             if (response.ok) {
                 return response.json()
-            } else {
-                console.log("login failed");
-            }
+            } 
         }).then((json) => {
                 if (json.authorization !== undefined) {
                     localStorage.setItem("jwtToken", json.authorization)
