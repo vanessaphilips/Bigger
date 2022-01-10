@@ -28,7 +28,7 @@ public class Orderservice {
 
     public void executeOrderByType(OrderDTO order){
         currentAssetPrice = rootRepository.getCurrentPriceByAssetCode(order.getCode());
-        Asset asset = rootRepository.findAssetByCode(order.getCode());
+        asset = rootRepository.findAssetByCode(order.getCode());
         //if type = x y z bla bla, stuur naar andere methode.
 
         //types:
@@ -52,9 +52,10 @@ public class Orderservice {
         double totalCost = order.getAmount() + orderFee;
 
         //email uit token
-        String email= "Aisha@Gmail.de";//temp email
+        String email= "Nandini@Wanadoo.org";//temp email
         Wallet clientWallet = rootRepository.findWalletByEmail(email);
         Wallet bankWallet = rootRepository.findWalletbyBankCode(BigBangkApplicatie.bigBangkSingleton().getCode());
+        System.out.println(bankWallet.getAsset());
 
         if(clientWallet.getBalance() >= totalCost){
             if(bankWallet.getAsset().get(asset) >= boughtAssetAmount){
@@ -69,6 +70,7 @@ public class Orderservice {
                 rootRepository.updateWalletBalanceAndAsset(bankWallet, asset, bankWallet.getAsset().get(asset));
                 //Sla transactie op
                 //TODO all deze rootrepo aanroepen moeten uiteindelijk maar een methode in rootrepo worden, nu een beetje een rommeltje
+                System.out.println("tot hier");
                 rootRepository.saveNewTransaction(transaction);
                 return "Order successful.";
             } else{

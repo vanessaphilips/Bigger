@@ -113,12 +113,12 @@ public class RootRepository {
     }
 
     // WALLET
-    //ongetest as of yet - philip
+
     public Wallet findWalletByEmail(String email){
         Wallet wallet = walletDAO.findWalletByEmail(email);
         return findWalletWithAssetByIban(wallet.getIban());
     }
-    //ditto
+
     public Wallet findWalletbyBankCode(String bankCode){
         Wallet wallet = walletDAO.findWalletByBankCode(bankCode);
         return findWalletWithAssetByIban(wallet.getIban());
@@ -165,7 +165,5 @@ public class RootRepository {
      */
     public void saveNewTransaction(Transaction transaction) {
         orderDAO.saveTransaction(transaction);
-        //updateWallet(transaction.getSellerWallet());
-        //updateWallet(transaction.getBuyerWallet());
     }
 }
