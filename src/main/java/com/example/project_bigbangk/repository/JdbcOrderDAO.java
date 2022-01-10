@@ -39,7 +39,7 @@ public class JdbcOrderDAO {
                 "INSERT INTO Order (requestedPrice, numberOfAssets, date, transactionFee) " +
                         "VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
         ps.setDouble(1, transaction.getRequestedPrice());
-        ps.setInt(2, transaction.getNumberOfAssets());
+        ps.setDouble(2, transaction.getNumberOfAssets());
         ps.setObject(3, transaction.getDate(LocalDateTime.class));
         ps.setDouble(4, transaction.getTransactionFee());
         return ps;

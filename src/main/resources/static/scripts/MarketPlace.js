@@ -65,38 +65,48 @@ const createTradeButton = (asset) => {
     return tradeButton
 }
 
-function setInnerHtml(assetCodeLabel, assetNameLabel, assetCurrentPriceLabel, asset) {
+function creatAssetCodeLabel(asset) {
+    let assetCodeLabel = document.createElement("label");
+    assetCodeLabel.id = "code"
     assetCodeLabel.innerHTML = asset.code
+    return assetCodeLabel
+}
+
+function creatAssetNameLabel(asset) {
+    let assetNameLabel = document.createElement("label");
+    assetNameLabel.id = "name"
     assetNameLabel.innerHTML = asset.name
-    assetCurrentPriceLabel.innerHTML = asset.currentPrice
+    return assetNameLabel
+}
+
+function creatCurrentPriceLabel(asset) {
+    let assetcurrentPriceLabel = document.createElement("label");
+    assetcurrentPriceLabel.id = "price"
+    assetcurrentPriceLabel.innerHTML = asset.currentPrice
+    return assetcurrentPriceLabel
+}
+
+function creatGraphContainer(asset, priceHistoriesOfAsset) {
+    let graphContainer = document.createElement("div");
+    graphContainer.id = "price"
+    let priceHistoryGraph = createGraph(priceHistoriesOfAsset)
+    priceHistoryGraph.id = "priceHistory" + asset.code
+    priceHistoryGraph.className = "priceHistoryGraph"
+    graphContainer.appendChild(priceHistoryGraph)
+    graphContainer.id = "graphContainer"
+    return graphContainer
 }
 
 const createDivPerAsset = (priceHistoriesOfAsset) => {
     let assetDivElement = document.createElement("div");
     if (priceHistoriesOfAsset.length > 0) {
         const asset = priceHistoriesOfAsset[0].asset
-
-        let assetCodeLabel = document.createElement("label");
-        let assetNameLabel = document.createElement("label");
-        let graphContainer = document.createElement("div")
-        let assetCurrentPriceLabel = document.createElement("label");
-        let priceHistoryGraph = createGraph(priceHistoriesOfAsset)
-
-        graphContainer.id = "graphContainer" + asset.code
         assetDivElement.id = asset.code;
-        assetCodeLabel.id = "code"
-        assetNameLabel.id = "name"
-        assetCurrentPriceLabel.id = "currentPrice"
-        priceHistoryGraph.id = "priceHistory" + asset.code
-        priceHistoryGraph.className = "priceHistoryGraph"
         assetDivElement.className = "asset"
-        graphContainer.appendChild(priceHistoryGraph)
-        setInnerHtml(assetCodeLabel, assetNameLabel, assetCurrentPriceLabel, asset)
-
-        assetDivElement.appendChild(assetCodeLabel)
-        assetDivElement.appendChild(assetNameLabel)
-        assetDivElement.appendChild(assetCurrentPriceLabel)
-        assetDivElement.appendChild(graphContainer)
+        assetDivElement.appendChild(creatAssetCodeLabel(asset))
+        assetDivElement.appendChild(creatAssetNameLabel(asset))
+        assetDivElement.appendChild(creatCurrentPriceLabel(asset))
+        assetDivElement.appendChild(creatGraphContainer(asset, priceHistoriesOfAsset))
         assetDivElement.appendChild(createTradeButton(asset))
 
     }
@@ -133,32 +143,21 @@ function createDateInPast() {
     return date.toISOString().substring(0, 23);
 }
 
-function acceptHeaders(token) {
-    const accept = []
-    accept.push(['Accept', 'Application/json'])
-    accept.push(["content-type", "application/json"])
-    accept.push(['Access-Control-Allow-Origin', '*'])
-    accept.push(['Access-Control-Allow-Methods', '*'])
-    accept.push(['authorization', token])
-    return accept
-}
+
 
 const getPriceHistoriesByAsset = (token) => {
-    console.log(token)
     return fetch(`${rootURL}priceHistories`,
         {
             method: 'POST',
             headers: acceptHeaders(token),
-            body: createDateInPast()
+            body: createDateInPast(1)
         }).then(promise => {
         if (promise.ok) {
             return promise.json()
         } else {
             console.log("Couldn't retrieve pricehistory from the server")
         }
-    }).then(json =>
-        json
-    )
+    }).then(json => json)
 }
 
 

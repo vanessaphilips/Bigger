@@ -13,12 +13,12 @@ import java.util.List;
  * Dummy class, remove in future
  */
 //ToDo remove thhis class in futuire
-public class DummyCryptoApiNegotiatorService2 implements ICryptoApiNegotiatorService {
+public class DummyCryptoApiNegotiator2 implements ICryptoApiNegotiator {
 
-    private final Logger logger = LoggerFactory.getLogger(DummyCryptoApiNegotiatorService2.class);
+    private final Logger logger = LoggerFactory.getLogger(DummyCryptoApiNegotiator2.class);
 
 
-    public DummyCryptoApiNegotiatorService2() {
+    public DummyCryptoApiNegotiator2() {
         super();
         logger.info("New CryptoNegotiatorService2");
     }

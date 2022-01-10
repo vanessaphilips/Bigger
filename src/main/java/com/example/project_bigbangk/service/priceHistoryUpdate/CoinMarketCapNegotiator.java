@@ -34,7 +34,7 @@ import java.util.*;
  * Creation date 12/11/2021
  */
 @Service
-public class CoinMarketCapNegotiator implements ICryptoApiNegotiatorService {
+public class CoinMarketCapNegotiator implements ICryptoApiNegotiator {
 
 
     private final Logger logger = LoggerFactory.getLogger(CoinMarketCapNegotiator.class);
@@ -47,11 +47,11 @@ public class CoinMarketCapNegotiator implements ICryptoApiNegotiatorService {
     private static final int STATUS_OK = 200;
     private final CloseableHttpClient HTTPClIENT;
 
-    private ICryptoApiSwitcherStrategy cryptoApiNegotiatorStrategy;
+    private ICryptoApiSwitcher cryptoApiNegotiatorStrategy;
 
-        public CoinMarketCapNegotiator(ICryptoApiSwitcherStrategy cryptoApiNegotiatorStrategy) {
+        public CoinMarketCapNegotiator(ICryptoApiSwitcher cryptoApiNegotiatorStrategy) {
         super();
-        logger.info("New CoinMarketCapNegociator");
+        logger.info("New CoinMarketCapNegotiator");
         HTTPClIENT = HttpClients.createDefault();
         cryptoApiNegotiatorStrategy.addNegotiator(this);
     }

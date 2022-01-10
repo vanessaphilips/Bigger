@@ -3,6 +3,7 @@
 
 package com.example.project_bigbangk;
 
+import com.example.project_bigbangk.model.Bank;
 import com.example.project_bigbangk.repository.RootRepository;
 import com.example.project_bigbangk.service.ClientFactory;
 import com.example.project_bigbangk.service.priceHistoryUpdate.*;
@@ -10,7 +11,9 @@ import org.h2.util.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Scope;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
@@ -27,12 +30,17 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
     private static final int NUMBER_OF_CLIENTS_TO_SEED = 3000;
     private static final int DELAY_PRICEHISTORYUPDATE = 3000;
     private static final int DELAY_DATABASES_SEEDING = 6000;
-    public static final int DAYS_OF_PRICEHISTORY_CACHE = 30;
 
     private final PriceHistoryUpdateService priceHistoryUpdateService;
     private final ClientFactory clientFactory;
     private final Logger logger = LoggerFactory.getLogger(BigBangkApplicatie.class);
 
+
+    @Bean
+    @Scope("singleton")
+    public static Bank bigBangkSingleton(){
+        return  new Bank("BigBangk", "BGBK", 0.01, 10000);
+    }
 
     public BigBangkApplicatie(PriceHistoryUpdateService priceHistoryUpdateService,
                               ClientFactory clientFactory) {
@@ -43,7 +51,7 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
     }
 
     @Override
-    public void onApplicationEvent(ContextRefreshedEvent event) {
+    public  void onApplicationEvent(ContextRefreshedEvent event) {
         startPriceHistoryUpdateTimer();
         startDateBaseSeeding();
     }

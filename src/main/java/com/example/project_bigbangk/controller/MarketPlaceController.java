@@ -39,7 +39,6 @@ public class MarketPlaceController {
     @PostMapping("/priceHistories")
     @ResponseBody
     public ResponseEntity<String> getPriceHistories(@RequestHeader String authorization, @RequestBody String date) {
-
         if (authenticateService.authenticate(authorization)) {
             LocalDateTime dateTime = LocalDateTime.parse(date);
             List<List<PriceHistoryDTO>> priceHistoriesByAssetDTO;
