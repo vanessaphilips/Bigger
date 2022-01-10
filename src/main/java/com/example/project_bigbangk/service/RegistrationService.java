@@ -77,7 +77,7 @@ public class RegistrationService {
         String checkRegMessage = (checkRegistrationInput(registrationDTO));
         inputErrorMessage = "";
         if(checkRegMessage.equals(Messages.NoInputErrors.getBody())){
-            Wallet wallet = new Wallet(ibanGenerator.getIban(),BigBangkApplicatie.bigBangk.getStartingcapital());
+            Wallet wallet = new Wallet(ibanGenerator.getIban(),BigBangkApplicatie.bigBangkSingleton().getStartingcapital());
             Address address = new Address(registrationDTO.getPostalCode(),registrationDTO.getStreet(), registrationDTO.getNumber(), registrationDTO.getCity(),
                     registrationDTO.getCountry());
             Client client = new Client(registrationDTO.getEmail(), registrationDTO.getFirstName(), registrationDTO.getInsertion(), registrationDTO.getLastName(), convertedDateOfBirth,
