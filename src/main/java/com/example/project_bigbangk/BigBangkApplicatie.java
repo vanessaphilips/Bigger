@@ -25,6 +25,7 @@ import java.util.TimerTask;
 public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedEvent> {
 
     public static final String CURRENT_CURRENCY = "EUR";
+    public static final long DAYS_OF_PRICEHISTORY_CACHE =30 ;
 
     private static final int UPDATE_INTERVAL_PRICEUPDATESERVICE = 300000;//5min
     private static final int NUMBER_OF_CLIENTS_TO_SEED = 3000;

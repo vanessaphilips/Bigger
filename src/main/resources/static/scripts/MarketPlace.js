@@ -9,7 +9,7 @@ const MAX_DAYS_BACK = 60
 await getToken()
 let token = localStorage.getItem("jwtToken")
 let daysBackInputField = document.getElementById("daysBack");
-let daysBack = 30;
+
 
 function updatePriceHistoryGraphs(priceHistoriesByAssets) {
     for (const priceHistoriesOfAsset of priceHistoriesByAssets) {
@@ -27,7 +27,6 @@ function updatePriceHistoryGraphs(priceHistoriesByAssets) {
 
 daysBackInputField.addEventListener("focusout", async (event) => {
     console.log("field is veranderd")
-    daysBack = daysBackInputField.value
     const jsonPriceHistories = await getPriceHistoriesByAsset(token)
     if (jsonPriceHistories !== undefined) {
         updatePriceHistoryGraphs(jsonToPriceHistoriesByAssets(jsonPriceHistories));
@@ -88,12 +87,12 @@ function creatCurrentPriceLabel(asset) {
 
 function creatGraphContainer(asset, priceHistoriesOfAsset) {
     let graphContainer = document.createElement("div");
-    graphContainer.id = "price"
+
     let priceHistoryGraph = createGraph(priceHistoriesOfAsset)
     priceHistoryGraph.id = "priceHistory" + asset.code
     priceHistoryGraph.className = "priceHistoryGraph"
     graphContainer.appendChild(priceHistoryGraph)
-    graphContainer.id = "graphContainer"
+    graphContainer.id = "graphContainer" + asset.code
     return graphContainer
 }
 
@@ -137,8 +136,7 @@ function jsonToPriceHistoriesByAssets(json) {
 }
 
 function createDateInPast() {
-    console.log(daysBack)
-    const date = new Date(new Date().valueOf() - daysBack * 86400000)
+    const date = new Date(new Date().valueOf() - daysBackInputField.value * 86400000)
     console.log(date)
     return date.toISOString().substring(0, 23);
 }
@@ -146,12 +144,14 @@ function createDateInPast() {
 
 
 const getPriceHistoriesByAsset = (token) => {
+    console.log(token)
     return fetch(`${rootURL}priceHistories`,
         {
             method: 'POST',
             headers: acceptHeaders(token),
-            body: createDateInPast(1)
+            body: createDateInPast()
         }).then(promise => {
+        console.log(promise)
         if (promise.ok) {
             return promise.json()
         } else {

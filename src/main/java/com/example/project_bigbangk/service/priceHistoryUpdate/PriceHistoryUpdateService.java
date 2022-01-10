@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,9 +43,9 @@ public class PriceHistoryUpdateService {
      * and sends it to the rootrepository
      */
     public void updatePriceHistory(String currency) {
-        List<PriceHistory> priceHistories =null;
+        List<PriceHistory> priceHistories = null;
         cryptoNegotiatorService = cryptoApiNegotiatorStrategy.getAvailableNegotiator();
-                if (cryptoNegotiatorService != null) {
+        if (cryptoNegotiatorService != null) {
             priceHistories = cryptoNegotiatorService.getPriceHistory(currency);
         }
         if (priceHistories != null) {
@@ -56,8 +57,8 @@ public class PriceHistoryUpdateService {
         }
     }
 
-    public void onPriceHistoryUpdated(){
-        for (IPriceHistoryListener priceHistoryListener : priceHistoryListeners){
+    public void onPriceHistoryUpdated() {
+        for (IPriceHistoryListener priceHistoryListener : priceHistoryListeners) {
             priceHistoryListener.onPriceHistoryUpdated();
         }
     }
