@@ -37,5 +37,4 @@ public class PriceHistoryCacheUpdateService implements IPriceHistoryListener {
         );
         logger.info("PriceHistoryCache Updated");
     }
-
 }
