@@ -43,7 +43,7 @@ public class OrderController{
     public ResponseEntity<String> placeOrder(@RequestHeader String authorization, @RequestBody OrderDTO orderDTO) {
         if (authenticateService.authenticate(authorization)) {
             Client client = authenticateService.getClientFromToken(authorization);
-            String orderMessage = orderservice.executeOrderByType(orderDTO, client);
+            String orderMessage = orderservice.handleOrderByType(orderDTO, client);
             if (orderMessage == null) {
                 return ResponseEntity.status(406).body("Order Failed.");
             } else {

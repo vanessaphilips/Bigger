@@ -12,7 +12,6 @@ import com.example.project_bigbangk.model.Orders.Transaction;
 import com.example.project_bigbangk.model.Wallet;
 import com.example.project_bigbangk.repository.RootRepository;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 
 @Service
@@ -23,8 +22,7 @@ public class Orderservice {
     private RootRepository rootRepository;
     private Client client;
 
-
-    public Orderservice(RootRepository rootRepository, BigBangkApplicatie bigBangkApplicatie) {
+    public Orderservice(RootRepository rootRepository) {
         this.rootRepository = rootRepository;
     }
 
@@ -46,8 +44,7 @@ public class Orderservice {
         }
     }
 
-
-    public String executeOrderByType(OrderDTO order, Client clientFromToken){
+    public String handleOrderByType(OrderDTO order, Client clientFromToken){
         client = clientFromToken;
         currentAssetPrice = rootRepository.getCurrentPriceByAssetCode(order.getCode());
         asset = rootRepository.findAssetByCode(order.getCode());
@@ -60,37 +57,27 @@ public class Orderservice {
         // Stoploss_Sell                code: Sloss     -sprint 3
 
         if(order.getType().equals("Buy")){
-            return executeBuyOrder(order);
+            return checkBuyOrder(order);
         }
         if(order.getType().equals("Sell")){
-            return executeSellOrder(order);
+            return checkSellOrder(order);
         }else{
             return "Incorrect order type in JSON";
         }
     }
-    public String executeBuyOrder(OrderDTO order){
+
+    public String checkBuyOrder(OrderDTO order){
         double boughtAssetAmount = order.getAmount() / currentAssetPrice;
         double orderFee = order.getAmount() * BigBangkApplicatie.bigBangk.getFeePercentage();
         double totalCost = order.getAmount() + orderFee;
-
         Wallet clientWallet = client.getWallet();
         Wallet bankWallet = rootRepository.findWalletbyBankCode(BigBangkApplicatie.bigBangk.getCode());
 
         if(clientWallet.getBalance() >= totalCost){
             if(bankWallet.getAsset().get(asset) >= boughtAssetAmount){
-                Transaction transaction = new Transaction(asset, order.getAmount(), boughtAssetAmount, LocalDateTime.now(), orderFee, clientWallet, bankWallet);
-                // UPDATE balans en asset van klant
-                clientWallet.setBalance(clientWallet.getBalance()-totalCost);
-                clientWallet.getAsset().replace(asset, clientWallet.getAsset().get(asset) + boughtAssetAmount);
-                rootRepository.updateWalletBalanceAndAsset(clientWallet, asset, clientWallet.getAsset().get(asset));
-                // UPDATE balans en asset van bank
-                bankWallet.setBalance(bankWallet.getBalance() + totalCost);
-                bankWallet.getAsset().replace(asset, bankWallet.getAsset().get(asset) - boughtAssetAmount);
-                rootRepository.updateWalletBalanceAndAsset(bankWallet, asset, bankWallet.getAsset().get(asset));
-                //Sla transactie op
-                //TODO all deze rootrepo aanroepen moeten uiteindelijk maar een methode in rootrepo worden, nu een beetje een rommeltje
-                rootRepository.saveNewTransaction(transaction);
+                executeBuyOrder(order, boughtAssetAmount, orderFee, totalCost, clientWallet, bankWallet);
                 return Messages.SuccessBuy.getBody();
+                
             } else{
                 return Messages.AssetBank.getBody();
             }
@@ -99,28 +86,27 @@ public class Orderservice {
         }
     }
 
-    public String executeSellOrder(OrderDTO order){
+    private void executeBuyOrder(OrderDTO order, double boughtAssetAmount, double orderFee, double totalCost, Wallet clientWallet, Wallet bankWallet) {
+        clientWallet.setBalance(clientWallet.getBalance()- totalCost);
+        clientWallet.getAsset().replace(asset, clientWallet.getAsset().get(asset) + boughtAssetAmount);
+        
+        bankWallet.setBalance(bankWallet.getBalance() + totalCost);
+        bankWallet.getAsset().replace(asset, bankWallet.getAsset().get(asset) - boughtAssetAmount);
+        
+        Transaction transaction = new Transaction(asset, order.getAmount(), boughtAssetAmount, LocalDateTime.now(), orderFee, clientWallet, bankWallet);
+        sendOrderToDatabase(clientWallet, bankWallet, transaction);
+    }
+
+    public String checkSellOrder(OrderDTO order){
         double sellOrderValue = order.getAmount() * currentAssetPrice;
         double orderFee = sellOrderValue * BigBangkApplicatie.bigBangk.getFeePercentage();
         double totalPayout = sellOrderValue - orderFee;
-
         Wallet clientWallet = client.getWallet();
         Wallet bankWallet = rootRepository.findWalletbyBankCode(BigBangkApplicatie.bigBangk.getCode());
 
         if(bankWallet.getBalance() >= totalPayout) {
             if (clientWallet.getAsset().get(asset) >= order.getAmount()) {
-                Transaction transaction = new Transaction(asset, sellOrderValue, order.getAmount(), LocalDateTime.now(), orderFee, bankWallet, clientWallet);
-                // UPDATE balans en asset van klant
-                clientWallet.setBalance(clientWallet.getBalance() + totalPayout);
-                clientWallet.getAsset().replace(asset, clientWallet.getAsset().get(asset) - order.getAmount());
-                rootRepository.updateWalletBalanceAndAsset(clientWallet, asset, clientWallet.getAsset().get(asset));
-                // UPDATE balans en asset van bank
-                bankWallet.setBalance(bankWallet.getBalance() - totalPayout);
-                bankWallet.getAsset().replace(asset, bankWallet.getAsset().get(asset) + order.getAmount());
-                rootRepository.updateWalletBalanceAndAsset(bankWallet, asset, bankWallet.getAsset().get(asset));
-                //Sla transactie op
-                //TODO all deze rootrepo aanroepen moeten uiteindelijk maar een methode in rootrepo worden, nu een beetje een rommeltje
-                rootRepository.saveNewTransaction(transaction);
+                executeSellOrder(order, sellOrderValue, orderFee, totalPayout, clientWallet, bankWallet);
                 return Messages.SuccessSell.getBody();
             } else{
                 return Messages.FundBank.getBody();
@@ -129,5 +115,24 @@ public class Orderservice {
             return  Messages.AssetClient.getBody();
         }
     }
+
+    private void executeSellOrder(OrderDTO order, double sellOrderValue, double orderFee, double totalPayout, Wallet clientWallet, Wallet bankWallet) {
+        clientWallet.setBalance(clientWallet.getBalance() + totalPayout);
+        clientWallet.getAsset().replace(asset, clientWallet.getAsset().get(asset) - order.getAmount());
+
+        bankWallet.setBalance(bankWallet.getBalance() - totalPayout);
+        bankWallet.getAsset().replace(asset, bankWallet.getAsset().get(asset) + order.getAmount());
+
+        Transaction transaction = new Transaction(asset, sellOrderValue, order.getAmount(), LocalDateTime.now(), orderFee, bankWallet, clientWallet);
+        sendOrderToDatabase(clientWallet, bankWallet, transaction);
+    }
+
+    public void sendOrderToDatabase(Wallet walletOne, Wallet walletTwo, Transaction transaction){
+        rootRepository.updateWalletBalanceAndAsset(walletOne, asset, walletOne.getAsset().get(asset));
+        rootRepository.updateWalletBalanceAndAsset(walletTwo, asset, walletTwo.getAsset().get(asset));
+        rootRepository.saveNewTransaction(transaction);
+    }
+
+
 
 }
