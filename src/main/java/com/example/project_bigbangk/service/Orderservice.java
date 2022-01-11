@@ -26,9 +26,29 @@ public class Orderservice {
         this.rootRepository = rootRepository;
     }
 
-    public void executeOrderByType(OrderDTO order){
+    public enum Messages
+    {
+        FundClient("Order Failed: Client has insufficient funds."),
+        FundBank("Order Failed: Bank has insufficient funds."),
+        AssetClient("Order Failed: Client has insufficient assets."),
+        AssetBank("Order Failed: Bank has insufficient assets."),
+        SuccessBuy("Buy-Order successful"),
+        SuccessSell("Sell-Order successful");
+        private String body;
+
+        Messages(String envBody) {
+            this.body = envBody;
+        }
+        public String getBody() {
+            return body;
+        }
+    }
+
+
+    public String executeOrderByType(OrderDTO order){
         currentAssetPrice = rootRepository.getCurrentPriceByAssetCode(order.getCode());
         asset = rootRepository.findAssetByCode(order.getCode());
+
         //if type = x y z bla bla, stuur naar andere methode.
 
         //types:
@@ -39,12 +59,13 @@ public class Orderservice {
         // Stoploss_Sell                code: Sloss
 
         if(order.getType().equals("Buy")){
-            executeBuyOrder(order);
+            return executeBuyOrder(order);
         }
         if(order.getType().equals("Sell")){
-            executeSellOrder(order);
+            return executeSellOrder(order);
+        }else{
+            return "Incorrect order type in JSON";
         }
-
     }
     public String executeBuyOrder(OrderDTO order){
         double boughtAssetAmount = order.getAmount() / currentAssetPrice;
@@ -70,12 +91,12 @@ public class Orderservice {
                 //Sla transactie op
                 //TODO all deze rootrepo aanroepen moeten uiteindelijk maar een methode in rootrepo worden, nu een beetje een rommeltje
                 rootRepository.saveNewTransaction(transaction);
-                return "Order successful. Bought " + boughtAssetAmount + " " + asset.getCode() + " for " + totalCost + "€.";
+                return Messages.SuccessBuy.getBody();
             } else{
-                return  "Cannot complete order: Insufficient " + order.getCode();
+                return Messages.AssetBank.getBody();
             }
          } else {
-            return "Cannot complete order: Insufficient funds.";
+            return Messages.FundClient.getBody();
         }
     }
 
@@ -85,7 +106,7 @@ public class Orderservice {
         double totalPayout = sellOrderValue - orderFee;
 
         //email uit token
-        String email= "Aad@Yahoo.fr";//temp email
+        String email= "Nandini@Wanadoo.org";//temp email
         Wallet clientWallet = rootRepository.findWalletByEmail(email);
         Wallet bankWallet = rootRepository.findWalletbyBankCode(BigBangkApplicatie.bigBangk.getCode());
 
@@ -103,12 +124,12 @@ public class Orderservice {
                 //Sla transactie op
                 //TODO all deze rootrepo aanroepen moeten uiteindelijk maar een methode in rootrepo worden, nu een beetje een rommeltje
                 rootRepository.saveNewTransaction(transaction);
-                return "Order successful. Sold " + order.getAmount() + " for "+ totalPayout + "€.";
+                return Messages.SuccessSell.getBody();
             } else{
-                return "Cannot complete order: Bank has insufficient funds.";
+                return Messages.FundBank.getBody();
             }
         } else {
-            return  "Cannot complete order: Insufficient " + order.getCode();
+            return  Messages.AssetClient.getBody();
         }
     }
 

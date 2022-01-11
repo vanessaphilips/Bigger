@@ -17,7 +17,6 @@ import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 /**
  * Takes the RegistrationDTO, checks the data within and if correct creates client(with hashed PW), wallet(with generated IBAN) and address objects and sends them to rootrepo for storage.
@@ -98,7 +97,7 @@ public class RegistrationService {
         for (AssetCode_Name asset : EnumSet.allOf(AssetCode_Name.class)) {
             assetMap.put(new Asset(asset.getAssetCode(), asset.getAssetName()), 0.0);
         }
-        return new Wallet(ibanGenerator.getIban(),BigBangkApplicatie.bigBangkSingleton().getStartingcapital(), assetMap);
+        return new Wallet(ibanGenerator.getIban(),BigBangkApplicatie.bigBangk.getStartingcapital(), assetMap);
     }
 
     /**
