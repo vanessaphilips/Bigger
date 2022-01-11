@@ -45,7 +45,12 @@ public class JdbcWalletDAO implements IWalletDAO{
 
     public void updateWalletAssets(Wallet wallet, Asset asset, double amount) {
         String sql = "Update wallet_has_asset Set amount = ? Where IBAN = ? And code = ?;";
-        jdbcTemplate.update(sql, amount,wallet.getIban(),asset.getCode());
+        jdbcTemplate.update(sql, amount, wallet.getIban(), asset.getCode());
+    }
+
+    public void createWalletAsset(Wallet wallet, Asset asset, double amount) {
+        String sql = "Insert into wallet_has_asset values(?,?,?);";
+        jdbcTemplate.update(sql, asset.getCode(), amount, wallet.getIban());
     }
 
     @Override
@@ -60,27 +65,27 @@ public class JdbcWalletDAO implements IWalletDAO{
         return null;
     }
 
-    //FIXME nog niet uitgeprobeerd -philip
+
     public Wallet findWalletByEmail(String email) {
-        String slq = "Select wallet.IBAN, wallet.balance From wallet JOIN client ON client.IBAN = wallet.IBAN Where email = ?;";
+        String slq = "Select * From wallet JOIN client ON client.IBAN = wallet.IBAN Where email = ?;";
         Wallet wallet = null;
         try {
             wallet = jdbcTemplate.queryForObject(slq, new walletRowMapper(), email);
         } catch (DataAccessException dataAccessException) {
-            if (! dataAccessException.getMessage().toString().equals("Incorrect result size: expected 1, actual 0")) {
+            if (! dataAccessException.getMessage().toString().equals("findWalletByEmail: Incorrect result size: expected 1, actual 0")) {
                 System.err.println(dataAccessException.getMessage());}
         }
         return wallet;
     }
 
-    //FIXME nog niet uitgeprobeerd -philip
+
     public Wallet findWalletByBankCode(String bankCode) {
-        String slq = "Select wallet.IBAN, wallet.balance From wallet JOIN bank ON bank.IBAN = wallet.IBAN Where code = ?;";
+        String slq = "Select * From wallet JOIN bank ON bank.IBAN = wallet.IBAN Where code = ?;";
         Wallet wallet = null;
         try {
             wallet = jdbcTemplate.queryForObject(slq, new walletRowMapper(), bankCode);
         } catch (DataAccessException dataAccessException) {
-            if (! dataAccessException.getMessage().toString().equals("Incorrect result size: expected 1, actual 0")) {
+            if (! dataAccessException.getMessage().toString().equals("findWalletByBankCode: Incorrect result size: expected 1, actual 0")) {
                 System.err.println(dataAccessException.getMessage());}
         }
         return wallet;

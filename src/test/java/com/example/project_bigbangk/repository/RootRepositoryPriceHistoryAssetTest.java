@@ -3,8 +3,6 @@ package com.example.project_bigbangk.repository;
 import com.example.project_bigbangk.model.Asset;
 import com.example.project_bigbangk.model.AssetCode_Name;
 import com.example.project_bigbangk.model.PriceHistory;
-import com.example.project_bigbangk.service.AddressService;
-import com.example.project_bigbangk.service.ClientService;
 import com.example.project_bigbangk.service.WalletService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,10 +28,7 @@ class RootRepositoryPriceHistoryAssetTest {
     @Resource
 
     private RootRepository rootRepository;
-    @MockBean
-    AddressService addressService;
-    @MockBean
-    ClientService clientService;
+
     @MockBean
     WalletService walletService;
 

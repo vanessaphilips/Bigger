@@ -14,6 +14,8 @@ public interface IWalletDAO {
 
     public void updateWalletAssets(Wallet wallet, Asset asset, double amount);
 
+    public void createWalletAsset(Wallet wallet, Asset asset, double amount);
+
     public Double findAmountOfAsset(String iban, String assetCode);
 
     public Wallet findWalletByEmail(String email);

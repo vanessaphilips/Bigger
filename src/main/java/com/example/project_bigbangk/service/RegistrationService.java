@@ -14,11 +14,10 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 /**
  * Takes the RegistrationDTO, checks the data within and if correct creates client(with hashed PW), wallet(with generated IBAN) and address objects and sends them to rootrepo for storage.
@@ -77,11 +76,10 @@ public class RegistrationService {
         String checkRegMessage = (checkRegistrationInput(registrationDTO));
         inputErrorMessage = "";
         if(checkRegMessage.equals(Messages.NoInputErrors.getBody())){
-            Wallet wallet = new Wallet(ibanGenerator.getIban(),BigBangkApplicatie.bigBangkSingleton().getStartingcapital());
             Address address = new Address(registrationDTO.getPostalCode(),registrationDTO.getStreet(), registrationDTO.getNumber(), registrationDTO.getCity(),
                     registrationDTO.getCountry());
             Client client = new Client(registrationDTO.getEmail(), registrationDTO.getFirstName(), registrationDTO.getInsertion(), registrationDTO.getLastName(), convertedDateOfBirth,
-                    registrationDTO.getBsn(), hashService.hash(registrationDTO.getPassword()), address, wallet);
+                    registrationDTO.getBsn(), hashService.hash(registrationDTO.getPassword()), address, createNewWallet());
 
             rootRepository.createNewlyRegisteredClient(client);
 
@@ -89,6 +87,18 @@ public class RegistrationService {
         }else{
             return checkRegMessage;
         }
+    }
+
+    /**
+     * Creates Wallet with a map of all the different coin Assets offered by the Bank, set to 0.0
+     * @return
+     */
+    public Wallet createNewWallet(){
+        Map<Asset, Double> assetMap = new HashMap<>();
+        for (AssetCode_Name asset : EnumSet.allOf(AssetCode_Name.class)) {
+            assetMap.put(new Asset(asset.getAssetCode(), asset.getAssetName()), 0.0);
+        }
+        return new Wallet(ibanGenerator.getIban(),BigBangkApplicatie.bigBangkSingleton().getStartingcapital(), assetMap);
     }
 
     /**

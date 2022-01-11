@@ -2,7 +2,6 @@ package com.example.project_bigbangk.controller;
 
 import com.example.project_bigbangk.Utilities.ObjectToJsonHelper;
 import com.example.project_bigbangk.model.DTO.LoginDTO;
-import com.example.project_bigbangk.service.ClientService;
 import com.example.project_bigbangk.service.LoginService;
 import com.example.project_bigbangk.service.RegistrationService;
 import org.junit.jupiter.api.Test;
@@ -33,9 +32,6 @@ class LoginControllerTest {
     MarketPlaceController marketPlaceController;
     @MockBean
     private LoginService loginService;
-
-    @MockBean
-    private ClientService clientService;
 
     @MockBean
     private RegistrationService registrationService;
