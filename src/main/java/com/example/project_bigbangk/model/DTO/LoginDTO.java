@@ -12,6 +12,7 @@ public class LoginDTO {
 
     private String email;
     private String password;
+
     public LoginDTO(String email, String password ) {
         super();
         logger.info("New LoginDTO");
