@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,6 +23,7 @@ public class PriceHistoryUpdateService {
     private ICryptoApiSwitcher cryptoApiNegotiatorStrategy;
     private ICryptoApiNegotiator cryptoNegotiatorService;
     private RootRepository rootRepository;
+    private List<IPriceHistoryListener> priceHistoryListeners;
 
 
     public PriceHistoryUpdateService(ICryptoApiSwitcher cryptoApiNegotiatorStrategy, RootRepository rootRepository) {
@@ -29,6 +31,11 @@ public class PriceHistoryUpdateService {
         logger.info("New PriceHistoryUpdateService");
         this.cryptoApiNegotiatorStrategy = cryptoApiNegotiatorStrategy;
         this.rootRepository = rootRepository;
+        this.priceHistoryListeners = new ArrayList<>();
+    }
+
+    public void addPriceHistoryListener(IPriceHistoryListener IPriceHistoryListener) {
+        priceHistoryListeners.add(IPriceHistoryListener);
     }
 
     /**
@@ -36,7 +43,7 @@ public class PriceHistoryUpdateService {
      * and sends it to the rootrepository
      */
     public void updatePriceHistory(String currency) {
-        List<PriceHistory> priceHistories =null;
+        List<PriceHistory> priceHistories = null;
         cryptoNegotiatorService = cryptoApiNegotiatorStrategy.getAvailableNegotiator();
         if (cryptoNegotiatorService != null) {
             priceHistories = cryptoNegotiatorService.getPriceHistory(currency);
@@ -44,8 +51,15 @@ public class PriceHistoryUpdateService {
         if (priceHistories != null) {
             rootRepository.savePriceHistories(priceHistories);
             logger.info(String.format("Price history updated on %s", LocalDateTime.now()));
+            onPriceHistoryUpdated();
         } else {
             logger.error(String.format("Price history update encountered an error on %s", LocalDateTime.now()));
+        }
+    }
+
+    public void onPriceHistoryUpdated() {
+        for (IPriceHistoryListener priceHistoryListener : priceHistoryListeners) {
+            priceHistoryListener.onPriceHistoryUpdated();
         }
     }
 }

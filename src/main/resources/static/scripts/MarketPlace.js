@@ -1,9 +1,37 @@
+// import {rootURL} from "./URLs.js"
+// import {getToken} from "./DummyLogin.js"
+// import  "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"
+
 "use strict"
 
 const assetDivList = document.getElementById("assetListContainer")
-
+const MAX_DAYS_BACK = 60
 await getToken()
 let token = localStorage.getItem("jwtToken")
+let daysBackInputField = document.getElementById("daysBack");
+
+
+function updatePriceHistoryGraphs(priceHistoriesByAssets) {
+    for (const priceHistoriesOfAsset of priceHistoriesByAssets) {
+        const asset = priceHistoriesOfAsset[0].asset
+        let priceHistoryContainer = document.getElementById("graphContainer" + asset.code)
+        while (priceHistoryContainer.firstChild) {
+            priceHistoryContainer.removeChild(priceHistoryContainer.firstChild);
+        }
+        let  priceHistoryGraph = createGraph(priceHistoriesOfAsset)
+        priceHistoryGraph.id = "priceHistory" + asset.code
+        priceHistoryGraph.className = "priceHistoryGraph"
+        priceHistoryContainer.appendChild(priceHistoryGraph)
+    }
+}
+
+daysBackInputField.addEventListener("focusout", async (event) => {
+    console.log("field is veranderd")
+    const jsonPriceHistories = await getPriceHistoriesByAsset(token)
+    if (jsonPriceHistories !== undefined) {
+        updatePriceHistoryGraphs(jsonToPriceHistoriesByAssets(jsonPriceHistories));
+    }
+})
 
 
 class Asset {
@@ -59,12 +87,12 @@ function creatCurrentPriceLabel(asset) {
 
 function creatGraphContainer(asset, priceHistoriesOfAsset) {
     let graphContainer = document.createElement("div");
-    graphContainer.id = "price"
+
     let priceHistoryGraph = createGraph(priceHistoriesOfAsset)
     priceHistoryGraph.id = "priceHistory" + asset.code
     priceHistoryGraph.className = "priceHistoryGraph"
     graphContainer.appendChild(priceHistoryGraph)
-    graphContainer.id = "graphContainer"
+    graphContainer.id = "graphContainer" + asset.code
     return graphContainer
 }
 
@@ -79,6 +107,7 @@ const createDivPerAsset = (priceHistoriesOfAsset) => {
         assetDivElement.appendChild(creatCurrentPriceLabel(asset))
         assetDivElement.appendChild(creatGraphContainer(asset, priceHistoriesOfAsset))
         assetDivElement.appendChild(createTradeButton(asset))
+
     }
     return assetDivElement
 }
@@ -106,21 +135,23 @@ function jsonToPriceHistoriesByAssets(json) {
     return priceHistoriesByAssets
 }
 
-function createDateInPast(monthsBack) {
-    const date = new Date()
-    date.setMonth(date.getMonth() - monthsBack)
+function createDateInPast() {
+    const date = new Date(new Date().valueOf() - daysBackInputField.value * 86400000)
+    console.log(date)
     return date.toISOString().substring(0, 23);
 }
 
 
 
 const getPriceHistoriesByAsset = (token) => {
+    console.log(token)
     return fetch(`${rootURL}priceHistories`,
         {
             method: 'POST',
-            headers: acceptHeadersWithToken(token),
-            body: createDateInPast(1)
+            headers: acceptHeaders(token),
+            body: createDateInPast()
         }).then(promise => {
+        console.log(promise)
         if (promise.ok) {
             return promise.json()
         } else {
@@ -135,6 +166,7 @@ if (jsonPriceHistories !== undefined) {
     const priceHistoriesByAssets = jsonToPriceHistoriesByAssets(jsonPriceHistories)
     setHtmlElementAssetList(priceHistoriesByAssets)
 }
+
 
 
 

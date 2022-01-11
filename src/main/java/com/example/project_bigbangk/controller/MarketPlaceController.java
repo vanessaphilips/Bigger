@@ -35,34 +35,6 @@ public class MarketPlaceController {
         logger.info("New MarketPlaceController");
     }
 
-    @GetMapping("/marketplace")
-    @ResponseBody
-    public ResponseEntity<String> getAllAssets(@RequestHeader String authorization) {
-        if (authenticateService.authenticate(authorization)) {
-            List<Asset> assets = marketPlaceService.getAllAssets();
-            try {
-                String jsonAssets = MAPPER.writeValueAsString(assets);
-                return ResponseEntity.ok().body(jsonAssets);
-            } catch (JsonProcessingException e) {
-                logger.error(e.getMessage());
-            }
-        }
-        return ResponseEntity.status(401).body("token expired");
-    }
-
-    @PostMapping("/trade")
-    @ResponseBody
-    public ResponseEntity<String> transaction(@RequestHeader String authorization, @RequestBody AssetDTO assetDTO) {
-        if (authenticateService.authenticate(authorization)) {
-            try {
-                String json = MAPPER.writeValueAsString(assetDTO);
-                return ResponseEntity.ok().body(json);
-            } catch (JsonProcessingException e) {
-                logger.error(e.getMessage());
-            }
-        }
-        return ResponseEntity.status(401).body("token expired");
-    }
 
     @PostMapping("/priceHistories")
     @ResponseBody
