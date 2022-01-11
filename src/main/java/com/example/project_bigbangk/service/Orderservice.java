@@ -48,18 +48,17 @@ public class Orderservice {
     }
     public String executeBuyOrder(OrderDTO order){
         double boughtAssetAmount = order.getAmount() / currentAssetPrice;
-        double orderFee = order.getAmount() * BigBangkApplicatie.bigBangkSingleton().getFeePercentage();
+        double orderFee = order.getAmount() * BigBangkApplicatie.bigBangk.getFeePercentage();
         double totalCost = order.getAmount() + orderFee;
 
-        //email uit token
         String email= "Nandini@Wanadoo.org";//temp email
+        //authenticationservice heeft methode voor client uit token
         Wallet clientWallet = rootRepository.findWalletByEmail(email);
-        Wallet bankWallet = rootRepository.findWalletbyBankCode(BigBangkApplicatie.bigBangkSingleton().getCode());
-        System.out.println(bankWallet.getAsset());
+        Wallet bankWallet = rootRepository.findWalletbyBankCode(BigBangkApplicatie.bigBangk.getCode());
 
         if(clientWallet.getBalance() >= totalCost){
             if(bankWallet.getAsset().get(asset) >= boughtAssetAmount){
-                Transaction transaction = new Transaction(asset, currentAssetPrice, boughtAssetAmount, LocalDateTime.now(), orderFee, clientWallet, bankWallet);
+                Transaction transaction = new Transaction(asset, order.getAmount(), boughtAssetAmount, LocalDateTime.now(), orderFee, clientWallet, bankWallet);
                 // UPDATE balans en asset van klant
                 clientWallet.setBalance(clientWallet.getBalance()-totalCost);
                 clientWallet.getAsset().replace(asset, clientWallet.getAsset().get(asset) + boughtAssetAmount);
@@ -70,29 +69,29 @@ public class Orderservice {
                 rootRepository.updateWalletBalanceAndAsset(bankWallet, asset, bankWallet.getAsset().get(asset));
                 //Sla transactie op
                 //TODO all deze rootrepo aanroepen moeten uiteindelijk maar een methode in rootrepo worden, nu een beetje een rommeltje
-                System.out.println("tot hier");
                 rootRepository.saveNewTransaction(transaction);
-                return "Order successful.";
+                return "Order successful. Bought " + boughtAssetAmount + " " + asset.getCode() + " for " + totalCost + "€.";
             } else{
                 return  "Cannot complete order: Insufficient " + order.getCode();
             }
          } else {
-            return "Cannot complete order: insufficient funds.";
+            return "Cannot complete order: Insufficient funds.";
         }
     }
 
     public String executeSellOrder(OrderDTO order){
-        double orderFee = order.getAmount() * currentAssetPrice * BigBangkApplicatie.bigBangkSingleton().getFeePercentage();
-        double totalPayout = order.getAmount() * currentAssetPrice - orderFee;
+        double sellOrderValue = order.getAmount() * currentAssetPrice;
+        double orderFee = sellOrderValue * BigBangkApplicatie.bigBangk.getFeePercentage();
+        double totalPayout = sellOrderValue - orderFee;
 
         //email uit token
         String email= "Aad@Yahoo.fr";//temp email
         Wallet clientWallet = rootRepository.findWalletByEmail(email);
-        Wallet bankWallet = rootRepository.findWalletbyBankCode(BigBangkApplicatie.bigBangkSingleton().getCode());
+        Wallet bankWallet = rootRepository.findWalletbyBankCode(BigBangkApplicatie.bigBangk.getCode());
 
         if(bankWallet.getBalance() >= totalPayout) {
             if (clientWallet.getAsset().get(asset) >= order.getAmount()) {
-                Transaction transaction = new Transaction(asset, currentAssetPrice, order.getAmount(), LocalDateTime.now(), orderFee, bankWallet, clientWallet);
+                Transaction transaction = new Transaction(asset, sellOrderValue, order.getAmount(), LocalDateTime.now(), orderFee, bankWallet, clientWallet);
                 // UPDATE balans en asset van klant
                 clientWallet.setBalance(clientWallet.getBalance() + totalPayout);
                 clientWallet.getAsset().replace(asset, clientWallet.getAsset().get(asset) - order.getAmount());
@@ -104,9 +103,9 @@ public class Orderservice {
                 //Sla transactie op
                 //TODO all deze rootrepo aanroepen moeten uiteindelijk maar een methode in rootrepo worden, nu een beetje een rommeltje
                 rootRepository.saveNewTransaction(transaction);
-                return "Order successful.";
+                return "Order successful. Sold " + order.getAmount() + " for "+ totalPayout + "€.";
             } else{
-                return "Cannot complete order: bank has insufficient funds.";
+                return "Cannot complete order: Bank has insufficient funds.";
             }
         } else {
             return  "Cannot complete order: Insufficient " + order.getCode();

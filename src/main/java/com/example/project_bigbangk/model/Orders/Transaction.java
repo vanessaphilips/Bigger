@@ -11,28 +11,81 @@ import java.time.LocalDateTime;
  * Object "Transaction" > for "regular" transactions.
  */
 
-public class Transaction extends AbstractOrder{
+public class Transaction{
 
     private final Logger logger = LoggerFactory.getLogger(Transaction.class);
 
+    private Asset asset;
+    private double requestedPrice;
+    private double numberOfAssets;
+    private LocalDateTime date;
     private double transactionFee;
     private Wallet buyerWallet;
     private Wallet sellerWallet;
+    private long orderId;
 
-    public Transaction(int orderId, double requestedPrice, double numberOfAssets,
+    public Transaction(long orderId, double requestedPrice, double numberOfAssets,
                        LocalDateTime date, double transactionFee) {
-        super(orderId, requestedPrice, numberOfAssets, date);
+        this.orderId = orderId;
+        this.requestedPrice = requestedPrice;
         this.transactionFee = transactionFee;
+        this.date = date;
+        this.numberOfAssets = numberOfAssets;
         logger.info("New transaction, without Asset and Wallets");
     }
 
     public Transaction(Asset asset, double requestedPrice, double numberOfAssets, LocalDateTime date,
                        double transactionFee, Wallet buyerWallet, Wallet sellerWallet) {
-        super(asset, requestedPrice, numberOfAssets, date);
+        this.asset = asset;
+        this.requestedPrice = requestedPrice;
+        this.date = date;
+        this.numberOfAssets = numberOfAssets;
         this.transactionFee = transactionFee;
         this.buyerWallet = buyerWallet;
         this.sellerWallet = sellerWallet;
         logger.info("New transaction, without id");
+    }
+
+    public Logger getLogger() {
+        return logger;
+    }
+
+
+    public Asset getAsset() {
+        return asset;
+    }
+
+
+    public void setAsset(Asset asset) {
+        this.asset = asset;
+    }
+
+
+    public double getRequestedPrice() {
+        return requestedPrice;
+    }
+
+
+    public void setRequestedPrice(double requestedPrice) {
+        this.requestedPrice = requestedPrice;
+    }
+
+
+    public double getNumberOfAssets() {
+        return numberOfAssets;
+    }
+
+    public void setNumberOfAssets(double numberOfAssets) {
+        this.numberOfAssets = numberOfAssets;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 
     public double getTransactionFee() {
@@ -57,6 +110,14 @@ public class Transaction extends AbstractOrder{
 
     public void setSellerWallet(Wallet sellerWallet) {
         this.sellerWallet = sellerWallet;
+    }
+
+    public long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(long orderId) {
+        this.orderId = orderId;
     }
 
     @Override
