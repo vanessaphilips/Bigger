@@ -6,6 +6,7 @@ package com.example.project_bigbangk.service;
 
 import com.example.project_bigbangk.BigBangkApplicatie;
 import com.example.project_bigbangk.model.Asset;
+import com.example.project_bigbangk.model.Client;
 import com.example.project_bigbangk.model.DTO.OrderDTO;
 import com.example.project_bigbangk.model.Orders.Transaction;
 import com.example.project_bigbangk.model.Wallet;
@@ -18,8 +19,9 @@ import java.time.LocalDateTime;
 public class Orderservice {
 
     double currentAssetPrice;
-    Asset asset;
+    private Asset asset;
     private RootRepository rootRepository;
+    private Client client;
 
 
     public Orderservice(RootRepository rootRepository, BigBangkApplicatie bigBangkApplicatie) {
@@ -45,18 +47,17 @@ public class Orderservice {
     }
 
 
-    public String executeOrderByType(OrderDTO order){
+    public String executeOrderByType(OrderDTO order, Client clientFromToken){
+        client = clientFromToken;
         currentAssetPrice = rootRepository.getCurrentPriceByAssetCode(order.getCode());
         asset = rootRepository.findAssetByCode(order.getCode());
 
-        //if type = x y z bla bla, stuur naar andere methode.
-
         //types:
-        // BuyOrder (alleen met bank)   code: Buy
-        // SellOrder (alleen met bank)  code: Sell
-        // Limit_Buy                    code: Lbuy
-        // Limit_Sell                   code: Lsell
-        // Stoploss_Sell                code: Sloss
+        // BuyOrder (alleen met bank)   code: Buy       -klaar
+        // SellOrder (alleen met bank)  code: Sell      -klaar
+        // Limit_Buy                    code: Lbuy      -sprint 3
+        // Limit_Sell                   code: Lsell     -sprint 3
+        // Stoploss_Sell                code: Sloss     -sprint 3
 
         if(order.getType().equals("Buy")){
             return executeBuyOrder(order);
@@ -72,9 +73,7 @@ public class Orderservice {
         double orderFee = order.getAmount() * BigBangkApplicatie.bigBangk.getFeePercentage();
         double totalCost = order.getAmount() + orderFee;
 
-        String email= "Nandini@Wanadoo.org";//temp email
-        //authenticationservice heeft methode voor client uit token
-        Wallet clientWallet = rootRepository.findWalletByEmail(email);
+        Wallet clientWallet = client.getWallet();
         Wallet bankWallet = rootRepository.findWalletbyBankCode(BigBangkApplicatie.bigBangk.getCode());
 
         if(clientWallet.getBalance() >= totalCost){
@@ -105,9 +104,7 @@ public class Orderservice {
         double orderFee = sellOrderValue * BigBangkApplicatie.bigBangk.getFeePercentage();
         double totalPayout = sellOrderValue - orderFee;
 
-        //email uit token
-        String email= "Nandini@Wanadoo.org";//temp email
-        Wallet clientWallet = rootRepository.findWalletByEmail(email);
+        Wallet clientWallet = client.getWallet();
         Wallet bankWallet = rootRepository.findWalletbyBankCode(BigBangkApplicatie.bigBangk.getCode());
 
         if(bankWallet.getBalance() >= totalPayout) {

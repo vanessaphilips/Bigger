@@ -3,8 +3,10 @@ package com.example.project_bigbangk.controller;
 @Author Philip Beeltje, Studentnummer: 500519452
 */
 
+import com.example.project_bigbangk.model.Client;
 import com.example.project_bigbangk.model.DTO.OrderDTO;
 import com.example.project_bigbangk.service.Orderservice;
+import com.example.project_bigbangk.service.Security.AuthenticateService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,10 +15,12 @@ import org.springframework.web.bind.annotation.*;
 public class OrderController{
 
     private Orderservice orderservice;
+    private AuthenticateService authenticateService;
 
-    public OrderController(Orderservice orderservice){
+    public OrderController(Orderservice orderservice, AuthenticateService authenticateService){
         super();
         this.orderservice = orderservice;
+        this.authenticateService = authenticateService;
     }
 
     //als je vanuit marketplace of je portfolio op order knop drukt bij coin x, kom je hier aan.
@@ -35,14 +39,20 @@ public class OrderController{
 
     //in het scherm hierboven^ kan je alles van je order instellen, dat wordt hieronder opgevangen.
     @PostMapping("/placeorder")
-    public ResponseEntity<String> placeOrder(@RequestBody OrderDTO orderDTO){
-       String orderMessage = orderservice.executeOrderByType(orderDTO);
-       if(orderMessage == null){
-           return ResponseEntity.status(406).body("Order Failed.");
-       }else{
-           return ResponseEntity.status(201).body(orderMessage);
-       }
+
+    public ResponseEntity<String> placeOrder(@RequestHeader String authorization, @RequestBody OrderDTO orderDTO) {
+        if (authenticateService.authenticate(authorization)) {
+            Client client = authenticateService.getClientFromToken(authorization);
+            String orderMessage = orderservice.executeOrderByType(orderDTO, client);
+            if (orderMessage == null) {
+                return ResponseEntity.status(406).body("Order Failed.");
+            } else {
+                return ResponseEntity.status(201).body(orderMessage);
+            }
+        }
+        return ResponseEntity.status(401).body("token expired");
     }
+
 
 
 
