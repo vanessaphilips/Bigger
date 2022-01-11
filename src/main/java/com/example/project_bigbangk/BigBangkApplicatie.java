@@ -31,17 +31,10 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
     private static final int NUMBER_OF_CLIENTS_TO_SEED = 3000;
     private static final int DELAY_PRICEHISTORYUPDATE = 3000;
     private static final int DELAY_DATABASES_SEEDING = 6000;
-
+    public static final Bank bigBangk = new Bank("BigBangk", "BGBK", 0.01, 10000);
     private final PriceHistoryUpdateService priceHistoryUpdateService;
     private final ClientFactory clientFactory;
     private final Logger logger = LoggerFactory.getLogger(BigBangkApplicatie.class);
-
-
-    @Bean
-    @Scope("singleton")
-    public static Bank bigBangkSingleton(){
-        return  new Bank("BigBangk", "BGBK", 0.01, 10000);
-    }
 
     public BigBangkApplicatie(PriceHistoryUpdateService priceHistoryUpdateService,
                               ClientFactory clientFactory) {
