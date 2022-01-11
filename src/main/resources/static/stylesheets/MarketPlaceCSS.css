@@ -62,32 +62,28 @@
 }
 
 #assetListContainer .tradeButton {
-    color: var(--blue);
-    background-color: white;
+    color: white;
+    background-color: var(--blue);
     border-style: solid;
     border-color: var(--blue);
-    border-width: 3px;
+    border-width: 2px;
     border-radius: 10%;
     height: fit-content;
     width: fit-content;
     font-size: 90%;
 }
+#tradeButton{
 
+}
 #kolomnamen .tradeButton {
-    border-width: 0px;
+    border-width:0px;
 }
 
 #kolomnamen {
     color: var(--blue);
 }
 
-.tradeButton.text {
-    color: black;
-}
 
-.tradeButton > hoover {
-    background-color: #d0cb96;
-}
 
 #name {
 
