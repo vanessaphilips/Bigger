@@ -3,13 +3,10 @@
 
 package com.example.project_bigbangk.controller;
 
-import com.example.project_bigbangk.model.Asset;
-import com.example.project_bigbangk.model.DTO.AssetDTO;
 import com.example.project_bigbangk.model.DTO.PriceHistoryDTO;
-import com.example.project_bigbangk.model.PriceHistory;
 import com.example.project_bigbangk.service.MarketPlaceService;
 import com.example.project_bigbangk.service.Security.AuthenticateService;
-import com.fasterxml.jackson.core.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
