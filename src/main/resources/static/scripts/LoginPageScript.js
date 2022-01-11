@@ -1,13 +1,45 @@
-function getFormData($form){
-    let unindexed_array = $form.serializeArray();
-    let indexed_array = {};
+"use strict"
 
-    $.map(unindexed_array, function(n, i){
-        indexed_array[n['id']] = n['value'];
-    });
-
-    return indexed_array;
+class LoginDTO {
+    constructor(email, password) {
+        this.email = email;
+        this.password = password;
+    }
 }
 
-let $form = $("#form_data");
-let data = getFormData($form);
+function submitLogin(){
+   let x = document.getElementById('email');
+   let y = document.getElementById('password');
+
+   let login = new LoginDTO(x,y);
+   sendLoginData(login);
+}
+
+function sendLoginData(lData) {
+    fetch("http://localhost:8080/login", {
+        method: 'POST',
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(lData)
+    })
+        .then(response => {
+            if (response.status === 200) {
+                return response.text()
+                    .then(text => {
+                        alert(text);
+                    })
+            } else if (response.status === 401) {
+                return response.text()
+                    .then(text => alert(text))
+            } else {
+                alert('Unknown Error.')
+            }
+        })
+        .catch((error) => {
+            console.error('Error', error)
+        });
+}
+
+
