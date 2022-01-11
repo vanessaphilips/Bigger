@@ -36,16 +36,12 @@ public class OrderController{
     //in het scherm hierboven^ kan je alles van je order instellen, dat wordt hieronder opgevangen.
     @PostMapping("/placeorder")
     public ResponseEntity<String> placeOrder(@RequestBody OrderDTO orderDTO){
-        orderservice.executeOrderByType(orderDTO);
-
-        //service:
-        //als transactie type, gelijk kijken of je hem kan uitvoeren
-        //bij transacties die niet kunnen, niet opslaan-alleen melding dat het niet kan
-        //bij andere orders, de order opslaan. en dan moet een andere async service bijhouden wanneer ze afgerond kunnen worden!
-
-        //controller weer:
-        //bericht terug naar frontend over success of falen
-        return null;
+       String orderMessage = orderservice.executeOrderByType(orderDTO);
+       if(orderMessage == null){
+           return ResponseEntity.status(406).body("Order Failed.");
+       }else{
+           return ResponseEntity.status(201).body(orderMessage);
+       }
     }
 
 
