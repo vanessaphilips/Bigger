@@ -9,10 +9,9 @@ const MAX_DAYS_BACK = 60
 
 await getToken()
 let token = localStorage.getItem("jwtToken")
-console.log("marketplace" + token + Date.now())
 let daysBackInputField = document.getElementById("daysBack");
 let daysBack = 30
-daysBackInputField.innerText = daysBack;
+daysBackInputField.value = daysBack;
 
 function updatePriceHistoryGraphs(priceHistoriesByAssets) {
     for (const priceHistoriesOfAsset of priceHistoriesByAssets) {
@@ -143,13 +142,11 @@ function jsonToPriceHistoriesByAssets(json) {
 
 function createDateInPast() {
     const date = new Date(new Date().valueOf() - daysBack * 86400000)
-    console.log(date)
     return date.toISOString().substring(0, 23);
 }
 
 
 const getPriceHistoriesByAsset = (token) => {
-    console.log("getPriceHistroyToken"+token+ Date.now())
     return fetch(`${rootURL}priceHistories`,
         {
             method: 'POST',
