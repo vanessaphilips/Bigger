@@ -6,10 +6,13 @@
 
 const assetDivList = document.getElementById("assetListContainer")
 const MAX_DAYS_BACK = 60
+
 await getToken()
 let token = localStorage.getItem("jwtToken")
+console.log("marketplace" + token + Date.now())
 let daysBackInputField = document.getElementById("daysBack");
-
+let daysBack = 30
+daysBackInputField.innerText = daysBack;
 
 function updatePriceHistoryGraphs(priceHistoriesByAssets) {
     for (const priceHistoriesOfAsset of priceHistoriesByAssets) {
@@ -18,7 +21,7 @@ function updatePriceHistoryGraphs(priceHistoriesByAssets) {
         while (priceHistoryContainer.firstChild) {
             priceHistoryContainer.removeChild(priceHistoryContainer.firstChild);
         }
-        let  priceHistoryGraph = createGraph(priceHistoriesOfAsset)
+        let priceHistoryGraph = createGraph(priceHistoriesOfAsset)
         priceHistoryGraph.id = "priceHistory" + asset.code
         priceHistoryGraph.className = "priceHistoryGraph"
         priceHistoryContainer.appendChild(priceHistoryGraph)
@@ -27,10 +30,12 @@ function updatePriceHistoryGraphs(priceHistoriesByAssets) {
 
 daysBackInputField.addEventListener("focusout", async (event) => {
     console.log("field is veranderd")
+    daysBack = daysBackInputField.value
     const jsonPriceHistories = await getPriceHistoriesByAsset(token)
     if (jsonPriceHistories !== undefined) {
         updatePriceHistoryGraphs(jsonToPriceHistoriesByAssets(jsonPriceHistories));
     }
+
 })
 
 
@@ -93,6 +98,7 @@ function creatGraphContainer(asset, priceHistoriesOfAsset) {
     priceHistoryGraph.className = "priceHistoryGraph"
     graphContainer.appendChild(priceHistoryGraph)
     graphContainer.id = "graphContainer" + asset.code
+    graphContainer.className = "graphContainer"
     return graphContainer
 }
 
@@ -136,19 +142,18 @@ function jsonToPriceHistoriesByAssets(json) {
 }
 
 function createDateInPast() {
-    const date = new Date(new Date().valueOf() - daysBackInputField.value * 86400000)
+    const date = new Date(new Date().valueOf() - daysBack * 86400000)
     console.log(date)
     return date.toISOString().substring(0, 23);
 }
 
 
-
 const getPriceHistoriesByAsset = (token) => {
-    console.log(token)
+    console.log("getPriceHistroyToken"+token+ Date.now())
     return fetch(`${rootURL}priceHistories`,
         {
             method: 'POST',
-            headers: acceptHeaders(token),
+            headers: acceptHeadersWithToken(token),
             body: createDateInPast()
         }).then(promise => {
         console.log(promise)

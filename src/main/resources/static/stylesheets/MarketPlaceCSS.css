@@ -37,7 +37,7 @@
     text-align: left;
 }
 
-#graphContainer {
+.graphContainer {
     background-color: #ffffff;
     border-bottom-style: solid;
     border-width: thin;
@@ -52,7 +52,7 @@
 
 }
 
-#graphContainer > div > div {
+.graphContainer > div > div {
     background-color: white;
     color: var(--blue);
     max-height: 50%;
