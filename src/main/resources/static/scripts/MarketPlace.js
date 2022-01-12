@@ -173,6 +173,7 @@ function createDateInPast() {
 }
 
 
+
 const getPriceHistoriesByAsset = (token) => {
     return fetch(`${rootURL}marketplace`,
         {
