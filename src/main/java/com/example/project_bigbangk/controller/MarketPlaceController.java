@@ -3,11 +3,13 @@
 
 package com.example.project_bigbangk.controller;
 
+import com.example.project_bigbangk.BigBangkApplicatie;
 import com.example.project_bigbangk.model.DTO.PriceHistoryDTO;
 import com.example.project_bigbangk.service.MarketPlaceService;
 import com.example.project_bigbangk.service.Security.AuthenticateService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +35,7 @@ public class MarketPlaceController {
     }
 
 
-    @PostMapping("/priceHistories")
+    @PostMapping("/marketplace")
     @ResponseBody
     public ResponseEntity<String> getPriceHistories(@RequestHeader String authorization, @RequestBody String date) {
         if (authenticateService.authenticate(authorization)) {
@@ -41,8 +43,11 @@ public class MarketPlaceController {
             List<List<PriceHistoryDTO>> priceHistoriesByAssetDTO;
             priceHistoriesByAssetDTO = marketPlaceService.getAllAssetsWithPriceHistoryFromDate(dateTime);
             try {
-                String jsonPriceHistoriesByAsset = MAPPER.writeValueAsString(priceHistoriesByAssetDTO);
-                return ResponseEntity.ok().body(jsonPriceHistoriesByAsset);
+                //String jsonPriceHistoriesByAsset = MAPPER.writeValueAsString(priceHistoriesByAssetDTO);
+                ObjectNode jsonBody = MAPPER.createObjectNode();
+                jsonBody.put("priceHistory", MAPPER.writeValueAsString(priceHistoriesByAssetDTO));
+                jsonBody.put("updateInterval" ,String.valueOf(BigBangkApplicatie.UPDATE_INTERVAL_PRICEUPDATESERVICE));
+                return ResponseEntity.ok().body(MAPPER.writeValueAsString(jsonBody));
             } catch (JsonProcessingException e) {
                 logger.error(e.getMessage());
             }

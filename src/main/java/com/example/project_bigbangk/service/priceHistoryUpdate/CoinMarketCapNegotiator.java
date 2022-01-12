@@ -24,7 +24,10 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 
 /**
@@ -49,7 +52,7 @@ public class CoinMarketCapNegotiator implements ICryptoApiNegotiator {
 
     private ICryptoApiSwitcher cryptoApiNegotiatorStrategy;
 
-        public CoinMarketCapNegotiator(ICryptoApiSwitcher cryptoApiNegotiatorStrategy) {
+    public CoinMarketCapNegotiator(ICryptoApiSwitcher cryptoApiNegotiatorStrategy) {
         super();
         logger.info("New CoinMarketCapNegotiator");
         HTTPClIENT = HttpClients.createDefault();
@@ -133,9 +136,9 @@ public class CoinMarketCapNegotiator implements ICryptoApiNegotiator {
             for (JsonNode json : node.findValues("data")) {
                 for (JsonNode coin : json) {
                     double price = Double.parseDouble(coin.get("quote").get("EUR").get("price").toString());
-                    String assetCode  = coin.get("symbol").textValue();
+                    String assetCode = coin.get("symbol").textValue();
                     String assetName = coin.get("name").textValue();
-                    PriceHistory priceHistory = new PriceHistory(LocalDateTime.now(), price, new Asset(assetCode,assetName, price));
+                    PriceHistory priceHistory = new PriceHistory(LocalDateTime.now(), price, new Asset(assetCode, assetName, price));
                     priceHistories.add(priceHistory);
                 }
             }
