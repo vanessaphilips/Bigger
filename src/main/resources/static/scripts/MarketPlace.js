@@ -2,21 +2,25 @@
 //Declare constants
 
 const MARKETPLACE_ROOT_CONTAINER = document.getElementById("assetListContainer")
-const TRADEBUTTON_CLASSNAME = "tradeButton"
+const TRADEBUTTON_CLASS = "tradeButton"
 const TRADEBUTTON_INNERHTML = "trade"
 const TRADEBUTTON_ID_SUFFIX = "Button"
 
 const ASSETCODELABEL_ID = "code"
 const ASSETNAMELABEL_ID = "name"
 const ASSETCURRENTPRICELABEL_ID = "price"
-const PRICEHISTORYGRAPH_CLASSNAME = "priceHistoryGraph"
+
+const PRICEHISTORYGRAPH_CLASS = "priceHistoryGraph"
 const PRICEHISTORYGRAPH_ID_PREFIX = "priceHistory"
-const GRAPHCONTAINER_CLASSNAME = "graphContainer"
+
+const GRAPHCONTAINER_CLASS = "graphContainer"
 const GRAPHCONTAINER_ID_PREFIX = "graphContainer"
-const ASSETCONTAINER_CLASSNAME = "asset"
+
+const ASSETCONTAINER_CLASS = "assetContainer"
+const SELECTED_ASSETCONTAINER_CLASS = "selectedAsset"
 const DAYSBACKINPUTFIELD_ID = "daysBack"
 const ROUNDING_DIGITS = 2
-const SELECTED_ASSET = "selectedAsset"
+
 
 
 await getToken()
@@ -53,7 +57,7 @@ daysBackInputField.addEventListener("input", async () => {
 
 const createTradeButton = (asset) => {
     let tradeButton = document.createElement("label")
-    tradeButton.className = TRADEBUTTON_CLASSNAME
+    tradeButton.className = TRADEBUTTON_CLASS
     tradeButton.id = asset.code + TRADEBUTTON_ID_SUFFIX
     tradeButton.innerHTML = TRADEBUTTON_INNERHTML
     tradeButton.addEventListener("click", function () {
@@ -99,7 +103,7 @@ function creatCurrentPriceLabel(asset) {
 function createPriceHistoryGraph(asset, priceHistoriesOfAsset) {
     let priceHistoryGraph = createGraph(priceHistoriesOfAsset)
     priceHistoryGraph.id = PRICEHISTORYGRAPH_ID_PREFIX + asset.code
-    priceHistoryGraph.className = PRICEHISTORYGRAPH_CLASSNAME
+    priceHistoryGraph.className = PRICEHISTORYGRAPH_CLASS
     return priceHistoryGraph;
 }
 
@@ -108,7 +112,7 @@ function creatGraphContainer(asset, priceHistoriesOfAsset) {
     let priceHistoryGraph = createPriceHistoryGraph(asset, priceHistoriesOfAsset);
     graphContainer.appendChild(priceHistoryGraph)
     graphContainer.id = GRAPHCONTAINER_ID_PREFIX + asset.code
-    graphContainer.className = GRAPHCONTAINER_CLASSNAME
+    graphContainer.className = GRAPHCONTAINER_CLASS
     return graphContainer
 }
 
@@ -117,7 +121,7 @@ const createAssetContainer = (priceHistoriesOfAsset) => {
     if (priceHistoriesOfAsset.length > 0) {
         const asset = priceHistoriesOfAsset[0].asset
         assetContainer.id = asset.code;
-        assetContainer.className = ASSETCONTAINER_CLASSNAME
+        assetContainer.className = ASSETCONTAINER_CLASS
         assetContainer.appendChild(creatAssetCodeLabel(asset))
         assetContainer.appendChild(creatAssetNameLabel(asset))
         assetContainer.appendChild(creatCurrentPriceLabel(asset))
@@ -125,13 +129,13 @@ const createAssetContainer = (priceHistoriesOfAsset) => {
         assetContainer.appendChild(createTradeButton(asset))
     }
     assetContainer.addEventListener("click", () => {
-        if (assetContainer.className === SELECTED_ASSET) {
-            assetContainer.className = ASSETCONTAINER_CLASSNAME
+        if (assetContainer.className === SELECTED_ASSETCONTAINER_CLASS) {
+            assetContainer.className = ASSETCONTAINER_CLASS
         } else {
-            for (const assetContainer of MARKETPLACE_ROOT_CONTAINER.getElementsByClassName(SELECTED_ASSET)) {
-                assetContainer.className = ASSETCONTAINER_CLASSNAME
+            for (const assetContainer of MARKETPLACE_ROOT_CONTAINER.getElementsByClassName(SELECTED_ASSETCONTAINER_CLASS)) {
+                assetContainer.className = ASSETCONTAINER_CLASS
             }
-            assetContainer.className = SELECTED_ASSET
+            assetContainer.className = SELECTED_ASSETCONTAINER_CLASS
             console.log(assetContainer.className)
         }
 
