@@ -25,22 +25,14 @@
     width: 100%;
 }
 
-.groot {
-    /*display:flex ;*/
-    /*justify-content: space-around;*/
-    /*flex-wrap: wrap;*/
-    /*flex-direction: column;*/
-    /*background-color: white;*/
-    /*margin: 5px;*/
-    height: 300px
-
-}
-
-/*dit is de graph*/
-.groot > .graphContainer > .priceHistoryGraph > div > div > div {
+/*dit is de graph zelf, denk ik*/
+.selectedAsset > .graphContainer > .priceHistoryGraph > div > div > div {
     height: 300px;
 }
 
+.selectedAsset > .graphContainer {
+    height: 300px;
+}
 
 
 #assetListContainer > div > label {
