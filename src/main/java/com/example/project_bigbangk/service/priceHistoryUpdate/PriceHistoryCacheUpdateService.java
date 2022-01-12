@@ -13,25 +13,25 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 
 @Service
-public class PriceHistoryCacheUpdateService implements IPriceHistoryListener {
+public class PriceHistoryCacheUpdateService implements IObserver {
 
 
     private final Logger logger = LoggerFactory.getLogger(PriceHistoryCacheUpdateService.class);
     RootRepository rootRepository;
     PriceHistoryCache priceHistoryCache;
-    PriceHistoryUpdateService priceHistoryUpdateService;
+    ISubject subject;
 
-    public PriceHistoryCacheUpdateService(RootRepository rootRepository, PriceHistoryCache priceHistoryCache, PriceHistoryUpdateService priceHistoryUpdateService) {
+    public PriceHistoryCacheUpdateService(RootRepository rootRepository, PriceHistoryCache priceHistoryCache, ISubject subject) {
         super();
         logger.info("New PriceHistoryCacheUpdateService");
         this.rootRepository = rootRepository;
         this.priceHistoryCache = priceHistoryCache;
-        this.priceHistoryUpdateService = priceHistoryUpdateService;
-        priceHistoryUpdateService.addPriceHistoryListener(this);
+        this.subject = subject;
+        subject.addListener(this);
     }
 
     @Override
-    public void onPriceHistoryUpdated() {
+    public void update() {
         priceHistoryCache.setPriceHistories(
                 rootRepository.getAllPriceHistroriesByAssets(LocalDateTime.now().minusDays(BigBangkApplicatie.DAYS_OF_PRICEHISTORY_CACHE))
         );
