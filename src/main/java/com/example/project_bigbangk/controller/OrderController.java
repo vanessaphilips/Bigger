@@ -44,12 +44,8 @@ public class OrderController{
         if (authenticateService.authenticate(authorization)) {
             Client client = authenticateService.getClientFromToken(authorization);
             String orderMessage = orderservice.handleOrderByType(orderDTO, client);
-            if (orderMessage == null) {
-                return ResponseEntity.status(406).body("Order Failed.");
-            } else {
                 return ResponseEntity.status(201).body(orderMessage);
             }
-        }
         return ResponseEntity.status(401).body("token expired");
     }
 

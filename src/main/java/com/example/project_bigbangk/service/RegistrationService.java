@@ -77,8 +77,10 @@ public class RegistrationService {
         if(checkRegMessage.equals(Messages.NoInputErrors.getBody())){
             Address address = new Address(registrationDTO.getPostalCode(),registrationDTO.getStreet(), registrationDTO.getNumber(), registrationDTO.getCity(),
                     registrationDTO.getCountry());
+            Wallet wallet = BigBangkApplicatie.baseWallet.clone();
+            wallet.setIban(ibanGenerator.getIban());
             Client client = new Client(registrationDTO.getEmail(), registrationDTO.getFirstName(), registrationDTO.getInsertion(), registrationDTO.getLastName(), convertedDateOfBirth,
-                    registrationDTO.getBsn(), hashService.hash(registrationDTO.getPassword()), address, createNewWallet());
+                    registrationDTO.getBsn(), hashService.hash(registrationDTO.getPassword()), address, wallet);
 
             rootRepository.createNewlyRegisteredClient(client);
 
@@ -86,18 +88,6 @@ public class RegistrationService {
         }else{
             return checkRegMessage;
         }
-    }
-
-    /**
-     * Creates Wallet with a map of all the different coin Assets offered by the Bank, set to 0.0
-     * @return
-     */
-    public Wallet createNewWallet(){
-        Map<Asset, Double> assetMap = new HashMap<>();
-        for (AssetCode_Name asset : EnumSet.allOf(AssetCode_Name.class)) {
-            assetMap.put(new Asset(asset.getAssetCode(), asset.getAssetName()), 0.0);
-        }
-        return new Wallet(ibanGenerator.getIban(),BigBangkApplicatie.bigBangk.getStartingcapital(), assetMap);
     }
 
     /**

@@ -7,12 +7,13 @@ import com.example.project_bigbangk.model.Orders.Limit_Buy;
 import com.example.project_bigbangk.model.Orders.Limit_Sell;
 import com.example.project_bigbangk.model.Orders.Stoploss_Sell;
 import com.example.project_bigbangk.model.Orders.Transaction;
+import com.example.project_bigbangk.service.IbanGeneratorService;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class Wallet {
+public class Wallet implements Prototype {
 
     private String bank;
     private String iban;
@@ -23,8 +24,6 @@ public class Wallet {
     private List<Limit_Buy> limitBuy;
     private List<Stoploss_Sell> stoplossSell;
     private ICanTrade owner;
-
-    //Is het niet handiger om het type er achter te zetten zoals buyOrderList of assetMap, transactionList?
 
     public Wallet(String bank, String iban, double balance, Map<Asset, Double> asset, List<Transaction> transaction,
                   List<Limit_Sell> limitSell, List<Limit_Buy> limnitBuy, List<Stoploss_Sell> stoplossSell,
@@ -149,5 +148,10 @@ public class Wallet {
 
     public void setOwner(ICanTrade owner) {
         this.owner = owner;
+    }
+
+    @Override
+    public Wallet clone() {
+        return new Wallet(this.iban,this.balance, this.asset);
     }
 }
