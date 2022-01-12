@@ -59,3 +59,13 @@ CREATE TABLE `wallet_has_asset`
     `IBAN` VARCHAR(45) NOT NULL,
     PRIMARY KEY (`code`, `IBAN`)
 );
+
+CREATE TABLE `address`
+(
+    `postalcode` VARCHAR(10) NOT NULL,
+    `street` VARCHAR(45) NOT NULL,
+    `number` INT NULL,
+    `city` VARCHAR(45) NOT NULL,
+    `country` VARCHAR(45) NOT NULL,
+    PRIMARY KEY (`postalcode`, `number`)
+);

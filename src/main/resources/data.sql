@@ -33,5 +33,14 @@ VALUES ('2005-12-31 21:00:59Z', 'BTC', 44000),
        ('2005-12-31 21:20:59Z', 'ETH', 2.5);
 INSERT INTO `asset`
 VALUES('BTC', 'Bitcoin'),
-       ('ETH', 'Ethereal')
+       ('ETH', 'Ethereal');
+
+INSERT INTO `Address`
+VALUES ('3013AL', 'Weena', 500, 'Rotterdam', 'Nederland'),
+       ('3066JB', 'MarievanEijsden-Vinkstraat', 188, 'Rotterdam', 'Nederland'),
+       ('3038GK', 'Gordelweg', 202, 'Rotterdam', 'Nederland'),
+       ('2952BE', 'Stoelendans', 82, 'Capellea/dIJssel', 'Nederland'),
+       ('1217ZC', 'KoosPostemalaan', 6, 'Hilversum', 'Holland');
+
+
 
