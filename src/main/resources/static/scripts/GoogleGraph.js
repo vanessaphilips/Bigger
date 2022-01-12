@@ -16,6 +16,18 @@ function setOptions() {
         legend: {display: false},
         height: 100,
         width: 200,
+        //        chartArea: {
+        //            // leave room for y-axis labels
+        //
+        //            width: '50%',
+        //            height: '50%'
+        //        },
+        // explorer: {
+        //     actions: ['dragToZoom', 'rightClickToReset'],
+        //     axis: 'horizontal',
+        //     keepInBounds: true,
+        //     maxZoomIn: 1100.0
+        // }
     };
 }
 
@@ -30,10 +42,11 @@ const createGraph = (priceHistoriesOfAsset) => {
         const data = new google.visualization.DataTable()
         setData(data, dates, prices)
         console.log("laden data googleGraph gelukt")
-        var options = setOptions()
+        const options = setOptions()
         const chart = new google.visualization.LineChart(divGraph);
         chart.draw(data, options);
 
     }
+
     return divGraph
 }
