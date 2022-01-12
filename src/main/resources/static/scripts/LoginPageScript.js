@@ -11,33 +11,33 @@ function submitLogin(){
    let x = document.getElementById('email');
    let y = document.getElementById('password');
 
-   let login = new LoginDTO(x,y);
-   sendLoginData(login);
+   const loginDTO = new LoginDTO(x,y);
+   sendLoginData(loginDTO);
 }
 
-function sendLoginData(lData) {
-    fetch("http://localhost:8080/login", {
-        method: 'POST',
-        headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(lData)
-    })
-        .then(response => {
+async function sendLoginData(lData) {
+    await fetch(`${rootURL}login`, {
+        method: "POST",
+        headers: acceptHeaders(),
+        body: JSON.stringify(loginDTO)
+    }).then(response => {
             if (response.status === 200) {
-                return response.text()
-                    .then(text => {
-                        alert(text);
-                    })
-            } else if (response.status === 401) {
+                return response.json()
+            }
+            else if (response.status === 401) {
                 return response.text()
                     .then(text => alert(text))
             } else {
                 alert('Unknown Error.')
             }
-        })
-        .catch((error) => {
+        }).then((json) => {
+            if (json.authorization !== undefined) {
+                localStorage.setItem(JWT_KEY, json.authorization)
+                console.log("login succes" + loginDTO.email);
+            } else {
+                console.log("login failed");
+            }
+        }).catch((error) => {
             console.error('Error', error)
         });
 }
