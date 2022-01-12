@@ -22,16 +22,16 @@ const DAYSBACKINPUTFIELD_ID = "daysBack"
 const ROUNDING_DIGITS = 2
 
 
-
 await getToken()
 let token = localStorage.getItem(JWT_KEY)
 let daysBackInputField = document.getElementById(DAYSBACKINPUTFIELD_ID);
 let daysBack = 30
 daysBackInputField.value = daysBack;
-
 //Declare functions
 
-function updatePriceHistoryGraphs(priceHistoriesByAssets) {
+    function
+updatePriceHistoryGraphs(priceHistoriesByAssets)
+{
     for (const priceHistoriesOfAsset of priceHistoriesByAssets) {
         const asset = priceHistoriesOfAsset[0].asset
         let priceHistoryContainer = document.getElementById(GRAPHCONTAINER_ID_PREFIX + asset.code)
@@ -46,13 +46,12 @@ function updatePriceHistoryGraphs(priceHistoriesByAssets) {
 daysBackInputField.addEventListener("input", async () => {
     console.log("field is veranderd")
     daysBack = daysBackInputField.value
-    const jsonPriceHistories = await getPriceHistoriesByAsset(token)
+    let json = await getPriceHistoriesByAsset(token)
+    const jsonPriceHistories = JSON.parse(json.priceHistory)
     if (jsonPriceHistories !== undefined) {
         updatePriceHistoryGraphs(jsonToPriceHistoriesByAssets(jsonPriceHistories));
     }
 })
-
-
 
 
 const createTradeButton = (asset) => {
@@ -144,7 +143,9 @@ const createAssetContainer = (priceHistoriesOfAsset) => {
 }
 
 const fillPageWithAssets = (priceHistoriesByAssets) => {
+
     for (const priceHistoriesOfAsset of priceHistoriesByAssets) {
+        priceHistoriesByAssets.sort(c => c.date)
         MARKETPLACE_ROOT_CONTAINER.appendChild(createAssetContainer(priceHistoriesOfAsset))
     }
 }
@@ -154,9 +155,9 @@ function parseDate(localDateTimeString) {
     return new Date(dateTime)
 }
 
-function jsonToPriceHistoriesByAssets(json) {
+function jsonToPriceHistoriesByAssets(jsonPriceHistories) {
     const priceHistoriesByAssets = []
-    for (const priceHistoriesOfAssetJson of json) {
+    for (const priceHistoriesOfAssetJson of jsonPriceHistories) {
         const priceHistoriesOfAsset = []
         for (const priceHistory of priceHistoriesOfAssetJson) {
             priceHistoriesOfAsset.push(new PriceHistory(parseDate(priceHistory.dateTime), priceHistory.price, priceHistory.asset))
@@ -173,7 +174,7 @@ function createDateInPast() {
 
 
 const getPriceHistoriesByAsset = (token) => {
-    return fetch(`${rootURL}priceHistories`,
+    return fetch(`${rootURL}marketplace`,
         {
             method: 'POST',
             headers: acceptHeadersWithToken(token),
@@ -186,14 +187,29 @@ const getPriceHistoriesByAsset = (token) => {
         }
     }).then(json => json)
 }
+let updateInterval = 300000;
+let lastUpdate = Date.now();
 
-
-const jsonPriceHistories = await getPriceHistoriesByAsset(token)
-if (jsonPriceHistories !== undefined) {
-    const priceHistoriesByAssets = jsonToPriceHistoriesByAssets(jsonPriceHistories)
-    fillPageWithAssets(priceHistoriesByAssets)
+async function refreshpage() {
+    console.log("pageUpdated on " + new Date(Date.now()).toLocaleTimeString())
+    const json = await getPriceHistoriesByAsset(token)
+    updateInterval = Number.parseFloat(json.updateInterval);
+    const jsonPriceHistories = JSON.parse(json.priceHistory);
+    if (jsonPriceHistories !== undefined) {
+        const priceHistoriesByAssets = jsonToPriceHistoriesByAssets(jsonPriceHistories)
+        lastUpdate = priceHistoriesByAssets[0].sort(c => c.date)[0].date
+        fillPageWithAssets(priceHistoriesByAssets)
+    }
 }
 
+await refreshpage()
+const dateNow = new Date()
+const initialTimeOut = updateInterval - (dateNow.getTime() - lastUpdate.getTime()) + 10000
+console.log(initialTimeOut)
+const onPriceHistoryUpdate = () => {
+    refreshpage()
+    setInterval(refreshpage, updateInterval)
+}
 
-
+setTimeout(onPriceHistoryUpdate, initialTimeOut)
 
