@@ -9,13 +9,13 @@ function setData(data, dates, prices) {
     }
 }
 
-function setOptions() {
+function setOptions(width, height) {
     return {
         title: {display: false},
         curveType: 'function',
         legend: {display: false},
-        height: 100,
-        width: 200,
+        height: height,
+        width: width,
         //        chartArea: {
         //            // leave room for y-axis labels
         //
@@ -31,7 +31,7 @@ function setOptions() {
     };
 }
 
-const createGraph = (priceHistoriesOfAsset) => {
+const createGraph = (priceHistoriesOfAsset, width, height) => {
     let dates = priceHistoriesOfAsset.map(ph => ph.date)
     let prices = priceHistoriesOfAsset.map(ph => ph.price)
     const divGraph = document.createElement("div")
@@ -42,7 +42,7 @@ const createGraph = (priceHistoriesOfAsset) => {
         const data = new google.visualization.DataTable()
         setData(data, dates, prices)
         console.log("laden data googleGraph gelukt")
-        const options = setOptions()
+        const options = setOptions(width, height)
         const chart = new google.visualization.LineChart(divGraph);
         chart.draw(data, options);
 
