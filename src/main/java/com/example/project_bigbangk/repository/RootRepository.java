@@ -124,10 +124,6 @@ public class RootRepository {
         return findWalletWithAssetByIban(wallet.getIban());
     }
 
-    public void saveNewWallet(Wallet wallet) {
-        walletDAO.saveNewWallet(wallet);
-    }
-
     public Wallet findWalletByIban(String iban) {
         return walletDAO.findWalletByIban(iban);
     }
@@ -150,12 +146,6 @@ public class RootRepository {
         wallet.setAsset(assetWithAmountMap);
         return wallet;
     }
-
-    //TODO onderstaande methode maken!
-
-    private void updateWallet(Wallet sellerWallet) {
-    }
-
 
     //ORDER > TRANSACTION
 
