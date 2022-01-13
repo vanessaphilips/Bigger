@@ -3,8 +3,6 @@
 
 const MARKETPLACE_ROOT_CONTAINER = document.getElementById("assetListContainer")
 const TRADEBUTTON_CLASS = "tradeButton"
-const TRADEBUTTON_INNERHTML = "trade"
-const TRADEBUTTON_ID_SUFFIX = "Button"
 
 const ASSETCODELABEL_ID = "code"
 const ASSETNAMELABEL_ID = "name"
@@ -21,64 +19,47 @@ const SELECTED_ASSETCONTAINER_CLASS = "selectedAsset"
 const DAYSBACKINPUTFIELD_ID = "daysBack"
 const ROUNDING_DIGITS = 2
 
-
+const GRAPHWIDTH = 200;
+const GRAPHHEIGHT = 100;
+let updateInterval = 300000;
+let lastUpdate = Date.now();
 await getToken()
 let token = localStorage.getItem(JWT_KEY)
 let daysBackInputField = document.getElementById(DAYSBACKINPUTFIELD_ID);
 let daysBack = 30
-daysBackInputField.value = daysBack;
-//Declare functions
 
-    function
-updatePriceHistoryGraphs(priceHistoriesByAssets)
-{
+let priceHistoriesByAssets = [[]]
+
+//Declare functions
+async function initializePage() {
+    daysBackInputField.value = daysBack;
+    console.log("pageUpdated on " + new Date(Date.now()).toLocaleTimeString())
+    const json = await getPriceHistoriesByAsset(token)
+    updateInterval = Number.parseFloat(json.updateInterval);
+    const jsonPriceHistories = JSON.parse(json.priceHistory);
+    if (jsonPriceHistories !== undefined) {
+        saveAsPriceHistories(jsonPriceHistories)
+        lastUpdate = priceHistoriesByAssets[0].sort(c => c.date)[0].date
+        fillPageWithAssets()
+    }
+}
+
+function upDatePriceHistoryGraph(priceHistoriesOfAsset, width, height) {
+    const asset = priceHistoriesOfAsset[0].asset
+    const graphContainer = document.getElementById(asset.code).getElementsByClassName(GRAPHCONTAINER_CLASS)[0]
+    graphContainer.replaceChild(createPriceHistoryGraph(asset, priceHistoriesOfAsset, width, height), graphContainer.firstChild)
+}
+
+function updateAllPriceHistoryGraphs() {
     for (const priceHistoriesOfAsset of priceHistoriesByAssets) {
-        const asset = priceHistoriesOfAsset[0].asset
-        let priceHistoryContainer = document.getElementById(GRAPHCONTAINER_ID_PREFIX + asset.code)
-        while (priceHistoryContainer.firstChild) {
-            priceHistoryContainer.removeChild(priceHistoryContainer.firstChild);
-        }
-        let priceHistoryGraph = createPriceHistoryGraph(asset, priceHistoriesOfAsset)
-        priceHistoryContainer.appendChild(priceHistoryGraph)
+        upDatePriceHistoryGraph(priceHistoriesOfAsset, GRAPHWIDTH, GRAPHHEIGHT)
     }
 }
 
 daysBackInputField.addEventListener("input", async () => {
-    console.log("field is veranderd")
     daysBack = daysBackInputField.value
-    let json = await getPriceHistoriesByAsset(token)
-    const jsonPriceHistories = JSON.parse(json.priceHistory)
-    if (jsonPriceHistories !== undefined) {
-        updatePriceHistoryGraphs(jsonToPriceHistoriesByAssets(jsonPriceHistories));
-    }
+    updateAllPriceHistoryGraphs();
 })
-
-
-const createTradeButton = (asset) => {
-    let tradeButton = document.createElement("label")
-    tradeButton.className = TRADEBUTTON_CLASS
-    tradeButton.id = asset.code + TRADEBUTTON_ID_SUFFIX
-    tradeButton.innerHTML = TRADEBUTTON_INNERHTML
-    tradeButton.addEventListener("click", function () {
-        localStorage.setItem(CURRENT_ASSET_KEY, JSON.stringify(asset))
-        window.location.href = tradeButtonLink;
-    })
-    return tradeButton
-}
-
-function creatAssetCodeLabel(asset) {
-    let assetCodeLabel = document.createElement("label");
-    assetCodeLabel.id = ASSETCODELABEL_ID
-    assetCodeLabel.innerHTML = asset.code
-    return assetCodeLabel
-}
-
-function creatAssetNameLabel(asset) {
-    let assetNameLabel = document.createElement("label");
-    assetNameLabel.id = ASSETNAMELABEL_ID
-    assetNameLabel.innerHTML = asset.name
-    return assetNameLabel
-}
 
 function normalizePrice(currentPrice) {
     //is de prijs ver achter de komma? Dan wordt 1/currentPrice groot
@@ -89,64 +70,64 @@ function normalizePrice(currentPrice) {
     //standaard aantal cijfers achter de komma(ROUNDING_DIGITS)
     let multiPly = (factor > 1 ? Math.pow(10, factor) : 1) * Math.pow(10, ROUNDING_DIGITS)
     return (Math.round(currentPrice * multiPly) / multiPly)
-
 }
 
-function creatCurrentPriceLabel(asset) {
-    let assetcurrentPriceLabel = document.createElement("label");
-    assetcurrentPriceLabel.id = ASSETCURRENTPRICELABEL_ID
-    assetcurrentPriceLabel.innerHTML = normalizePrice(asset.currentPrice)
-    return assetcurrentPriceLabel
-}
-
-function createPriceHistoryGraph(asset, priceHistoriesOfAsset) {
-    let priceHistoryGraph = createGraph(priceHistoriesOfAsset)
+function createPriceHistoryGraph(asset, priceHistoriesOfAsset, width, height) {
+    const dateInPast = new Date(new Date().valueOf() - daysBack * 86400000)
+    priceHistoriesOfAsset = priceHistoriesOfAsset.filter(ph => ph.date > dateInPast)
+    let priceHistoryGraph = createGraph(priceHistoriesOfAsset, width, height)
     priceHistoryGraph.id = PRICEHISTORYGRAPH_ID_PREFIX + asset.code
     priceHistoryGraph.className = PRICEHISTORYGRAPH_CLASS
     return priceHistoryGraph;
 }
 
-function creatGraphContainer(asset, priceHistoriesOfAsset) {
-    let graphContainer = document.createElement("div");
-    let priceHistoryGraph = createPriceHistoryGraph(asset, priceHistoriesOfAsset);
-    graphContainer.appendChild(priceHistoryGraph)
-    graphContainer.id = GRAPHCONTAINER_ID_PREFIX + asset.code
-    graphContainer.className = GRAPHCONTAINER_CLASS
-    return graphContainer
-}
-
-const createAssetContainer = (priceHistoriesOfAsset) => {
-    let assetContainer = document.createElement("div");
-    if (priceHistoriesOfAsset.length > 0) {
-        const asset = priceHistoriesOfAsset[0].asset
-        assetContainer.id = asset.code;
-        assetContainer.className = ASSETCONTAINER_CLASS
-        assetContainer.appendChild(creatAssetCodeLabel(asset))
-        assetContainer.appendChild(creatAssetNameLabel(asset))
-        assetContainer.appendChild(creatCurrentPriceLabel(asset))
-        assetContainer.appendChild(creatGraphContainer(asset, priceHistoriesOfAsset))
-        assetContainer.appendChild(createTradeButton(asset))
-    }
+function addEventListenner(assetContainer) {
+    const priceHistoryByAsset = priceHistoriesByAssets.filter(ph => ph[0].asset.code === assetContainer.id)[0]
     assetContainer.addEventListener("click", () => {
         if (assetContainer.className === SELECTED_ASSETCONTAINER_CLASS) {
             assetContainer.className = ASSETCONTAINER_CLASS
+            upDatePriceHistoryGraph(priceHistoryByAsset, GRAPHWIDTH, GRAPHHEIGHT)
         } else {
             for (const assetContainer of MARKETPLACE_ROOT_CONTAINER.getElementsByClassName(SELECTED_ASSETCONTAINER_CLASS)) {
+                const priceHistoryByAsset = priceHistoriesByAssets.filter(ph => ph[0].asset.code === assetContainer.id)[0]
                 assetContainer.className = ASSETCONTAINER_CLASS
+                upDatePriceHistoryGraph(priceHistoryByAsset, GRAPHWIDTH, GRAPHHEIGHT)
             }
             assetContainer.className = SELECTED_ASSETCONTAINER_CLASS
-            console.log(assetContainer.className)
-        }
 
+
+            upDatePriceHistoryGraph(priceHistoryByAsset, 600, 300)
+
+        }
     })
-    return assetContainer
 }
 
-const fillPageWithAssets = (priceHistoriesByAssets) => {
+function fillAssetContainer(assetContainer, priceHistoriesByAsset) {
+    if (priceHistoriesByAsset.length > 0) {
+        priceHistoriesByAsset.sort(c => c.date)
+        const asset = priceHistoriesByAsset[0].asset
+        assetContainer.id = asset.code;
+        assetContainer.getElementsByClassName(ASSETCODELABEL_ID)[0].innerHTML = asset.code
+        assetContainer.getElementsByClassName(ASSETNAMELABEL_ID)[0].innerHTML = asset.name
+        assetContainer.getElementsByClassName(ASSETCURRENTPRICELABEL_ID)[0].innerHTML = normalizePrice(asset.currentPrice)
+        const graphContainer = assetContainer.getElementsByClassName(GRAPHCONTAINER_CLASS)[0]
+        if (graphContainer.firstChild !== null) {
+            graphContainer.replaceChild(createPriceHistoryGraph(asset, priceHistoriesByAsset, GRAPHWIDTH, GRAPHHEIGHT), graphContainer.firstChild)
+        } else {
+            graphContainer.appendChild(createPriceHistoryGraph(asset, priceHistoriesByAsset, GRAPHWIDTH, GRAPHHEIGHT))
+        }
+        assetContainer.getElementsByClassName(TRADEBUTTON_CLASS)[0].addEventListener("click", function () {
+            localStorage.setItem(CURRENT_ASSET_KEY, JSON.stringify(asset))
+            window.location.href = tradeButtonLink;
+        })
+    }
+    addEventListenner(assetContainer)
+}
 
-    for (const priceHistoriesOfAsset of priceHistoriesByAssets) {
-        priceHistoriesByAssets.sort(c => c.date)
-        MARKETPLACE_ROOT_CONTAINER.appendChild(createAssetContainer(priceHistoriesOfAsset))
+const fillPageWithAssets = () => {
+    const assetContainers = document.getElementsByClassName("assetContainer")
+    for (let i = 0; i < assetContainers.length; i++) {
+        fillAssetContainer(assetContainers[i], priceHistoriesByAssets[i])
     }
 }
 
@@ -155,24 +136,22 @@ function parseDate(localDateTimeString) {
     return new Date(dateTime)
 }
 
-function jsonToPriceHistoriesByAssets(jsonPriceHistories) {
-    const priceHistoriesByAssets = []
+function saveAsPriceHistories(jsonPriceHistories) {
+    const tempPriceHistoriesByAssets = []
     for (const priceHistoriesOfAssetJson of jsonPriceHistories) {
         const priceHistoriesOfAsset = []
         for (const priceHistory of priceHistoriesOfAssetJson) {
             priceHistoriesOfAsset.push(new PriceHistory(parseDate(priceHistory.dateTime), priceHistory.price, priceHistory.asset))
         }
-        priceHistoriesByAssets.push(priceHistoriesOfAsset)
+        tempPriceHistoriesByAssets.push(priceHistoriesOfAsset)
     }
-    return priceHistoriesByAssets
+    priceHistoriesByAssets = tempPriceHistoriesByAssets
 }
 
 function createDateInPast() {
     const date = new Date(new Date().valueOf() - daysBack * 86400000)
     return date.toISOString().substring(0, 23);
 }
-
-
 
 const getPriceHistoriesByAsset = (token) => {
     return fetch(`${rootURL}marketplace`,
@@ -188,28 +167,14 @@ const getPriceHistoriesByAsset = (token) => {
         }
     }).then(json => json)
 }
-let updateInterval = 300000;
-let lastUpdate = Date.now();
 
-async function refreshpage() {
-    console.log("pageUpdated on " + new Date(Date.now()).toLocaleTimeString())
-    const json = await getPriceHistoriesByAsset(token)
-    updateInterval = Number.parseFloat(json.updateInterval);
-    const jsonPriceHistories = JSON.parse(json.priceHistory);
-    if (jsonPriceHistories !== undefined) {
-        const priceHistoriesByAssets = jsonToPriceHistoriesByAssets(jsonPriceHistories)
-        lastUpdate = priceHistoriesByAssets[0].sort(c => c.date)[0].date
-        fillPageWithAssets(priceHistoriesByAssets)
-    }
-}
-
-await refreshpage()
+await initializePage()
 const dateNow = new Date()
 const initialTimeOut = updateInterval - (dateNow.getTime() - lastUpdate.getTime()) + 10000
 console.log(initialTimeOut)
 const onPriceHistoryUpdate = () => {
-    refreshpage()
-    setInterval(refreshpage, updateInterval)
+    initializePage()
+    setInterval(initializePage, updateInterval)
 }
 
 setTimeout(onPriceHistoryUpdate, initialTimeOut)

@@ -34,6 +34,9 @@
     height: 300px;
 }
 
+#kolomnamen > label{
+    color: black;
+}
 
 #assetListContainer > div > label {
     background-color: white;
@@ -76,16 +79,16 @@
 }
 
 
-#kolomnamen {
+.name {
     color: var(--blue);
 }
 
 
-#code {
+.code {
     color: var(--blue);
 }
 
-#currentPrice {
+.price {
     background-color: #ffffff;
     flex-grow: 1.2;
 }
