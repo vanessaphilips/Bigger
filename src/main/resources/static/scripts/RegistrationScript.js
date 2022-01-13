@@ -21,13 +21,16 @@ class RegistrationDTO{
 const MIN_AGE = 18;
 const MAX_AGE = 150;
 
-document.getElementById('password').addEventListener('focusout', checkPassword);
+$( document ).ready(function() {
+    document.getElementById('password').addEventListener('focusout', checkPassword);
 
-document.getElementById('postalCode').addEventListener('focusout', checkAddress);
+    document.getElementById('postalCode').addEventListener('focusout', checkAddress);
 
-document.getElementById('number').addEventListener('focusout', checkAddress);
+    document.getElementById('number').addEventListener('focusout', checkAddress);
 
-document.getElementById('submitForm').addEventListener('click', prepareRegistration);
+    // document.getElementById('submitForm').addEventListener('click', prepareRegistration);
+});
+
 
 //generates minimum and maximum date entry based on current date.
 window.onload = function() {
@@ -104,7 +107,7 @@ function processAddress(data) {
 }
 
 function prepareRegistration() {
-
+        console.log("Preparing DTO");
         let registration = new RegistrationDTO(
         document.getElementById('email').value.trim(),
         document.getElementById('password').value,
@@ -119,30 +122,23 @@ function prepareRegistration() {
         document.getElementById('city').value,
         document.getElementById('country').value
     );
+        console.log(registration);
     sendRegistrationData(registration);
 }
 
 function sendRegistrationData(rData){
-    fetch("http://localhost:8080/register", {
-        method: 'POST',
-        headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Content-Type': 'application/json'
-        },
+    fetch(`http://localhost:8080/register`, {
+        method: "POST",
+        headers: acceptHeaders(),
         body: JSON.stringify(rData)
+    }).then(response => {
+        if (response.status === 201) {
+            console.log("Succesfull registration user: " + rData.email)
+        } else if (response.status === 409) {
+            console.log("User already in database: " + rData.email)
+        } else {
+            console.log("Bad registration" + response.body)
+        }
     })
-        .then(response => {
-            if(response.status === 201){
-                return response.text()
-                    .then(text => {
-                        alert(text);
-                        //naar login pagina
-                    })
-            }
-            else if(response.status === 409 || response.status === 406){
-                return response.text()
-                    .then(text => alert(text))
-            }else{alert('Unknown Error.')}
-        })
-        .catch((error) => {console.error('Error', error)});
 }
+
