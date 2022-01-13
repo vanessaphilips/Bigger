@@ -98,6 +98,7 @@ public class RegistrationService {
      * @return
      */
     public String checkRegistrationInput(RegistrationDTO registrationDTO){
+        inputErrorMessage = "";
         if (checkForEmptyStrings(registrationDTO)){
             inputErrorMessage += "Empty Field ";}
         if (!matchesRegex(registrationDTO.getEmail(), EMAIL_REGEX)){
@@ -106,7 +107,7 @@ public class RegistrationService {
             inputErrorMessage += "Invalid Password ";}
         if (checkUnderAgeLimit(registrationDTO)) {
             inputErrorMessage += "Invalid Date of Birth ";}
-        if(!matchesRegex(registrationDTO.getBsn(), BSN_REGEX)){
+        if(!matchesRegex(registrationDTO.getBsn(), BSN_REGEX) || !bsn11Check(registrationDTO.getBsn())){
             inputErrorMessage += "Invalid Bsn ";}
         if(!matchesRegex(registrationDTO.getPostalCode(), POSTAL_REGEX)){
             inputErrorMessage += "Invalid PostalCode ";}
@@ -150,6 +151,24 @@ public class RegistrationService {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(input);
         return matcher.matches();
+    }
+
+    /**
+     * @Author Kelly Speelman - de Jonge
+     */
+    // doet de 11 check op het bsn nummer
+    public boolean bsn11Check(String bsnNummer){
+        char[] bsn = bsnNummer.toCharArray();
+        int keerGetal = 9;
+        int bsnEindGetal = 0;
+        for (char c : bsn) {
+            bsnEindGetal += (Character.getNumericValue(c) * keerGetal);
+            keerGetal--;
+            if (keerGetal == 1) {
+                keerGetal = -1;
+            }
+        }
+        return (bsnEindGetal % 11) == 0;
     }
 
 }
