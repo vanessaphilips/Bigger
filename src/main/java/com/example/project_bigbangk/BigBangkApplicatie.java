@@ -22,7 +22,7 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
 
     public static final String CURRENT_CURRENCY = "EUR";
     public static final long DAYS_OF_PRICEHISTORY_CACHE =30 ;
-    public static final int UPDATE_INTERVAL_PRICEUPDATESERVICE = 20000;//5min 300000
+    public static final int UPDATE_INTERVAL_PRICEUPDATESERVICE = 300000;//5min 300000
     private static final int NUMBER_OF_CLIENTS_TO_SEED = 3000;
     private static final int DELAY_PRICEHISTORYUPDATE = 3000;
     private static final int DELAY_DATABASES_SEEDING = 6000;
