@@ -135,7 +135,7 @@ function sendRegistrationData(rData){
         } else if (response.status === 409) {
             console.log("User already in database: " + rData.email)
         } else {
-            console.log("Bad registration" + response.body)
+            console.log("Registration Failed: Missing or incorrect fields.");
         }
     })
 }
