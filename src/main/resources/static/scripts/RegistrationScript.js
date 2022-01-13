@@ -38,7 +38,7 @@ window.onload = function() {
     minday.setFullYear(minday.getFullYear() -(MAX_AGE))
     inp.max =  dateToString(maxday);
     inp.min =  dateToString(minday);
-    inp.defaultValue = dateToString(new Date());
+    inp.defaultValue = dateToString(new Date(2000-1-1));
     // Debug
     console.log(inp.outerHTML);
 }
