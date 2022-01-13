@@ -4,7 +4,9 @@ import com.example.project_bigbangk.Utilities.ObjectToJsonHelper;
 import com.example.project_bigbangk.model.DTO.LoginDTO;
 import com.example.project_bigbangk.service.LoginService;
 import com.example.project_bigbangk.service.RegistrationService;
+import com.example.project_bigbangk.service.Security.AuthenticateService;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -19,6 +21,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 /**
  * created by Pieter Jan Bleichrodt
  */
@@ -27,12 +30,16 @@ import static org.junit.jupiter.api.Assertions.*;
         "spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration")
 class LoginControllerTest {
     private MockMvc mockMvc;
-
+    @MockBean
+    OrderController orderController;
     @MockBean
     MarketPlaceController marketPlaceController;
     @MockBean
     private LoginService loginService;
-
+    @MockBean
+    AuthenticateService authenticateService;
+    @MockBean
+    WalletController walletController;
     @MockBean
     private RegistrationService registrationService;
     MockHttpServletRequestBuilder builder;
@@ -73,7 +80,7 @@ class LoginControllerTest {
             response = mockMvc.perform(builder);
             MvcResult result = response.andExpect(MockMvcResultMatchers.status().isOk())
                     .andReturn();
-            assertEquals("login succesfull", result.getResponse().getContentAsString());
+            assertEquals("{\"authorization\":\"login succesfull\"}", result.getResponse().getContentAsString());
         } catch (Exception e) {
             e.printStackTrace();
         }
