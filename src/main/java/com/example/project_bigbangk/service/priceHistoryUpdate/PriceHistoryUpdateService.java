@@ -17,13 +17,13 @@ import java.util.List;
  * Creation date 12/11/2021
  */
 @Service
-public class PriceHistoryUpdateService {
+public class PriceHistoryUpdateService implements ISubject {
 
     private final Logger logger = LoggerFactory.getLogger(PriceHistoryUpdateService.class);
     private ICryptoApiSwitcher cryptoApiNegotiatorStrategy;
     private ICryptoApiNegotiator cryptoNegotiatorService;
     private RootRepository rootRepository;
-    private List<IPriceHistoryListener> priceHistoryListeners;
+    private List<IObserver> observers;
 
 
     public PriceHistoryUpdateService(ICryptoApiSwitcher cryptoApiNegotiatorStrategy, RootRepository rootRepository) {
@@ -31,11 +31,11 @@ public class PriceHistoryUpdateService {
         logger.info("New PriceHistoryUpdateService");
         this.cryptoApiNegotiatorStrategy = cryptoApiNegotiatorStrategy;
         this.rootRepository = rootRepository;
-        this.priceHistoryListeners = new ArrayList<>();
+        this.observers = new ArrayList<>();
     }
 
-    public void addPriceHistoryListener(IPriceHistoryListener IPriceHistoryListener) {
-        priceHistoryListeners.add(IPriceHistoryListener);
+    public void addListener(IObserver IObserver) {
+        observers.add(IObserver);
     }
 
     /**
@@ -51,15 +51,15 @@ public class PriceHistoryUpdateService {
         if (priceHistories != null) {
             rootRepository.savePriceHistories(priceHistories);
             logger.info(String.format("Price history updated on %s", LocalDateTime.now()));
-            onPriceHistoryUpdated();
+            notifyObservers();
         } else {
             logger.error(String.format("Price history update encountered an error on %s", LocalDateTime.now()));
         }
     }
 
-    public void onPriceHistoryUpdated() {
-        for (IPriceHistoryListener priceHistoryListener : priceHistoryListeners) {
-            priceHistoryListener.onPriceHistoryUpdated();
+    public void notifyObservers() {
+        for (IObserver observer : observers) {
+            observer.update();
         }
     }
 }
