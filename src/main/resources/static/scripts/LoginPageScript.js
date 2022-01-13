@@ -8,38 +8,37 @@ class LoginDTO {
 }
 
 function submitLogin(){
-   let x = document.getElementById('email');
-   let y = document.getElementById('password');
+   let email = document.getElementById('email').value;
+   let password = document.getElementById('password').value;
 
-   const loginDTO = new LoginDTO(x,y);
-   sendLoginData(loginDTO);
+   if(!email || !password){
+       window.alert("Please full in both fields.")
+   }else {
+       const loginDTO = new LoginDTO(email, password);
+       sendLoginData(loginDTO);
+   }
 }
 
-async function sendLoginData(lData) {
-    await fetch(`${rootURL}login`, {
+function sendLoginData(lData) {
+    fetch(`${rootURL}login`, {
         method: "POST",
         headers: acceptHeaders(),
         body: JSON.stringify(lData)
-    }).then(response => {
-            if (response.status === 200) {
-                return response.json()
-            }
-            else if (response.status === 401) {
-                return response.text()
-                    .then(text => alert(text))
-            } else {
-                alert('Unknown Error.')
-            }
-        }).then((json) => {
-            if (json.authorization !== undefined) {
-                localStorage.setItem(JWT_KEY, json.authorization)
+    })
+        .then(response => {
+            if (response.ok) {
+                storeToken(response.json());
                 console.log("login succes" + lData.email);
-            } else {
+            }else {
                 console.log("login failed");
             }
-        }).catch((error) => {
-            console.error('Error', error)
-        });
+        })
+}
+
+function storeToken(json) {
+    if (json.authorization !== undefined) {
+        localStorage.setItem(JWT_KEY, json.authorization);
+    }
 }
 
 
