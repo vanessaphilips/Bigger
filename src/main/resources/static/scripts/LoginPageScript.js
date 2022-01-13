@@ -12,7 +12,7 @@ function submitLogin(){
    let password = document.getElementById('password').value;
 
    if(!email || !password){
-       window.alert("Please full in both fields.")
+       window.alert("Please fill in both fields.")
    }else {
        const loginDTO = new LoginDTO(email, password);
        sendLoginData(loginDTO);
@@ -28,7 +28,7 @@ function sendLoginData(lData) {
         .then(response => {
             if (response.ok) {
                 storeToken(response.json());
-                console.log("login succes" + lData.email);
+                console.log("login successful" + lData.email);
             }else {
                 console.log("login failed");
             }
@@ -40,5 +40,3 @@ function storeToken(json) {
         localStorage.setItem(JWT_KEY, json.authorization);
     }
 }
-
-
