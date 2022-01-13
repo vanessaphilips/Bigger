@@ -35,15 +35,16 @@ window.onload = function() {
     let maxday = new Date();
     maxday.setFullYear(maxday.getFullYear() - MIN_AGE);
     let minday = new Date();
-    minday.setFullYear(minday.getFullYear() -(MAX_AGE))
+    minday.setFullYear(minday.getFullYear() -(MAX_AGE));
     inp.max =  dateToString(maxday);
     inp.min =  dateToString(minday);
-    inp.defaultValue = dateToString(new Date(2000-1-1));
+    inp.defaultValue = dateToString(new Date(2000, 11, 12));
     // Debug
     console.log(inp.outerHTML);
 }
 
 function dateToString(date){
+
     return date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
 }
 
