@@ -19,7 +19,7 @@ async function sendLoginData(lData) {
     await fetch(`${rootURL}login`, {
         method: "POST",
         headers: acceptHeaders(),
-        body: JSON.stringify(loginDTO)
+        body: JSON.stringify(lData)
     }).then(response => {
             if (response.status === 200) {
                 return response.json()
@@ -33,7 +33,7 @@ async function sendLoginData(lData) {
         }).then((json) => {
             if (json.authorization !== undefined) {
                 localStorage.setItem(JWT_KEY, json.authorization)
-                console.log("login succes" + loginDTO.email);
+                console.log("login succes" + lData.email);
             } else {
                 console.log("login failed");
             }
