@@ -81,26 +81,24 @@ function createPriceHistoryGraph(asset, priceHistoriesOfAsset, width, height) {
     return priceHistoryGraph;
 }
 
-function addEventListenner(assetContainer) {
-    const priceHistoryByAsset = priceHistoriesByAssets.filter(ph => ph[0].asset.code === assetContainer.id)[0]
-    assetContainer.addEventListener("click", () => {
-        if (assetContainer.className === SELECTED_ASSETCONTAINER_CLASS) {
-            assetContainer.className = ASSETCONTAINER_CLASS
-            upDatePriceHistoryGraph(priceHistoryByAsset, GRAPHWIDTH, GRAPHHEIGHT)
-        } else {
-            for (const assetContainer of MARKETPLACE_ROOT_CONTAINER.getElementsByClassName(SELECTED_ASSETCONTAINER_CLASS)) {
-                const priceHistoryByAsset = priceHistoriesByAssets.filter(ph => ph[0].asset.code === assetContainer.id)[0]
-                assetContainer.className = ASSETCONTAINER_CLASS
-                upDatePriceHistoryGraph(priceHistoryByAsset, GRAPHWIDTH, GRAPHHEIGHT)
-            }
-            assetContainer.className = SELECTED_ASSETCONTAINER_CLASS
-
-
-            upDatePriceHistoryGraph(priceHistoryByAsset, 600, 300)
-
-        }
-    })
-}
+// function addEventListenner(assetContainer) {
+//     const priceHistoryByAsset = priceHistoriesByAssets.filter(ph => ph[0].asset.code === assetContainer.id)[0]
+//     assetContainer.addEventListener("click", () => {
+//         if (assetContainer.className === SELECTED_ASSETCONTAINER_CLASS) {
+//
+//             assetContainer.className = ASSETCONTAINER_CLASS
+//             upDatePriceHistoryGraph(priceHistoryByAsset, GRAPHWIDTH, GRAPHHEIGHT)
+//         } else {
+//             for (const assetContainerOther of MARKETPLACE_ROOT_CONTAINER.getElementsByClassName(SELECTED_ASSETCONTAINER_CLASS)) {
+//                 const priceHistoryByAssetOther = priceHistoriesByAssets.filter(ph => ph[0].asset.code === assetContainerOther.id)[0]
+//                 assetContainerOther.className = ASSETCONTAINER_CLASS
+//                 upDatePriceHistoryGraph(priceHistoryByAssetOther, GRAPHWIDTH, GRAPHHEIGHT)
+//             }
+//             assetContainer.className = SELECTED_ASSETCONTAINER_CLASS
+//             upDatePriceHistoryGraph(priceHistoryByAsset, 600, 300)
+//         }
+//     })
+// }
 
 function fillAssetContainer(assetContainer, priceHistoriesByAsset) {
     if (priceHistoriesByAsset.length > 0) {
@@ -121,7 +119,7 @@ function fillAssetContainer(assetContainer, priceHistoriesByAsset) {
             window.location.href = tradeButtonLink;
         })
     }
-    addEventListenner(assetContainer)
+    //addEventListenner(assetContainer)
 }
 
 const fillPageWithAssets = () => {
