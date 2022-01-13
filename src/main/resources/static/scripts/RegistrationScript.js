@@ -107,7 +107,6 @@ function processAddress(data) {
 }
 
 function prepareRegistration() {
-        console.log("Preparing DTO");
         let registration = new RegistrationDTO(
         document.getElementById('email').value.trim(),
         document.getElementById('password').value,
@@ -122,7 +121,6 @@ function prepareRegistration() {
         document.getElementById('city').value,
         document.getElementById('country').value
     );
-        console.log(registration);
     sendRegistrationData(registration);
 }
 
