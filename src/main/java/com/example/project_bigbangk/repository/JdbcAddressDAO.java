@@ -26,7 +26,7 @@ public class JdbcAddressDAO implements IAddressDAO {
 
     @Override
     public void saveAddress(Address mpAddress) {
-        String sql = "Insert into Address values(?,?,?,?,?)";
+        String sql = "Insert Ignore into Address values(?,?,?,?,?)";
         try {
             jdbcTemplate.update(sql, mpAddress.getPostalCode(), mpAddress.getStreet(), mpAddress.getNumber(),
                     mpAddress.getCity(), mpAddress.getCountry());
