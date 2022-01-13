@@ -30,7 +30,7 @@ public class WalletController {
         this.walletService = walletService;
     }
 
-    @PostMapping("/wallet")
+    @GetMapping("/wallet")
     @ResponseBody
     public ResponseEntity<String> gotoWalletScreen(@RequestHeader String authorization){
         if (authenticateService.authenticate(authorization)){
