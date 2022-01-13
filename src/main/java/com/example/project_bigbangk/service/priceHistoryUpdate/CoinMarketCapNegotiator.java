@@ -3,6 +3,7 @@
 package com.example.project_bigbangk.service.priceHistoryUpdate;
 
 import com.example.project_bigbangk.model.Asset;
+import com.example.project_bigbangk.model.PriceDate;
 import com.example.project_bigbangk.model.PriceHistory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -138,8 +139,8 @@ public class CoinMarketCapNegotiator implements ICryptoApiNegotiator {
                     double price = Double.parseDouble(coin.get("quote").get("EUR").get("price").toString());
                     String assetCode = coin.get("symbol").textValue();
                     String assetName = coin.get("name").textValue();
-                    PriceHistory priceHistory = new PriceHistory(LocalDateTime.now(), price, new Asset(assetCode, assetName, price));
-                    priceHistories.add(priceHistory);
+                    PriceDate priceDate = new PriceDate(LocalDateTime.now(), price);
+                    priceHistories.add(new PriceHistory(new ArrayList<>(List.of(priceDate)), new Asset(assetCode, assetName, price)));
                 }
             }
         }

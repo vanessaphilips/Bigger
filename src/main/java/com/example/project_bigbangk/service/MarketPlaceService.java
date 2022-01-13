@@ -5,7 +5,9 @@ package com.example.project_bigbangk.service;
 
 import com.example.project_bigbangk.BigBangkApplicatie;
 import com.example.project_bigbangk.model.Asset;
+import com.example.project_bigbangk.model.DTO.PriceDateDTO;
 import com.example.project_bigbangk.model.DTO.PriceHistoryDTO;
+import com.example.project_bigbangk.model.PriceDate;
 import com.example.project_bigbangk.model.PriceHistory;
 import com.example.project_bigbangk.repository.PriceHistoryCache;
 import com.example.project_bigbangk.repository.RootRepository;
@@ -35,29 +37,27 @@ public class MarketPlaceService {
         return rootRepository.getAllAssets();
     }
 
-    public List<List<PriceHistoryDTO>> getAllAssetsWithPriceHistoryFromDate(LocalDateTime localDateTime) {
-        List<List<PriceHistory>> priceHistoriesByAssets;
+    public List<PriceHistoryDTO> getAllPriceHistoriesFromDate(LocalDateTime localDateTime) {
+        List<PriceHistory> priceHistories;
         if (LocalDateTime.now().minusDays(BigBangkApplicatie.DAYS_OF_PRICEHISTORY_CACHE).isBefore(localDateTime)) {
-            priceHistoriesByAssets = priceHistoryCache.getPriceHistoriesFromDate(localDateTime);
+            priceHistories = priceHistoryCache.getPriceHistoriesFromDate(localDateTime);
         } else {
-          priceHistoriesByAssets  = rootRepository.getAllPriceHistroriesByAssets(localDateTime);
+            priceHistories = rootRepository.getAllPriceHistrories(localDateTime);
         }
 
-        return convertPriceHistroyToDTO(priceHistoriesByAssets);
+        return convertPriceHistroyToDTO(priceHistories);
     }
 
-    private List<List<PriceHistoryDTO>> convertPriceHistroyToDTO(List<List<PriceHistory>> priceHistoriesByAssets) {
-        List<List<PriceHistoryDTO>> priceHistoriesByAssetsDTO = new ArrayList<>();
-
-        for (List<PriceHistory> priceHistoriesOfAsset : priceHistoriesByAssets) {
-            List<PriceHistoryDTO> priceHistoriesOfAssetDTO = new ArrayList<>();
-            for (PriceHistory priceHistory : priceHistoriesOfAsset) {
-                priceHistoriesOfAssetDTO.add(new PriceHistoryDTO(priceHistory.getDateTime().toString(),
-                        priceHistory.getPrice(),
-                        priceHistory.getAsset()));
+    private List<PriceHistoryDTO> convertPriceHistroyToDTO(List<PriceHistory> priceHistories) {
+        List<PriceHistoryDTO> priceHistoriesDTO = new ArrayList<>();
+               for (PriceHistory priceHistory : priceHistories) {
+            List<PriceDateDTO> priceDateDTOS = new ArrayList<>();
+            for (PriceDate priceDate : priceHistory.getPriceDates()) {
+                priceDateDTOS.add(new PriceDateDTO(priceDate.getDateTime().toString(), priceDate.getPrice()));
             }
-            priceHistoriesByAssetsDTO.add(priceHistoriesOfAssetDTO);
+            priceHistoriesDTO.add(new PriceHistoryDTO(priceDateDTOS, priceHistory.getAsset()));
         }
-        return priceHistoriesByAssetsDTO;
+
+        return priceHistoriesDTO;
     }
 }

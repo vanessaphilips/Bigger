@@ -153,7 +153,7 @@ CREATE TABLE IF NOT EXISTS `bigbangk`.`order` (
   `type` VARCHAR(45) NOT NULL,
   `orderlimit` DOUBLE NULL,
   `amount` DOUBLE NULL,
-  `date` TIMESTAMP NOT NULL,
+  `dateTime` TIMESTAMP NOT NULL,
   `fee` DOUBLE NULL,
   `totalprice` DOUBLE NULL,
   PRIMARY KEY (`orderId`),

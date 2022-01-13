@@ -28,7 +28,7 @@ let token = localStorage.getItem(JWT_KEY)
 let daysBackInputField = document.getElementById(DAYSBACKINPUTFIELD_ID);
 let daysBack = 30
 
-let priceHistoriesByAssets = [[]]
+let priceHistories = []
 
 //Declare functions
 async function initializePage() {
@@ -39,20 +39,20 @@ async function initializePage() {
     const jsonPriceHistories = JSON.parse(json.priceHistory);
     if (jsonPriceHistories !== undefined) {
         saveAsPriceHistories(jsonPriceHistories)
-        lastUpdate = priceHistoriesByAssets[0].sort(c => c.date)[0].date
+        lastUpdate = priceHistories[0].priceDates.sort(c => c.date)[0].date
         fillPageWithAssets()
     }
 }
 
-function upDatePriceHistoryGraph(priceHistoriesOfAsset, width, height) {
-    const asset = priceHistoriesOfAsset[0].asset
+function upDatePriceHistoryGraph(priceHistory, width, height) {
+    const asset = priceHistory.asset
     const graphContainer = document.getElementById(asset.code).getElementsByClassName(GRAPHCONTAINER_CLASS)[0]
-    graphContainer.replaceChild(createPriceHistoryGraph(asset, priceHistoriesOfAsset, width, height), graphContainer.firstChild)
+    graphContainer.replaceChild(createPriceHistoryGraph(priceHistory, width, height), graphContainer.firstChild)
 }
 
 function updateAllPriceHistoryGraphs() {
-    for (const priceHistoriesOfAsset of priceHistoriesByAssets) {
-        upDatePriceHistoryGraph(priceHistoriesOfAsset, GRAPHWIDTH, GRAPHHEIGHT)
+    for (const priceHistory of priceHistories) {
+        upDatePriceHistoryGraph(priceHistory, GRAPHWIDTH, GRAPHHEIGHT)
     }
 }
 
@@ -72,11 +72,11 @@ function normalizePrice(currentPrice) {
     return (Math.round(currentPrice * multiPly) / multiPly)
 }
 
-function createPriceHistoryGraph(asset, priceHistoriesOfAsset, width, height) {
+function createPriceHistoryGraph(priceHistory, width, height) {
     const dateInPast = new Date(new Date().valueOf() - daysBack * 86400000)
-    priceHistoriesOfAsset = priceHistoriesOfAsset.filter(ph => ph.date > dateInPast)
-    let priceHistoryGraph = createGraph(priceHistoriesOfAsset, width, height)
-    priceHistoryGraph.id = PRICEHISTORYGRAPH_ID_PREFIX + asset.code
+    const priceDates = priceHistory.priceDates.filter(ph => ph.date > dateInPast)
+    let priceHistoryGraph = createGraph(priceDates, width, height)
+    priceHistoryGraph.id = PRICEHISTORYGRAPH_ID_PREFIX + priceHistory.asset.code
     priceHistoryGraph.className = PRICEHISTORYGRAPH_CLASS
     return priceHistoryGraph;
 }
@@ -100,22 +100,22 @@ function createPriceHistoryGraph(asset, priceHistoriesOfAsset, width, height) {
 //     })
 // }
 
-function fillAssetContainer(assetContainer, priceHistoriesByAsset) {
-    if (priceHistoriesByAsset.length > 0) {
-        priceHistoriesByAsset.sort(c => c.date)
-        const asset = priceHistoriesByAsset[0].asset
-        assetContainer.id = asset.code;
-        assetContainer.getElementsByClassName(ASSETCODELABEL_ID)[0].innerHTML = asset.code
-        assetContainer.getElementsByClassName(ASSETNAMELABEL_ID)[0].innerHTML = asset.name
-        assetContainer.getElementsByClassName(ASSETCURRENTPRICELABEL_ID)[0].innerHTML = normalizePrice(asset.currentPrice)
+function fillAssetContainer(assetContainer, priceHistory) {
+    if (priceHistory !== undefined) {
+        priceHistory.priceDates.sort(c => c.date)
+        console.log(priceHistory)
+        assetContainer.id = priceHistory.asset.code;
+        assetContainer.getElementsByClassName(ASSETCODELABEL_ID)[0].innerHTML = priceHistory.asset.code
+        assetContainer.getElementsByClassName(ASSETNAMELABEL_ID)[0].innerHTML = priceHistory.asset.name
+        assetContainer.getElementsByClassName(ASSETCURRENTPRICELABEL_ID)[0].innerHTML = normalizePrice(priceHistory.asset.currentPrice)
         const graphContainer = assetContainer.getElementsByClassName(GRAPHCONTAINER_CLASS)[0]
         if (graphContainer.firstChild !== null) {
-            graphContainer.replaceChild(createPriceHistoryGraph(asset, priceHistoriesByAsset, GRAPHWIDTH, GRAPHHEIGHT), graphContainer.firstChild)
+            graphContainer.replaceChild(createPriceHistoryGraph(priceHistory, GRAPHWIDTH, GRAPHHEIGHT), graphContainer.firstChild)
         } else {
-            graphContainer.appendChild(createPriceHistoryGraph(asset, priceHistoriesByAsset, GRAPHWIDTH, GRAPHHEIGHT))
+            graphContainer.appendChild(createPriceHistoryGraph(priceHistory, GRAPHWIDTH, GRAPHHEIGHT))
         }
         assetContainer.getElementsByClassName(TRADEBUTTON_CLASS)[0].addEventListener("click", function () {
-            localStorage.setItem(CURRENT_ASSET_KEY, JSON.stringify(asset))
+            localStorage.setItem(CURRENT_ASSET_KEY, JSON.stringify(priceHistory.asset))
             window.location.href = tradeButtonLink;
         })
     }
@@ -125,7 +125,7 @@ function fillAssetContainer(assetContainer, priceHistoriesByAsset) {
 const fillPageWithAssets = () => {
     const assetContainers = document.getElementsByClassName("assetContainer")
     for (let i = 0; i < assetContainers.length; i++) {
-        fillAssetContainer(assetContainers[i], priceHistoriesByAssets[i])
+        fillAssetContainer(assetContainers[i], priceHistories[i])
     }
 }
 
@@ -135,15 +135,11 @@ function parseDate(localDateTimeString) {
 }
 
 function saveAsPriceHistories(jsonPriceHistories) {
-    const tempPriceHistoriesByAssets = []
-    for (const priceHistoriesOfAssetJson of jsonPriceHistories) {
-        const priceHistoriesOfAsset = []
-        for (const priceHistory of priceHistoriesOfAssetJson) {
-            priceHistoriesOfAsset.push(new PriceHistory(parseDate(priceHistory.dateTime), priceHistory.price, priceHistory.asset))
+    priceHistories = jsonPriceHistories.map(ph => {
+            const priceDates = ph.priceDates.map(pd => new PriceDate(parseDate(pd.dateTime), pd.price))
+            return new PriceHistory(priceDates, new Asset(ph.asset))
         }
-        tempPriceHistoriesByAssets.push(priceHistoriesOfAsset)
-    }
-    priceHistoriesByAssets = tempPriceHistoriesByAssets
+    )
 }
 
 function createDateInPast() {

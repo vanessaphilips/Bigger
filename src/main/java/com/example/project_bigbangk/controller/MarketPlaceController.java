@@ -40,8 +40,8 @@ public class MarketPlaceController {
     public ResponseEntity<String> getPriceHistories(@RequestHeader String authorization, @RequestBody String date) {
         if (authenticateService.authenticate(authorization)) {
             LocalDateTime dateTime = LocalDateTime.parse(date);
-            List<List<PriceHistoryDTO>> priceHistoriesByAssetDTO;
-            priceHistoriesByAssetDTO = marketPlaceService.getAllAssetsWithPriceHistoryFromDate(dateTime);
+            List<PriceHistoryDTO> priceHistoriesByAssetDTO;
+            priceHistoriesByAssetDTO = marketPlaceService.getAllPriceHistoriesFromDate(dateTime);
             try {
                 //String jsonPriceHistoriesByAsset = MAPPER.writeValueAsString(priceHistoriesByAssetDTO);
                 ObjectNode jsonBody = MAPPER.createObjectNode();

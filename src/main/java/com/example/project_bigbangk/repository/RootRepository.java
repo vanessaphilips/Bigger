@@ -10,6 +10,7 @@ package com.example.project_bigbangk.repository;
 import com.example.project_bigbangk.model.*;
 import com.example.project_bigbangk.model.Orders.Transaction;
 import org.springframework.stereotype.Repository;
+
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -21,15 +22,15 @@ public class RootRepository {
     private IWalletDAO walletDAO;
     private IAssetDAO assetDAO;
     private JdbcOrderDAO orderDAO;
-    private final IPriceHistoryDAO priceHistoryDAO;
+    private final IPricedateDAO priceDateDAO;
     private final int AMOUNT_OF_ASSETS = 20;
 
     public RootRepository(IClientDAO clientDAO, IAddressDAO addressDAO, IWalletDAO walletDAO,
-                          IPriceHistoryDAO priceHistoryDAO, IAssetDAO assetDAO, JdbcOrderDAO orderDAO) {
+                          IPricedateDAO priceDateDAO, IAssetDAO assetDAO, JdbcOrderDAO orderDAO) {
         this.clientDAO = clientDAO;
         this.addressDAO = addressDAO;
         this.walletDAO = walletDAO;
-        this.priceHistoryDAO = priceHistoryDAO;
+        this.priceDateDAO = priceDateDAO;
         this.assetDAO = assetDAO;
         this.orderDAO = orderDAO;
     }
@@ -70,29 +71,29 @@ public class RootRepository {
             if (saveAssets) {
                 assetDAO.saveAsset(priceHistory.getAsset());
             }
-            priceHistoryDAO.savePriceHistory(priceHistory);
+            for (PriceDate priceDate : priceHistory.getPriceDates()) {
+                priceDateDAO.savePriceDate(priceDate, priceHistory.getAsset().getCode());
+            }
         }
     }
 
     public double getCurrentPriceByAssetCode(String assetCode) {
-        return priceHistoryDAO.getCurrentPriceByAssetCode(assetCode);
+        return priceDateDAO.getCurrentPriceByAssetCode(assetCode);
     }
 
-    public List<List<PriceHistory>> getAllPriceHistroriesByAssets(LocalDateTime dateTime) {
+    public List<PriceHistory> getAllPriceHistrories(LocalDateTime dateTime) {
         List<Asset> assets = assetDAO.getAllAssets();
-        List<List<PriceHistory>> priceHistoriesAllAssets = new ArrayList<>();
+        List<PriceHistory> priceHistories = new ArrayList<>();
         if (assets != null) {
             for (Asset asset : assets) {
-                List<PriceHistory> priceHistories = priceHistoryDAO.getPriceHistoriesByCodeFromDate(dateTime, asset.getCode());
-                asset.setCurrentPrice(Collections.max(priceHistories).getPrice());
-                for (PriceHistory priceHistory : priceHistories) {
-                    priceHistory.setAsset(asset);
-                }
-                priceHistoriesAllAssets.add(priceHistories);
+                List<PriceDate> priceDates = priceDateDAO.getPriceDatesByCodeFromDate(dateTime, asset.getCode());
+                asset.setCurrentPrice(Collections.max(priceDates).getPrice());
+                new PriceHistory(priceDates, asset);
+                priceHistories.add(new PriceHistory(priceDates, asset));
             }
         }
-        if (priceHistoriesAllAssets.size() != 0) {
-            return priceHistoriesAllAssets;
+        if (priceHistories.size() != 0) {
+            return priceHistories;
         }
         return null;
     }
@@ -102,24 +103,24 @@ public class RootRepository {
         List<Asset> assets = assetDAO.getAllAssets();
         if (assets != null) {
             for (Asset asset : assets) {
-                asset.setCurrentPrice(priceHistoryDAO.getCurrentPriceByAssetCode(asset.getCode()));
+                asset.setCurrentPrice(priceDateDAO.getCurrentPriceByAssetCode(asset.getCode()));
             }
         }
         return assets;
     }
 
-    public Asset findAssetByCode(String code){
+    public Asset findAssetByCode(String code) {
         return assetDAO.findAssetByCode(code);
     }
 
     // WALLET
 
-    public Wallet findWalletByEmail(String email){
+    public Wallet findWalletByEmail(String email) {
         Wallet wallet = walletDAO.findWalletByEmail(email);
         return findWalletWithAssetByIban(wallet.getIban());
     }
 
-    public Wallet findWalletbyBankCode(String bankCode){
+    public Wallet findWalletbyBankCode(String bankCode) {
         Wallet wallet = walletDAO.findWalletByBankCode(bankCode);
         return findWalletWithAssetByIban(wallet.getIban());
     }
@@ -151,6 +152,7 @@ public class RootRepository {
 
     /**
      * Saves Transaction, including sellerWallet and buyerWallet in database.
+     *
      * @param transaction
      */
     public void saveNewTransaction(Transaction transaction) {

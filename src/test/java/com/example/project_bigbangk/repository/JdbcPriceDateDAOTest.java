@@ -3,45 +3,35 @@
 //import com.example.project_bigbangk.model.Asset;
 //import com.example.project_bigbangk.model.AssetCode_Name;
 //import com.example.project_bigbangk.model.PriceHistory;
-//import com.example.project_bigbangk.service.WalletService;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
+//import org.junit.jupiter.api.*;
 //import org.mockito.Mockito;
 //import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.boot.test.mock.mockito.MockBean;
+//import org.springframework.test.context.ActiveProfiles;
 //
 //import javax.annotation.Resource;
 //import java.time.LocalDateTime;
 //import java.util.ArrayList;
 //import java.util.List;
-//import java.util.stream.Collectors;
 //
+//import static org.assertj.core.api.Assertions.assertThat;
 //import static org.junit.jupiter.api.Assertions.assertEquals;
 //import static org.junit.jupiter.api.Assertions.assertNull;
 //
-///**
-// * Rootrepository test voor de PriceHistory sectie
-// * @author Pieter jan Bleichrodt
-// */
 //@SpringBootTest
-//class RootRepositoryPriceHistoryAssetTest {
+//@ActiveProfiles("test")
+//@TestMethodOrder(value = MethodOrderer.OrderAnnotation.class)
+//class JdbcPriceDateDAOTest {
+//
+//
 //    @Resource
-//
-//    private RootRepository rootRepository;
-//
-//    @MockBean
-//    WalletService walletService;
-//
-//    @MockBean
-//    private IPricedateDAO jdbcPriceHistoryDAO;
-//    @MockBean
-//    private IAssetDAO jdbcAssetDAO;
+//    JdbcPriceDateDAO priceHistoryDAO;
 //
 //    private List<Asset> assets = new ArrayList<>();
 //    private List<PriceHistory> priceHistories = new ArrayList<>();
-//    private LocalDateTime localDateTime ;
+//
 //
 //    @BeforeEach
+//
 //    public void setup() {
 //        priceHistories.add(createPriceHistory(0.7, createAsset(AssetCode_Name.BTC)));
 //        priceHistories.add(createPriceHistory(1.3, createAsset(AssetCode_Name.BTC)));
@@ -55,25 +45,47 @@
 //        priceHistories.add(createPriceHistory(5.5, createAsset(AssetCode_Name.ADA)));
 //        priceHistories.add(createPriceHistory(2.5, createAsset(AssetCode_Name.ADA)));
 //        priceHistories.add(createPriceHistory(0.5, createAsset(AssetCode_Name.ADA)));
-//        localDateTime = LocalDateTime.now().minusSeconds(20);
-//        for (Asset asset : assets) {
-//            List<PriceHistory> priceHistoriesByAsset = priceHistories.stream().filter(ph -> ph.getAsset().getCode().equals(asset.getCode())).collect(Collectors.toList());
-//            Mockito.when(jdbcPriceHistoryDAO.getPriceDatesByCodeFromDate(localDateTime, asset.getCode())).thenReturn(priceHistoriesByAsset);
+//    }
+//    @Test
+//    @Order(1)
+//    void savePriceHistories() {
+//        for (PriceHistory priceHistory : priceHistories) {
+//            priceHistoryDAO.savePriceDate(priceHistory);
 //        }
 //    }
 //
 //    @Test
-//    void getAllPriceHistroriesByAssets() {
-//        Mockito.when(jdbcAssetDAO.getAllAssets()).thenReturn(assets);
-//        List<PriceHistory> priceHistories = rootRepository.getAllPriceHistrories(localDateTime);
-//        assertEquals(12, priceHistories.size());
+//    @Order(2)
+//    void getCurrentPriceByAssetCode() {
+//
+//        double actual = priceHistoryDAO.getCurrentPriceByAssetCode(AssetCode_Name.BTC.getAssetCode());
+//        double expected = 1.21;
+//        assertEquals(expected, actual);
+//        actual = priceHistoryDAO.getCurrentPriceByAssetCode(AssetCode_Name.ETH.getAssetCode());
+//        expected = 6.3;
+//        assertEquals(expected, actual);
+//        //find asset with no PriceHistory
+//        actual = priceHistoryDAO.getCurrentPriceByAssetCode(AssetCode_Name.BUSD.getAssetCode());
+//        expected = -1;
+//        assertEquals(expected, actual);
+//        //find asset that doesn't exist
+//        actual = priceHistoryDAO.getCurrentPriceByAssetCode("SDFSS");
+//        assertEquals(expected, actual);
 //    }
 //
 //    @Test
-//    void getAllPriceHistroriesByAssets2() {
-//        Mockito.when(jdbcAssetDAO.getAllAssets()).thenReturn(null);
-//        List<PriceHistory> priceHistories = rootRepository.getAllPriceHistrories(localDateTime);
-//        assertNull(priceHistories);
+//    @Order(3)
+//    void getAllPriceHistory() {
+//        List<PriceHistory> actual = priceHistoryDAO.getPriceDatesByCodeFromDate(LocalDateTime.now().minusYears(20), "BTC");
+//        assertThat(actual.size()).isEqualTo(9);
+//        actual = priceHistoryDAO.getPriceDatesByCodeFromDate(LocalDateTime.now().minusSeconds(20), "BTC");
+//        assertThat(actual.size()).isEqualTo(4);
+//        //find asset with no PriceHistory
+//        actual = priceHistoryDAO.getPriceDatesByCodeFromDate(LocalDateTime.now().minusSeconds(20), "BIC");
+//        assertNull(actual);
+//        //find asset that doesn't exist
+//        actual = priceHistoryDAO.getPriceDatesByCodeFromDate(LocalDateTime.now().minusSeconds(20), "asfsg");
+//        assertNull(actual);
 //    }
 //
 //    private PriceHistory createPriceHistory(double currentprice, Asset asset) {
@@ -90,7 +102,7 @@
 //        Mockito.when(asset.getCode()).thenReturn(assetCodeName.getAssetCode());
 //        Mockito.when(asset.getCurrentPrice()).thenReturn(1.0);
 //
-//        assets.add(asset);
+//
 //        return asset;
 //    }
 //

@@ -1,17 +1,23 @@
 "use strict"
 
 class Asset {
-    constructor(code, name, currentPrice) {
-        this.name = name
-        this.code = code
-        this.currentPrice = currentPrice
+    constructor(asset) {
+        this.name = asset.name
+        this.code = asset.code
+        this.currentPrice = asset.currentPrice
+    }
+}
+
+class PriceDate {
+    constructor(date, price) {
+        this.dateTime = date
+        this.price = price
     }
 }
 
 class PriceHistory {
-    constructor(date, price, asset) {
-        this.date = date
-        this.price = price
+    constructor(priceDates, asset) {
+        this.priceDates = priceDates
         this.asset = asset
     }
 }

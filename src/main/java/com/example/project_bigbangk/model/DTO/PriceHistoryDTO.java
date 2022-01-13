@@ -4,15 +4,24 @@
 package com.example.project_bigbangk.model.DTO;
 
 import com.example.project_bigbangk.model.Asset;
+import com.example.project_bigbangk.model.PriceDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class PriceHistoryDTO {
 
-       private Asset asset;
-    private String dateTime;
+    List<PriceDateDTO> priceDates;
+
+    public List<PriceDateDTO> getPriceDates() {
+        return priceDates;
+    }
+
+    private Asset asset;
 
     public Asset getAsset() {
         return asset;
@@ -22,29 +31,10 @@ public class PriceHistoryDTO {
         this.asset = asset;
     }
 
-    public String getDateTime() {
-        return dateTime;
-    }
-
-    public void setDateTime(String dateTime) {
-        this.dateTime = dateTime;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    private double price;
-
-    public PriceHistoryDTO(String dateTime, double price, Asset asset) {
+    public PriceHistoryDTO(List<PriceDateDTO> priceDates, Asset asset) {
         super();
-        this.dateTime = dateTime;
+        this.priceDates = priceDates;
         this.asset = asset;
-        this.price = price;
     }
 
 
