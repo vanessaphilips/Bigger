@@ -12,7 +12,6 @@ import java.util.Objects;
 public class Bank {
     private Wallet wallet;
     private List<Client> clients;
-    private List<Asset> offeredCryptos;
     private String name;
     private String code;
     private double feePercentage;
@@ -30,7 +29,6 @@ public class Bank {
         return "Bank{" +
                 "wallet=" + wallet +
                 ", clients=" + clients +
-                ", offeredCryptos=" + offeredCryptos +
                 ", name='" + name + '\'' +
                 ", code='" + code + '\'' +
                 ", feePercentage=" + feePercentage +
@@ -66,14 +64,6 @@ public class Bank {
 
     public void setClients(List<Client> clients) {
         this.clients = clients;
-    }
-
-    public List<Asset> getOfferedCryptos() {
-        return offeredCryptos;
-    }
-
-    public void setOfferedCryptos(List<Asset> offeredCryptos) {
-        this.offeredCryptos = offeredCryptos;
     }
 
     public String getName() {

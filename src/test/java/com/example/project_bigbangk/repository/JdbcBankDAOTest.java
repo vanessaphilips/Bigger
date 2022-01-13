@@ -15,7 +15,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.*;
 
 /**
- * Hier wordt de JdbcBanckDOA gestest.
+ * Hier wordt de JdbcBankDOA gestest.
  *
  * @Author Kelly Speelman - de Jonge
  */
