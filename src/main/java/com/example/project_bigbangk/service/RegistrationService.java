@@ -117,6 +117,7 @@ public class RegistrationService {
         if (inputErrorMessage.length()<1){
             return Messages.NoInputErrors.getBody();
         }
+        System.out.println("Errors Found: " + inputErrorMessage);
         return "Errors Found: " + inputErrorMessage;
     }
 
