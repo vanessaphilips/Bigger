@@ -4,6 +4,7 @@ import com.example.project_bigbangk.Utilities.ObjectToJsonHelper;
 import com.example.project_bigbangk.model.DTO.RegistrationDTO;
 import com.example.project_bigbangk.service.LoginService;
 import com.example.project_bigbangk.service.RegistrationService;
+import com.example.project_bigbangk.service.Security.AuthenticateService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,17 +22,20 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @TestPropertySource(properties =
         "spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration")
 class RegistrationTest {
-
-
     private MockMvc mockMvc;
-    private MockHttpServletRequestBuilder builder;
-    private RegistrationDTO registrationDTO;
-
+    @MockBean
+    OrderController orderController;
+    @MockBean
+    MarketPlaceController marketPlaceController;
     @MockBean
     private LoginService loginService;
-
+    @MockBean
+    AuthenticateService authenticateService;
+    @MockBean
+    WalletController walletController;
     @MockBean
     private RegistrationService registrationService;
+    MockHttpServletRequestBuilder builder;
 
     @Autowired
     public RegistrationTest(MockMvc mockMvc){
@@ -42,7 +46,7 @@ class RegistrationTest {
     @Test
     void RegisterClient() throws Exception {
 
-        registrationDTO = new RegistrationDTO("henk@unicom.nl", "password1234345", "Henk", "de", "Kort",
+        RegistrationDTO registrationDTO = new RegistrationDTO("henk@unicom.nl", "password1234345", "Henk", "de", "Kort",
                 "123434546", "1950-01-01", "1111BN", "Straatie", 9, "Muiden", "NLD");
 
         Mockito.when(registrationService.registerClient(registrationDTO)).thenReturn("Registration Successful");
