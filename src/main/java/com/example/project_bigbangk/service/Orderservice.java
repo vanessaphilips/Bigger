@@ -75,7 +75,7 @@ public class Orderservice {
 
         if(clientWallet.getBalance() >= totalCost){
             if(bankWallet.getAsset().get(asset) >= boughtAssetAmount){
-                executeOrder(order, boughtAssetAmount, orderFee, totalCost, clientWallet, bankWallet);
+                executeBuyOrder(order, boughtAssetAmount, orderFee, totalCost, clientWallet, bankWallet);
                 return Messages.SuccessBuy.getBody();
                 
             } else{
@@ -86,6 +86,18 @@ public class Orderservice {
         }
     }
 
+    private void executeBuyOrder(OrderDTO order, double boughtAssetAmount, double orderFee, double totalCost, Wallet clientWallet, Wallet bankWallet) {
+        clientWallet.setBalance(clientWallet.getBalance()- totalCost);
+        clientWallet.getAsset().replace(asset, clientWallet.getAsset().get(asset) + boughtAssetAmount);
+
+        bankWallet.setBalance(bankWallet.getBalance() + totalCost);
+        bankWallet.getAsset().replace(asset, bankWallet.getAsset().get(asset) - boughtAssetAmount);
+
+        Transaction transaction = new Transaction(asset, order.getAmount(), boughtAssetAmount, LocalDateTime.now(), orderFee, clientWallet, bankWallet);
+        sendOrderToDatabase(clientWallet, bankWallet, transaction);
+    }
+
+
     public String checkSellOrder(OrderDTO order){
         double sellOrderValue = order.getAmount() * currentAssetPrice;
         double orderFee = sellOrderValue * BigBangkApplicatie.bigBangk.getFeePercentage();
@@ -95,7 +107,7 @@ public class Orderservice {
 
         if(bankWallet.getBalance() >= totalPayout) {
             if (clientWallet.getAsset().get(asset) >= order.getAmount()) {
-                executeOrder(order, sellOrderValue, orderFee, totalPayout, bankWallet, clientWallet);
+                executeSellOrder(order, sellOrderValue, orderFee, totalPayout, bankWallet, clientWallet);
                 return Messages.SuccessSell.getBody();
             } else{
                 return Messages.FundBank.getBody();
@@ -105,16 +117,18 @@ public class Orderservice {
         }
     }
 
-    private void executeOrder(OrderDTO order, double boughtAssetAmount, double orderFee, double totalCost, Wallet buyerWallet, Wallet sellerWallet) {
-        buyerWallet.setBalance(buyerWallet.getBalance()- totalCost);
-        buyerWallet.getAsset().replace(asset, buyerWallet.getAsset().get(asset) + boughtAssetAmount);
+    private void executeSellOrder(OrderDTO order, double sellOrderValue, double orderFee, double totalPayout, Wallet clientWallet, Wallet bankWallet) {
+        clientWallet.setBalance(clientWallet.getBalance() + totalPayout);
+        clientWallet.getAsset().replace(asset, clientWallet.getAsset().get(asset) - order.getAmount());
 
-        sellerWallet.setBalance(sellerWallet.getBalance() + totalCost);
-        sellerWallet.getAsset().replace(asset, sellerWallet.getAsset().get(asset) - boughtAssetAmount);
+        bankWallet.setBalance(bankWallet.getBalance() - totalPayout);
+        bankWallet.getAsset().replace(asset, bankWallet.getAsset().get(asset) + order.getAmount());
 
-        Transaction transaction = new Transaction(asset, order.getAmount(), boughtAssetAmount, LocalDateTime.now(), orderFee, buyerWallet, sellerWallet);
-        sendOrderToDatabase(buyerWallet, sellerWallet, transaction);
+        Transaction transaction = new Transaction(asset, sellOrderValue, order.getAmount(), LocalDateTime.now(), orderFee, bankWallet, clientWallet);
+        sendOrderToDatabase(clientWallet, bankWallet, transaction);
     }
+
+
 
 
     public void sendOrderToDatabase(Wallet walletOne, Wallet walletTwo, Transaction transaction){

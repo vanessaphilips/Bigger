@@ -27,7 +27,7 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
     private static final int DELAY_PRICEHISTORYUPDATE = 3000;
     private static final int DELAY_DATABASES_SEEDING = 6000;
     public static final Bank bigBangk = new Bank("BigBangk", "BGBK", 0.01, 10000);
-    public static Wallet baseWallet;
+    public static Wallet prototypeWallet;
     private final PriceHistoryUpdateService priceHistoryUpdateService;
     private final ClientFactory clientFactory;
     private final Logger logger = LoggerFactory.getLogger(BigBangkApplicatie.class);
@@ -53,7 +53,7 @@ public class BigBangkApplicatie implements ApplicationListener<ContextRefreshedE
         for (AssetCode_Name asset : EnumSet.allOf(AssetCode_Name.class)) {
             assetMap.put(new Asset(asset.getAssetCode(), asset.getAssetName()), 0.0);
         }
-        baseWallet = new Wallet("none",bigBangk.getStartingcapital(), assetMap);
+        prototypeWallet = new Wallet("none",bigBangk.getStartingcapital(), assetMap);
     }
 
     private void startPriceHistoryUpdateTimer() {

@@ -40,7 +40,7 @@ public class OrderController{
     //in het scherm hierboven^ kan je alles van je order instellen, dat wordt hieronder opgevangen.
     @PostMapping("/placeorder")
 
-    public ResponseEntity<String> placeOrder(@RequestHeader String authorization, @RequestBody OrderDTO orderDTO) {
+    public ResponseEntity<?> placeOrder(@RequestHeader String authorization, @RequestBody OrderDTO orderDTO) {
         if (authenticateService.authenticate(authorization)) {
             Client client = authenticateService.getClientFromToken(authorization);
             String orderMessage = orderservice.handleOrderByType(orderDTO, client);

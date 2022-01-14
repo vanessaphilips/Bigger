@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class Wallet implements Prototype {
+public class Wallet implements Cloneable {
 
     private String bank;
     private String iban;
@@ -151,7 +151,12 @@ public class Wallet implements Prototype {
     }
 
     @Override
-    public Wallet clone() {
-        return new Wallet(this.iban,this.balance, this.asset);
+    public Wallet clone(){
+        try {
+            return (Wallet)super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
