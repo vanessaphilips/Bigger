@@ -33,7 +33,7 @@ public class PriceHistoryCacheUpdateService implements IObserver {
     @Override
     public void update() {
         priceHistoryCache.setPriceHistories(
-                rootRepository.getAllPriceHistroriesByAssets(LocalDateTime.now().minusDays(BigBangkApplicatie.DAYS_OF_PRICEHISTORY_CACHE))
+                rootRepository.getAllPriceHistories(LocalDateTime.now().minusDays(BigBangkApplicatie.DAYS_OF_PRICEHISTORY_CACHE))
         );
         logger.info("PriceHistoryCache Updated");
     }

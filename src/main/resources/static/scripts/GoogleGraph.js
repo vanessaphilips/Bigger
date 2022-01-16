@@ -31,9 +31,9 @@ function setOptions(width, height) {
     };
 }
 
-const createGraph = (priceHistoriesOfAsset, width, height) => {
-    let dates = priceHistoriesOfAsset.map(ph => ph.date)
-    let prices = priceHistoriesOfAsset.map(ph => ph.price)
+const createGraph = (priceDates, width, height) => {
+    let dates = priceDates.map(ph => ph.dateTime)
+    let prices = priceDates.map(ph => ph.price)
     const divGraph = document.createElement("div")
     google.charts.load('current', {'packages': ['corechart']});
     google.charts.setOnLoadCallback(drawChart);

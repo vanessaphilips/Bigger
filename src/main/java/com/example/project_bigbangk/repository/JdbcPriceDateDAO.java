@@ -3,6 +3,7 @@
 
 package com.example.project_bigbangk.repository;
 
+import com.example.project_bigbangk.model.PriceDate;
 import com.example.project_bigbangk.model.PriceHistory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,38 +19,42 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public class JdbcPriceHistoryDAO implements IPriceHistoryDAO {
+public class JdbcPriceDateDAO implements IPricedateDAO {
 
-    private final Logger logger = LoggerFactory.getLogger(JdbcPriceHistoryDAO.class);
+    private final Logger logger = LoggerFactory.getLogger(JdbcPriceDateDAO.class);
     JdbcTemplate jdbcTemplate;
 
-    public JdbcPriceHistoryDAO(JdbcTemplate jdbcTemplate) {
+    public JdbcPriceDateDAO(JdbcTemplate jdbcTemplate) {
         super();
-        logger.info("New JdbcPriceHistoryDAO");
+        logger.info("New JdbcPriceDateDAO");
         this.jdbcTemplate = jdbcTemplate;
     }
 
+
+
+
     @Override
-    public void savePriceHistory(PriceHistory priceHistory) {
+    public void savePriceDate(PriceDate priceDate, String assetCode) {
         String sql = "Insert into PriceHistory values(?,?,?);";
-        try {
-            jdbcTemplate.update(sql,
-                    priceHistory.getDateTime(),
-                    priceHistory.getAsset().getCode(),
-                    priceHistory.getPrice());
-        } catch (DataAccessException dataAccessException) {
-            logger.info(dataAccessException.getMessage());
-        }
-    }
+                    try {
+                jdbcTemplate.update(sql,
+                        priceDate.getDateTime(),
+                        assetCode,
+                        priceDate.getPrice());
+            } catch (DataAccessException dataAccessException) {
+                logger.info(dataAccessException.getMessage());
+            }
+       }
+
 
     @Override
     public double getCurrentPriceByAssetCode(String assetCode) {
         String sql = "Select * from (SELECT * FROM pricehistory where code = ? )as priceHisotryByCoin ORDER BY dateTime DESC LIMIT 1;";
         double currentPrice = -1;
         try {
-            PriceHistory priceHistory = jdbcTemplate.queryForObject(sql,
-                    new PriceHistoryRowMapper(), assetCode);
-            currentPrice = priceHistory==null?-1:  priceHistory.getPrice();
+            PriceDate priceDate = jdbcTemplate.queryForObject(sql,
+                    new PriceDateRowMapper(), assetCode);
+            currentPrice = priceDate == null ? -1 : priceDate.getPrice();
         } catch (DataAccessException dataAccessException) {
             logger.info(dataAccessException.getMessage());
         }
@@ -57,27 +62,26 @@ public class JdbcPriceHistoryDAO implements IPriceHistoryDAO {
     }
 
     @Override
-    public List<PriceHistory> getPriceHistoriesByCodeFromDate(LocalDateTime date, String assetCode) {
+    public List<PriceDate> getPriceDatesByCodeFromDate(LocalDateTime date, String assetCode) {
         String sql = "SELECT * FROM pricehistory where dateTime> ? and code = ?;";
-        List<PriceHistory> priceHistories = null;
+        List<PriceDate> priceDates = null;
         try {
-            priceHistories = jdbcTemplate.query(sql, new PriceHistoryRowMapper(), date, assetCode);
-            if(priceHistories.size()==0){
-                priceHistories = null;
+            priceDates = jdbcTemplate.query(sql, new PriceDateRowMapper(), date, assetCode);
+            if (priceDates.size() == 0) {
+                priceDates = null;
             }
         } catch (DataAccessException dataAccessException) {
             logger.info(dataAccessException.getMessage());
         }
-        return priceHistories;
+        return priceDates;
     }
 
-    private class PriceHistoryRowMapper implements RowMapper<PriceHistory> {
+    private class PriceDateRowMapper implements RowMapper<PriceDate> {
         @Override
-        public PriceHistory mapRow(ResultSet resultSet, int rowNumber) throws SQLException {
+        public PriceDate mapRow(ResultSet resultSet, int rowNumber) throws SQLException {
             LocalDate localDate = resultSet.getDate("datetime").toLocalDate();
             LocalDateTime localDateTime = localDate.atTime(resultSet.getTime("datetime").toLocalTime());
-            return new PriceHistory(
-                    localDateTime, resultSet.getDouble("price"));
+            return new PriceDate(localDateTime, resultSet.getDouble("price"));
         }
     }
 }

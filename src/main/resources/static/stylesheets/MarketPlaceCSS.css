@@ -1,10 +1,26 @@
 :root {
     --orange: #ff8034;
-    --blue: #83a0ea;
+    --blue: #83b0ea;
     --fullwidth: 100%;
+    --selected: #5288b7
 }
 
-#assetListContainer {
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    border-width: 0;
+    -moz-appearance: textfield;
+
+    width: 20px;
+    height: 30%;
+}
+
+.assetContainers {
     font-family: Calibri, sans-serif;
     display: flex;
     flex-direction: column;
@@ -15,14 +31,43 @@
     margin: auto;
 }
 
-#assetListContainer > div {
+.graphContainer {
     display: flex;
-    justify-content: space-between;
+    flex-direction: row;
+    }
+
+.assetContainers > div {
+    display: flex;
+    justify-content: space-around;
     flex-wrap: nowrap;
     flex-direction: row;
     background-color: #ffffff;
     margin: 5px;
     width: 100%;
+    border-bottom-style: solid;
+    border-width: thin;
+    border-color: var(--blue);
+    padding: 5px;
+}
+
+
+.assetContainer .codeContainer {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    background-color: #ffffff;
+    width: 100%;
+
+}
+
+.assetContainers > div > label {
+    background-color: white;
+
+    padding: 5px;
+    font-size: 125%;
+    width: 100%;
+    text-align: left;
 }
 
 /*dit is de graph zelf, denk ik*/
@@ -34,39 +79,11 @@
     height: 300px;
 }
 
-#kolomnamen > label{
+.kolomnamen > label {
     color: black;
 }
 
-#assetListContainer > div > label {
-    background-color: white;
-    border-bottom-style: solid;
-    border-width: thin;
-    border-color: var(--blue);
-    padding: 5px;
-    font-size: 125%;
-    width: 100%;
-    text-align: left;
-}
-
-.graphContainer {
-    background-color: #ffffff;
-    border-bottom-style: solid;
-    border-width: thin;
-    border-color: var(--blue);
-    width: 100%;
-}
-
-.graphContainer > div > div {
-    background-color: white;
-    color: var(--blue);
-
-    height: 5%;
-    font-size: 16px;
-    max-height: 20%;
-}
-
-#assetListContainer .tradeButton {
+.tradeButton {
     color: white;
     background-color: var(--blue);
     border-style: solid;
@@ -77,7 +94,10 @@
     width: fit-content;
     font-size: 90%;
 }
-
+.tradeButton:hover {
+     background-color: var(--selected);
+    cursor: pointer;
+    }
 
 .name {
     color: var(--blue);

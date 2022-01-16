@@ -4,58 +4,49 @@
 package com.example.project_bigbangk.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
- *
  * @author Pieter Jan Bleichrodt
  * Creation date 12/12/2021
  */
-public class PriceHistory implements Comparable<PriceHistory> {
+public class PriceHistory {
 
 
     private Asset asset;
-    private LocalDateTime dateTime;
-    private double price;
 
-    public PriceHistory(LocalDateTime dateTime, double price, Asset asset) {
-        super();
-        this.dateTime = dateTime;
-        this.asset = asset;
-        this.price = price;
+    public List<PriceDate> getPriceDates() {
+        return priceDates;
     }
 
-    public PriceHistory(LocalDateTime dateTime, double price) {
-        super();
-        this.dateTime = dateTime;
-        this.price = price;
+    public void setPriceDates(List<PriceDate> priceDates) {
+        this.priceDates = priceDates;
+    }
+
+    List<PriceDate> priceDates;
+
+    public PriceHistory(List<PriceDate> priceDates, Asset asset) {
+        this.priceDates = priceDates;
+        Collections.sort(this.priceDates);
+        this.asset = asset;
+    }
+
+    public PriceHistory(PriceDate priceDate) {
+        priceDates = new ArrayList<>();
+        this.priceDates.add(priceDate);
     }
 
     public Asset getAsset() {
         return asset;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
-    }
-
-    public double getPrice() {
-        return price;
-    }
 
     public void setAsset(Asset asset) {
         this.asset = asset;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
-    }
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    @Override
-    public int compareTo(PriceHistory o) {
-        return this.getDateTime().compareTo(o.getDateTime());
-    }
 }
