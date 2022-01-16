@@ -42,7 +42,7 @@ public class MarketPlaceService {
         if (LocalDateTime.now().minusDays(BigBangkApplicatie.DAYS_OF_PRICEHISTORY_CACHE).isBefore(localDateTime)) {
             priceHistories = priceHistoryCache.getPriceHistoriesFromDate(localDateTime);
         } else {
-            priceHistories = rootRepository.getAllPriceHistrories(localDateTime);
+            priceHistories = rootRepository.getAllPriceHistories(localDateTime);
         }
 
         return convertPriceHistroyToDTO(priceHistories);

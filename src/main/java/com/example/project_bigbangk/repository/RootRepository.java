@@ -81,15 +81,17 @@ public class RootRepository {
         return priceDateDAO.getCurrentPriceByAssetCode(assetCode);
     }
 
-    public List<PriceHistory> getAllPriceHistrories(LocalDateTime dateTime) {
+    public List<PriceHistory> getAllPriceHistories(LocalDateTime dateTime) {
         List<Asset> assets = assetDAO.getAllAssets();
         List<PriceHistory> priceHistories = new ArrayList<>();
         if (assets != null) {
             for (Asset asset : assets) {
                 List<PriceDate> priceDates = priceDateDAO.getPriceDatesByCodeFromDate(dateTime, asset.getCode());
-                asset.setCurrentPrice(Collections.max(priceDates).getPrice());
-                new PriceHistory(priceDates, asset);
-                priceHistories.add(new PriceHistory(priceDates, asset));
+                if (priceDates != null) {
+                    asset.setCurrentPrice(Collections.max(priceDates).getPrice());
+                    new PriceHistory(priceDates, asset);
+                    priceHistories.add(new PriceHistory(priceDates, asset));
+                }
             }
         }
         if (priceHistories.size() != 0) {
