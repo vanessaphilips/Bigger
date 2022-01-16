@@ -28,7 +28,6 @@ import static org.mockito.Mockito.when;
  * @author Pieter jan Bleichrodt
  */
 @SpringBootTest
-@ActiveProfiles("test")
 class RootRepositoryPriceHistoryTest {
 
     @Resource
@@ -36,6 +35,7 @@ class RootRepositoryPriceHistoryTest {
 
     @MockBean
     WalletService walletService;
+
 
     @MockBean
     private IPricedateDAO priceDateDAO;
