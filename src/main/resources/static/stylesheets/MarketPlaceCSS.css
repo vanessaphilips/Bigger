@@ -12,12 +12,11 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type=number] {
-    border-width: 0;
+#daysBack[type=number] {
+    border-width: 1px;
     -moz-appearance: textfield;
-
-    width: 20px;
-    height: 30%;
+    width:20px;
+    height: 50%;
 }
 
 .assetContainers {
@@ -25,20 +24,23 @@ input[type=number] {
     display: flex;
     flex-direction: column;
     background-color: #ffffff;
-    max-width: 60%;
+    max-width:60%;
     justify-content: left;
     align-items: self-start;
     margin: auto;
 }
 
-.graphContainer {
+.inputContainer {
     display: flex;
     flex-direction: row;
-    }
+    align-items: center;
+    justify-content: left;
+    max-width: 100%;
+}
 
 .assetContainers > div {
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-start;
     flex-wrap: nowrap;
     flex-direction: row;
     background-color: #ffffff;
@@ -53,7 +55,8 @@ input[type=number] {
 
 .assetContainer .codeContainer {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
+    align-items: self-start;
     flex-wrap: nowrap;
     flex-direction: column;
     background-color: #ffffff;
@@ -61,15 +64,17 @@ input[type=number] {
 
 }
 
-.assetContainers > div > label {
+.assetContainers > div > * {
     background-color: white;
-
     padding: 5px;
     font-size: 125%;
     width: 100%;
     text-align: left;
 }
+.graphContainer > .priceHistoryGraph >div >div>div{
+    background-color: #ffffff;
 
+}
 /*dit is de graph zelf, denk ik*/
 .selectedAsset > .graphContainer > .priceHistoryGraph > div > div > div {
     height: 300px;
@@ -92,12 +97,13 @@ input[type=number] {
     border-radius: 10%;
     height: fit-content;
     width: fit-content;
-    font-size: 90%;
+    font-size: 70%;
 }
+
 .tradeButton:hover {
-     background-color: var(--selected);
+    background-color: var(--selected);
     cursor: pointer;
-    }
+}
 
 .name {
     color: var(--blue);
