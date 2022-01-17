@@ -25,6 +25,7 @@ input::-webkit-inner-spin-button {
     flex-direction: column;
     background-color: #ffffff;
     max-width:60%;
+    height: 800px;
     justify-content: left;
     align-items: self-start;
     margin: auto;
