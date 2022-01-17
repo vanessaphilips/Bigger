@@ -1,5 +1,6 @@
 package com.example.project_bigbangk.repository;
 
+import com.example.project_bigbangk.model.Orders.Limit_Buy;
 import com.example.project_bigbangk.model.Orders.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,11 +89,35 @@ public class JdbcOrderDAO {
 //        return null;
 //    }
 
+    //Limit_buy
+
+    //TODO graag deze methode reviewen. En daarbij afvragen of "totalCost (of totalPrice)" ook in de DB moet worden opgeslagen?
+
+    /**
+     * Saves Limit_Buy order in database, waiting to be matched with another client's offer (matchservice).
+     * @param limit_buy
+     * author = Vanessa Philips
+     */
+    public void saveLimit_Buy(Limit_Buy limit_buy){
+        String sql = "INSERT INTO bigbangk.order (buyer, code, type, orderlimit, amount, date) VALUES (?, ?, ?, ?, ?, ?);";
+
+        try {
+            jdbcTemplate.update(sql,
+                    limit_buy.getBuyerWallet().getIban(),
+                    limit_buy.getAsset().getCode(),
+                    "limit_buy",
+                    limit_buy.getRequestedPrice(),
+                    limit_buy.getNumberOfAssets(),
+                    java.sql.Timestamp.valueOf(limit_buy.getDate()));
+        } catch (DataAccessException dataAccessException) {
+            logger.info(dataAccessException.getMessage());
+        }
+    }
+
     //TODO overige ordertypes toevoegen
 
     //Limit_sell
 
-    //Limit_buy
 
     //Stoploss_sell
 
