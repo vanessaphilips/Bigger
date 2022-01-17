@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Hier wordt de JdbcBankDOA gestest.
@@ -53,7 +52,6 @@ class JdbcBankDAOTest {
 
         assertThat(jdbcBankDAOTest.findAllBank().size()).isEqualTo(2);
 
-       // mis lukte save (wordt niet opgeslagen omdat de primary key al bestaat)
         newBankUpdate.setWallet(mockWallet);
         jdbcBankDAOTest.saveBank(newBankUpdate);
         assertThat(jdbcBankDAOTest.findAllBank().size()).isEqualTo(2);
@@ -79,7 +77,6 @@ class JdbcBankDAOTest {
         jdbcBankDAOTest.updateBank(newBankUpdate);
         assertThat(jdbcBankDAOTest.findBank(newBankUpdate.getName()).getCode()).isEqualTo(newBank.getCode());
 
-        //mis lukte update (omdat de bank niet in de database staat.)
         Bank bestaatNiet = new Bank("No bank", "NONO", 3.0, 2.0);
         jdbcBankDAOTest.updateBank(bestaatNiet);
         assertThat(jdbcBankDAOTest.findBank(bestaatNiet.getName())).isNull();
