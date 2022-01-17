@@ -33,7 +33,7 @@ public class JdbcBankDAO implements IBankDAO{
             jdbcTemplate.update(sql, bank.getCode(), bank.getName(),
                     bank.getWallet().getIban(), bank.getStartingcapital(),
                     bank.getFeePercentage());
-        } catch (Exception foutmelding){
+        } catch (DataAccessException foutmelding){
             System.out.println(foutmelding.getMessage());
         }
     }
@@ -60,7 +60,7 @@ public class JdbcBankDAO implements IBankDAO{
                     "WHERE code = ?;";
             jdbcTemplate.update(sql, bank.getName(), bank.getFeePercentage(),
                     bank.getStartingcapital(), bank.getCode());
-        } catch (Exception foutmelding){
+        } catch (DataAccessException foutmelding){
             System.out.println(foutmelding.getMessage());
         }
     }

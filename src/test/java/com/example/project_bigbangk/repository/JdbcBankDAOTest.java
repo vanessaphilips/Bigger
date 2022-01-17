@@ -46,12 +46,15 @@ class JdbcBankDAOTest {
 
     @Test
     void saveBank() {
+        assertThat(jdbcBankDAOTest.findAllBank().size()).isEqualTo(1);
         newBank.setWallet(mockWallet);
         jdbcBankDAOTest.saveBank(newBank);
 
-        // mis lukte save
+        assertThat(jdbcBankDAOTest.findAllBank().size()).isEqualTo(2);
+
         newBankUpdate.setWallet(mockWallet);
         jdbcBankDAOTest.saveBank(newBankUpdate);
+        assertThat(jdbcBankDAOTest.findAllBank().size()).isEqualTo(2);
     }
 
     @Test
@@ -62,7 +65,7 @@ class JdbcBankDAOTest {
 
         actual = jdbcBankDAOTest.findBank("Test bank");
         expected = newBank;
-        assertThat(actual).isEqualTo(expected);
+        assertThat(actual).isEqualTo(expected).isNotNull();
 
         actual = jdbcBankDAOTest.findBank("Geen bank");
         assertThat(actual).isNull();
@@ -70,12 +73,14 @@ class JdbcBankDAOTest {
 
     @Test
     void updateBank() {
+        assertThat(jdbcBankDAOTest.findBank(newBank.getName()).getCode()).isEqualTo(newBank.getCode());
         jdbcBankDAOTest.updateBank(newBankUpdate);
+        assertThat(jdbcBankDAOTest.findBank(newBankUpdate.getName()).getCode()).isEqualTo(newBank.getCode());
 
-        //mis lukte update
         Bank bestaatNiet = new Bank("No bank", "NONO", 3.0, 2.0);
         jdbcBankDAOTest.updateBank(bestaatNiet);
-        System.out.println(jdbcBankDAOTest.findAllBank());
+        assertThat(jdbcBankDAOTest.findBank(bestaatNiet.getName())).isNull();
+        assertThat(jdbcBankDAOTest.findAllBank().size()).isEqualTo(2);
     }
 
     @Test
@@ -84,7 +89,6 @@ class JdbcBankDAOTest {
         List<Bank> expected = new ArrayList<>();
         expected.add(bigBangk);
         expected.add(newBankUpdate);
-        assertThat(actual).isEqualTo(expected);
-        assertThat(actual.size()).isEqualTo(expected.size());
+        assertThat(actual).isEqualTo(expected).size().isEqualTo(expected.size());
     }
 }
