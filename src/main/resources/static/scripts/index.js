@@ -16,21 +16,18 @@ function fillNavMap() {
 }
 
 function setCurrentContent(selectedContent) {
-    console.log(currentContentContainer)
     if (currentContentContainer.firstChild !== undefined) {
-        console.log(selectedContent)
         currentContentContainer.replaceChild(selectedContent, currentContentContainer.firstChild)
     } else {
         currentContentContainer.appendChild(selectedContent)
     }
 }
 
-function fillNavigation() {
+function fillNavigationElement() {
     for (const navKey in navElements) {
         const navLink = document.createElement("label")
         navLink.innerText = navKey;
         navLink.addEventListener("click", () => {
-            console.log("in FillNavigation: "+navElements[navKey])
             setCurrentContent(navElements[navKey])
         })
         navigation.appendChild(navLink)
@@ -39,7 +36,5 @@ function fillNavigation() {
 
 
 fillNavMap()
-fillNavigation()
+fillNavigationElement()
 setCurrentContent(navElements['login'])
-// console.log(htmlPage)
-// document.replaceChild(document.body, htmlPage.body)
