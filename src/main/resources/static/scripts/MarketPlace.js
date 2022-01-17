@@ -24,7 +24,7 @@ const GRAPHWIDTH = 200;
 const GRAPHHEIGHT = 100;
 let updateInterval = 300000;
 let lastUpdate = Date.now();
-await getToken()
+//await getToken()
 let token = localStorage.getItem(JWT_KEY)
 let daysBackInputField = document.getElementById(DAYSBACKINPUTFIELD_ID);
 let daysBack = 7
@@ -197,10 +197,13 @@ const getPriceHistoriesByAsset = (token) => {
         }).then(promise => {
         if (promise.ok) {
             return promise.json()
-        } else {
+        } else if(promise.status===400){
             console.log("Couldn't retrieve pricehistory from the server")
+        }else if(promise.status===401){
+                       window.location.href = loginPageURL
         }
     }).then(json => json)
+        .catch(error=>console.log("Somethin went wrong: " + error))
 }
 
 await initializePage()
