@@ -120,6 +120,8 @@ public class Transaction{
         this.orderId = orderId;
     }
 
+    //FIXME toString aanpassen (transaction extends niet meer van abstract order)
+
     @Override
     public String toString() {
         return super.toString() +

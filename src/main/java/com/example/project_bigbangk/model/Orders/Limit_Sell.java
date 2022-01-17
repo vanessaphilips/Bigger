@@ -17,12 +17,12 @@ public class Limit_Sell extends AbstractOrder{
 
     private Wallet sellerWallet;
 
-    public Limit_Sell(int orderId, double requestedPrice, int numberOfAssets, LocalDateTime date) {
+    public Limit_Sell(int orderId, double requestedPrice, double numberOfAssets, LocalDateTime date) {
         super(orderId, requestedPrice, numberOfAssets, date);
         logger.info("New Limit_Sell, without Asset and Wallet");
     }
 
-    public Limit_Sell(Asset asset, double requestedPrice, int numberOfAssets, LocalDateTime date, Wallet sellerWallet) {
+    public Limit_Sell(Asset asset, double requestedPrice, double numberOfAssets, LocalDateTime date, Wallet sellerWallet) {
         super(asset, requestedPrice, numberOfAssets, date);
         this.sellerWallet = sellerWallet;
         logger.info("New Limit_Sell, without id");
