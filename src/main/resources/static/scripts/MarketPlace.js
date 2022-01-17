@@ -24,7 +24,6 @@ const GRAPHWIDTH = 200;
 const GRAPHHEIGHT = 100;
 let updateInterval = 300000;
 let lastUpdate = Date.now();
-//await getToken()
 let token = localStorage.getItem(JWT_KEY)
 let daysBackInputField = document.getElementById(DAYSBACKINPUTFIELD_ID);
 let daysBack = 7

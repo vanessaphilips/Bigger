@@ -1,0 +1,53 @@
+body {
+    font-family: "Bodoni MT Condensed", sans-serif;
+    width: 99%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    display: block;
+    width: fit-content;
+    justify-content: center;
+    align-content: center;
+    margin:auto;
+    font-size: 400%;
+    color: dimgray;
+    background-color: var(--blue);
+
+
+}
+
+#navigation {
+    font-size: 100%;
+    display: flex;
+    flex-direction: row;
+    width: 69%;
+    justify-content: space-around;
+    align-content: center;
+    margin:  0 auto 10vh auto;
+    padding: 10px;
+    border-color: var(--blue);
+    border-width: 2px;
+    border-bottom-style: solid;
+}
+#navigation> label:hover {
+   color: #5288b7;
+    cursor: pointer;
+}
+
+#currentContentContainer {
+    display: flex;
+    flex-direction: column;
+    width: 69%;
+    height: fit-content;
+    margin: auto;
+}
+
+#currentContentObject {
+    min-width: fit-content;
+    height:80vh;
+    max-width: 100%;
+
+}
