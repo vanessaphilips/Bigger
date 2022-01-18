@@ -3,18 +3,16 @@ package com.example.project_bigbangk.repository;
 import com.example.project_bigbangk.model.Orders.Limit_Buy;
 import com.example.project_bigbangk.model.Orders.Limit_Sell;
 import com.example.project_bigbangk.model.Orders.Transaction;
+import com.example.project_bigbangk.model.Orders.TransactionType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * Created by Vanessa Philips.
@@ -43,7 +41,7 @@ public class JdbcOrderDAO {
                     transaction.getBuyerWallet().getIban(),
                     transaction.getSellerWallet().getIban(),
                     transaction.getAsset().getCode(),
-                    "transaction",
+                    TransactionType.TRANSACTION,
                     transaction.getNumberOfAssets(),
                     java.sql.Timestamp.valueOf(transaction.getDate()),
                     transaction.getTransactionFee(),
@@ -91,9 +89,6 @@ public class JdbcOrderDAO {
 //    }
 
     //Limit_buy
-
-    //TODO graag Limit_Buy methode reviewen. En daarbij afvragen of "totalCost (of totalPrice)" ook in de DB moet worden opgeslagen?
-
     /**
      * Saves Limit_Buy order in database, waiting to be matched with another client's offer (matchservice).
      * @param limit_buy
@@ -106,7 +101,7 @@ public class JdbcOrderDAO {
             jdbcTemplate.update(sql,
                     limit_buy.getBuyerWallet().getIban(),
                     limit_buy.getAsset().getCode(),
-                    "limit_buy",
+                    TransactionType.LIMIT_BUY,
                     limit_buy.getRequestedPrice(),
                     limit_buy.getNumberOfAssets(),
                     java.sql.Timestamp.valueOf(limit_buy.getDate()));
@@ -131,7 +126,7 @@ public class JdbcOrderDAO {
             jdbcTemplate.update(sql,
                     limit_sell.getSellerWallet().getIban(),
                     limit_sell.getAsset().getCode(),
-                    "limit_sell",
+                    TransactionType.LIMIT_SELL,
                     limit_sell.getRequestedPrice(),
                     limit_sell.getNumberOfAssets(),
                     java.sql.Timestamp.valueOf(limit_sell.getDate()));
@@ -140,7 +135,7 @@ public class JdbcOrderDAO {
         }
     }
 
-    //TODO overige ordertypes toevoegen
+    //TODO Stoploss_sell toevoegen
 
     //Stoploss_sell
 

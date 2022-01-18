@@ -187,5 +187,4 @@ public class RootRepository {
 
     //ORDER > STOPLOSS_SELL
 
-
 }

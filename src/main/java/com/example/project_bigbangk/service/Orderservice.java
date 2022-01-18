@@ -181,14 +181,11 @@ public class Orderservice {
      * @return
      */
     public String checkLsellOrder(OrderDTO order){
-        //TODO hier checken of klant voldoende assets heeft.
-        // En hoe zit dat met de fee, daar moeten ze wel geld voor hebben ook.
         double offeredAssetAmount = order.getAmount() / currentAssetPrice;
-        double orderFee = order.getAmount() * BigBangkApplicatie.bigBangk.getFeePercentage();
-        double totalCost = order.getAmount() + orderFee;
         Wallet clientWallet = client.getWallet();
+        Asset asset = rootRepository.findAssetByCode(order.getCode());
 
-        if (clientWallet.getBalance() >= totalCost) {
+        if (clientWallet.getAsset().get(asset) >= offeredAssetAmount) {
             Limit_Sell limit_sell = new Limit_Sell(asset, order.getLimit(), offeredAssetAmount, LocalDateTime.now(), clientWallet);
             rootRepository.saveWaitingLimitSellOrder(limit_sell);
         } else {

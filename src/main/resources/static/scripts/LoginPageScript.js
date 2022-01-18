@@ -25,9 +25,9 @@ function sendLoginData(lData) {
         headers: acceptHeaders(),
         body: JSON.stringify(lData)
     })
-        .then(response => {
+        .then(async response => {
             if (response.ok) {
-                storeToken(response.json());
+                storeToken(await response.json());
                 console.log("login successful" + lData.email);
             }else {
                 console.log("login failed");
