@@ -8,7 +8,9 @@ package com.example.project_bigbangk.model.Orders;
  * 4 types of transactions/orders.
  */
 
-public enum TransactionCode_Name {
+//TODO even overleg over onderstaande namen!
+
+public enum TransactionType {
     TRANSACTION ("Transaction"),
     LIMIT_SELL ("Sell if price reaches level above current level"),
     LIMIT_BUY("Buy if price reaches below desired level"),
@@ -16,7 +18,7 @@ public enum TransactionCode_Name {
 
     private String transactionName;
 
-    private TransactionCode_Name(String transactionName) {
+    private TransactionType(String transactionName) {
         this.transactionName =  transactionName;
     }
 

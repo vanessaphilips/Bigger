@@ -17,12 +17,12 @@ public class Limit_Buy extends AbstractOrder{
 
     private Wallet buyerWallet;
 
-    public Limit_Buy(int orderId, double requestedPrice, int numberOfAssets, LocalDateTime date) {
+    public Limit_Buy(int orderId, double requestedPrice, double numberOfAssets, LocalDateTime date) {
         super(orderId, requestedPrice, numberOfAssets, date);
         logger.info("New Limit_Buy, without Asset and Wallet");
     }
 
-    public Limit_Buy(Asset asset, double requestedPrice, int numberOfAssets, LocalDateTime date, Wallet buyerWallet) {
+    public Limit_Buy(Asset asset, double requestedPrice, double numberOfAssets, LocalDateTime date, Wallet buyerWallet) {
         super(asset, requestedPrice, numberOfAssets, date);
         this.buyerWallet = buyerWallet;
         logger.info("New Limit_Buy, without id");

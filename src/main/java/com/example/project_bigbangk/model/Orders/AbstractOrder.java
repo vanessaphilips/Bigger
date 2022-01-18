@@ -66,7 +66,7 @@ abstract class AbstractOrder {
         this.numberOfAssets = numberOfAssets;
     }
 
-    public LocalDateTime getDate(Class<LocalDateTime> localDateTimeClass) {
+    public LocalDateTime getDate() {
         return date;
     }
 
