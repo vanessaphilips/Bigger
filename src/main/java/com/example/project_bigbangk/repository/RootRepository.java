@@ -8,9 +8,7 @@
 package com.example.project_bigbangk.repository;
 
 import com.example.project_bigbangk.model.*;
-import com.example.project_bigbangk.model.Orders.Limit_Buy;
-import com.example.project_bigbangk.model.Orders.Limit_Sell;
-import com.example.project_bigbangk.model.Orders.Transaction;
+import com.example.project_bigbangk.model.Orders.*;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -152,6 +150,11 @@ public class RootRepository {
         return wallet;
     }
 
+    //Order
+    public List<Limit_Sell> getAllLimitSell() {
+      return null;
+    }
+
     //ORDER > TRANSACTION
 
     /**
@@ -183,6 +186,14 @@ public class RootRepository {
      */
     public void saveWaitingLimitSellOrder(Limit_Sell limit_sell){
         orderDAO.saveLimit_Sell(limit_sell);
+    }
+
+    public void saveTransaction(Transaction transaction) {
+        orderDAO.saveTransaction(transaction);
+        walletDAO.updateBalance(transaction.getBuyerWallet());
+        walletDAO.updateWalletAssets(transaction.getBuyerWallet(), transaction.getAsset(), transaction.getBuyerWallet().getAsset().get(transaction.getAsset()));
+        walletDAO.updateBalance(transaction.getSellerWallet());
+        walletDAO.updateWalletAssets(transaction.getSellerWallet(), transaction.getAsset(), transaction.getSellerWallet().getAsset().get(transaction.getAsset()));
     }
 
     //ORDER > STOPLOSS_SELL
