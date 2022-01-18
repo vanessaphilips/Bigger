@@ -9,6 +9,7 @@ import com.example.project_bigbangk.model.Asset;
 import com.example.project_bigbangk.model.Client;
 import com.example.project_bigbangk.model.DTO.OrderDTO;
 import com.example.project_bigbangk.model.Orders.Limit_Buy;
+import com.example.project_bigbangk.model.Orders.Limit_Sell;
 import com.example.project_bigbangk.model.Orders.Transaction;
 import com.example.project_bigbangk.model.Wallet;
 import com.example.project_bigbangk.repository.RootRepository;
@@ -34,7 +35,9 @@ public class Orderservice {
         AssetClient("Order Failed: Client has insufficient assets."),
         AssetBank("Order Failed: Bank has insufficient assets."),
         SuccessBuy("Buy-Order successful"),
-        SuccessSell("Sell-Order successful");
+        SuccessSell("Sell-Order successful"),
+        WaitingLimitBuy("Limit-buy order waiting for match"),
+        WaitingLimitSell("Limit-sell order waiting for match");
         private String body;
 
         Messages(String envBody) {
@@ -50,7 +53,7 @@ public class Orderservice {
         currentAssetPrice = rootRepository.getCurrentPriceByAssetCode(order.getCode());
         asset = rootRepository.findAssetByCode(order.getCode());
 
-        //types:
+        // types:
         // BuyOrder (alleen met bank)   code: Buy       -klaar
         // SellOrder (alleen met bank)  code: Sell      -klaar
         // Limit_Buy                    code: Lbuy      -sprint 3
@@ -149,7 +152,7 @@ public class Orderservice {
     // Limit_Buy -> code: Lbuy
 
     /**
-     * Check if the Limit_Buy order can be done, if yes -> save waitingLimitBuyOrder in database
+     * Checks if the Limit_Buy order can be done, if yes -> save waitingLimitBuyOrder in database
      * @param order
      * @return
      * author = Vanessa Philips
@@ -166,13 +169,32 @@ public class Orderservice {
         } else {
             return Messages.FundClient.getBody();
         }
-        return null;
+        return Messages.WaitingLimitBuy.getBody();
     }
 
     // Limit_Sell -> code: Lsell
 
+    /**
+     * Checks if the Limit_Sell order can be done, if yes -> save waitingLimitSellOrder in database
+     * @param order
+     * author = Vanessa Philips
+     * @return
+     */
     public String checkLsellOrder(OrderDTO order){
-        return null;
+        //TODO hier checken of klant voldoende assets heeft.
+        // En hoe zit dat met de fee, daar moeten ze wel geld voor hebben ook.
+        double offeredAssetAmount = order.getAmount() / currentAssetPrice;
+        double orderFee = order.getAmount() * BigBangkApplicatie.bigBangk.getFeePercentage();
+        double totalCost = order.getAmount() + orderFee;
+        Wallet clientWallet = client.getWallet();
+
+        if (clientWallet.getBalance() >= totalCost) {
+            Limit_Sell limit_sell = new Limit_Sell(asset, order.getLimit(), offeredAssetAmount, LocalDateTime.now(), clientWallet);
+            rootRepository.saveWaitingLimitSellOrder(limit_sell);
+        } else {
+            return Messages.AssetClient.getBody();
+        }
+        return Messages.WaitingLimitSell.getBody();
     }
 
     // Stoploss_Sell -> code: Sloss

@@ -9,6 +9,7 @@ package com.example.project_bigbangk.repository;
 
 import com.example.project_bigbangk.model.*;
 import com.example.project_bigbangk.model.Orders.Limit_Buy;
+import com.example.project_bigbangk.model.Orders.Limit_Sell;
 import com.example.project_bigbangk.model.Orders.Transaction;
 import org.springframework.stereotype.Repository;
 
@@ -172,5 +173,19 @@ public class RootRepository {
     public void saveWaitingLimitBuyOrder(Limit_Buy limit_buy){
         orderDAO.saveLimit_Buy(limit_buy);
     }
+
+    //ORDER > LIMIT_SELL
+
+    /**
+     * Saves Limit_Sell order temporary. To be completed when there is a match with another client's offer (matchservice).
+     * @param limit_sell
+     * author = Vanessa Philips
+     */
+    public void saveWaitingLimitSellOrder(Limit_Sell limit_sell){
+        orderDAO.saveLimit_Sell(limit_sell);
+    }
+
+    //ORDER > STOPLOSS_SELL
+
 
 }
