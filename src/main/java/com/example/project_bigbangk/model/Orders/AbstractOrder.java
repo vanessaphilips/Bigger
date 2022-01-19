@@ -14,24 +14,24 @@ public abstract class AbstractOrder {
 
     private long orderId;
     private Asset asset;
-    private double limit;
+    private double orderLimit;
     private double assetAmount;
     private LocalDateTime date;
 
-    public AbstractOrder(long orderId, Asset asset, double requestedPrice, double numberOfAssets, LocalDateTime date) {
+    public AbstractOrder(long orderId, Asset asset, double orderLimit, double assetAmount, LocalDateTime date) {
         this.orderId = orderId;
         this.asset = asset;
-        this.limit = limit;
+        this.orderLimit = orderLimit;
         this.assetAmount = assetAmount;
         this.date = date;
     }
 
-    public AbstractOrder(long orderId, double limit, double assetAmount, LocalDateTime date) {
-        this(orderId, null, limit, assetAmount, date);
+    public AbstractOrder(long orderId, double orderLimit, double assetAmount, LocalDateTime date) {
+        this(orderId, null, orderLimit, assetAmount, date);
     }
 
-    public AbstractOrder(Asset asset, double limit, double assetAmount, LocalDateTime date) {
-        this(0, asset, limit, assetAmount, date);
+    public AbstractOrder(Asset asset, double orderLimit, double assetAmount, LocalDateTime date) {
+        this(0, asset, orderLimit, assetAmount, date);
     }
 
     public long getOrderId() {
@@ -50,12 +50,12 @@ public abstract class AbstractOrder {
         this.asset = asset;
     }
 
-    public double getLimit() {
-        return limit;
+    public double getOrderLimit() {
+        return orderLimit;
     }
 
-    public void setLimit(double limit) {
-        this.limit = limit;
+    public void setOrderLimit(double orderLimit) {
+        this.orderLimit = orderLimit;
     }
 
     public double getAssetAmount() {
@@ -79,7 +79,7 @@ public abstract class AbstractOrder {
         return "AbstractOrder{" +
                 "orderId=" + orderId +
                 ", asset=" + asset +
-                ", requestedPrice=" + limit +
+                ", requestedPrice=" + orderLimit +
                 ", numberOfAssets=" + assetAmount +
                 ", date=" + date +
                 '}';

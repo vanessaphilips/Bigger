@@ -76,7 +76,7 @@ public class JdbcOrderDAO {
         @Override
         public Limit_Sell mapRow(ResultSet resultSet, int rowNum) throws SQLException {
             int orderId = resultSet.getInt("orderId");
-            Double requestedPrice = resultSet.getDouble("requestedPrice");
+            Double requestedPrice = resultSet.getDouble("orderLimit");
             Integer assetAmount = resultSet.getInt("assetAmount");
             LocalDateTime date = resultSet.getObject("date", LocalDateTime.class);
             return new Limit_Sell(orderId, requestedPrice, assetAmount, date);
@@ -88,7 +88,7 @@ public class JdbcOrderDAO {
         @Override
         public Limit_Buy mapRow(ResultSet resultSet, int rowNum) throws SQLException {
             int orderId = resultSet.getInt("orderId");
-            Double limit = resultSet.getDouble("requestedPrice");
+            Double limit = resultSet.getDouble("orderLimit");
             Integer assetAmount = resultSet.getInt("assetAmount");
             LocalDateTime date = resultSet.getObject("date", LocalDateTime.class);
             return new Limit_Buy(orderId, limit, assetAmount, date);
@@ -99,7 +99,7 @@ public class JdbcOrderDAO {
         @Override
         public Stoploss_Sell mapRow(ResultSet resultSet, int rowNum) throws SQLException {
             int orderId = resultSet.getInt("orderId");
-            Double limit = resultSet.getDouble("requestedPrice");
+            Double limit = resultSet.getDouble("orderLimit");
             Integer assetAmount = resultSet.getInt("assetAmount");
             LocalDateTime date = resultSet.getObject("date", LocalDateTime.class);
 
@@ -121,7 +121,7 @@ public class JdbcOrderDAO {
                     limit_buy.getBuyer().getIban(),
                     limit_buy.getAsset().getCode(),
                     TransactionType.LIMIT_BUY.toString(),
-                    limit_buy.getLimit(),
+                    limit_buy.getOrderLimit(),
                     limit_buy.getAssetAmount(),
                     java.sql.Timestamp.valueOf(limit_buy.getDate()));
         } catch (DataAccessException dataAccessException) {
@@ -143,7 +143,7 @@ public class JdbcOrderDAO {
                     limit_sell.getSeller().getIban(),
                     limit_sell.getAsset().getCode(),
                     TransactionType.LIMIT_SELL.toString(),
-                    limit_sell.getLimit(),
+                    limit_sell.getOrderLimit(),
                     limit_sell.getAssetAmount(),
                     java.sql.Timestamp.valueOf(limit_sell.getDate()));
         } catch (DataAccessException dataAccessException) {

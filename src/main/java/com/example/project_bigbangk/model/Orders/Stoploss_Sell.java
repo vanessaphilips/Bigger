@@ -18,13 +18,13 @@ public class Stoploss_Sell extends AbstractOrder{
     private Wallet seller;
 
 
-    public Stoploss_Sell(int orderId, double limit, double assetAmount, LocalDateTime date) {
-        super(orderId, limit, assetAmount, date);
+    public Stoploss_Sell(int orderId, double orderLimit, double assetAmount, LocalDateTime date) {
+        super(orderId, orderLimit, assetAmount, date);
         logger.info("New Stoploss_Sell, without Asset and Wallet");
     }
 
-    public Stoploss_Sell(Asset asset, double limit, double assetAmount, LocalDateTime date, Wallet seller) {
-        super(asset, limit, assetAmount, date);
+    public Stoploss_Sell(Asset asset, double orderLimit, double assetAmount, LocalDateTime date, Wallet seller) {
+        super(asset, orderLimit, assetAmount, date);
         this.seller = seller;
 
         logger.info("New Stoploss_Sell, without id");
