@@ -10,7 +10,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * Created by Vanessa Philips.
@@ -101,7 +100,7 @@ public class JdbcOrderDAO {
                     limit_buy.getAsset().getCode(),
                     TransactionType.LIMIT_BUY,
                     limit_buy.getRequestedPrice(),
-                    limit_buy.getNumberOfAssets(),
+                    limit_buy.getAssetAmount(),
                     java.sql.Timestamp.valueOf(limit_buy.getDate()));
         } catch (DataAccessException dataAccessException) {
             logger.info(dataAccessException.getMessage());
@@ -126,7 +125,7 @@ public class JdbcOrderDAO {
                     limit_sell.getAsset().getCode(),
                     TransactionType.LIMIT_SELL,
                     limit_sell.getRequestedPrice(),
-                    limit_sell.getNumberOfAssets(),
+                    limit_sell.getAssetAmount(),
                     java.sql.Timestamp.valueOf(limit_sell.getDate()));
         } catch (DataAccessException dataAccessException) {
             logger.info(dataAccessException.getMessage());
@@ -136,6 +135,5 @@ public class JdbcOrderDAO {
     //TODO Stoploss_sell toevoegen
 
     //Stoploss_sell
-
 
 }
