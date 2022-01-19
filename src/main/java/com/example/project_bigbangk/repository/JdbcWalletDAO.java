@@ -50,8 +50,8 @@ public class JdbcWalletDAO implements IWalletDAO{
      * @return Wallet
      */
     public Wallet findWalletByOrderId(int orderId){
-        String sql = String.format("Select * From wallet JOIN order ON order.buyer = wallet.IBAN " +
-                "UNION Select * From wallet JOIN order ON order.seller = wallet.IBAN" +
+        String sql = String.format("Select * From wallet JOIN `order` ON `order`.buyer = wallet.IBAN " +
+                "UNION Select * From wallet JOIN `order` ON `order`.seller = wallet.IBAN" +
                 "WHERE orderId = ? AND NOT type = '%s';", TransactionType.TRANSACTION.toString());
         Wallet wallet = null;
         try {
@@ -69,7 +69,7 @@ public class JdbcWalletDAO implements IWalletDAO{
      * @return Wallet
      */
     public Wallet FindSellerWalletByOrderId(int orderId){
-        String sql = String.format("Select * From wallet JOIN order ON order.seller = wallet.IBAN" +
+        String sql = String.format("Select * From wallet JOIN `order` ON `order`.seller = wallet.IBAN" +
                 "WHERE orderId = ? AND type = '%s';", TransactionType.TRANSACTION.toString());
         Wallet wallet = null;
         try {
@@ -87,7 +87,7 @@ public class JdbcWalletDAO implements IWalletDAO{
      * @return Wallet
      */
     public Wallet FindBuyerWalletByOrderId(int orderId){
-        String sql = String.format("Select * From wallet JOIN order ON order.buyer = wallet.IBAN" +
+        String sql = String.format("Select * From wallet JOIN `order` ON `order`.buyer = wallet.IBAN" +
                 "WHERE orderId = ? AND type = '%s';", TransactionType.TRANSACTION.toString());
         Wallet wallet = null;
         try {

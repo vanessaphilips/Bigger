@@ -38,7 +38,7 @@ public class JdbcOrderDAO {
                     transaction.getBuyerWallet().getIban(),
                     transaction.getSellerWallet().getIban(),
                     transaction.getAsset().getCode(),
-                    TransactionType.TRANSACTION,
+                    TransactionType.TRANSACTION.toString(),
                     transaction.getAssetAmount(),
                     java.sql.Timestamp.valueOf(transaction.getDate()),
                     transaction.getFee(),
