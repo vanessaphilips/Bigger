@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,10 +41,10 @@ public class OrderMatchingService {
         List<Limit_Buy> allLimit_BuyOrders = rootRepository.getAllLimitBuy();
 
         for (Limit_Buy limit_buy : allLimit_BuyOrders) {
-            double requestedPricePerAsset = limit_buy.getLimit() / limit_buy.getAssetAmount();
+            double requestedPricePerAsset = limit_buy.getRequestedPrice() / limit_buy.getNumberOfAssets();
             List<Limit_Sell> matches = allLimit_SellOrders.stream()
-                    .filter(lso -> requestedPricePerAsset > lso.getLimit() / lso.getAssetAmount())
-                    .sorted(Comparator.comparing(AbstractOrder::getLimit).reversed().thenComparing(AbstractOrder::getDate).reversed())
+                    .filter(lso -> requestedPricePerAsset > lso.getRequestedPrice() / lso.getNumberOfAssets())
+                    .sorted(Comparator.comparing(AbstractOrder::getRequestedPrice).reversed().thenComparing(AbstractOrder::getDate).reversed())
                     .collect(Collectors.toList());
             processMatches(limit_buy, matches);
         }
@@ -84,4 +86,6 @@ public class OrderMatchingService {
         }
         rootRepository.saveTransaction(transaction);
     }
+
+
 }

@@ -3,6 +3,7 @@
 
 package com.example.project_bigbangk.model;
 
+import com.example.project_bigbangk.BigBangkApplicatie;
 import com.example.project_bigbangk.model.Orders.Limit_Buy;
 import com.example.project_bigbangk.model.Orders.Limit_Sell;
 import com.example.project_bigbangk.model.Orders.Stoploss_Sell;
@@ -50,11 +51,11 @@ public class Wallet implements Cloneable {
     }
 
     public void addToBalance(double addedCash){
-        this.setBalance(this.getBalance() + addedCash);
+        this.balance+= addedCash;
     }
 
     public void removeFromBalance(double removedCash){
-        this.setBalance(this.getBalance() -removedCash);
+        this.balance-= removedCash;
     }
 
     public void addToAsset(Asset asset, double addedAmount){
@@ -63,6 +64,60 @@ public class Wallet implements Cloneable {
 
     public void removeFromAsset(Asset asset, double removedAmount){
         this.assets.replace(asset, (this.assets.get(asset) - removedAmount));
+    }
+
+    /**
+     * Calculates the balance thats still free for the client to spend.
+     * If a client has open buy orders he cannot make other buyorders using the same money. That's why we need to know the amount of the balance thats actually free for use in new orders.
+     * @return double free balance
+     */
+    public double freeBalance(){
+        double reservedBalance = 0.0;
+        for (Limit_Buy limit_buy : limitBuy) {
+            reservedBalance += limit_buy.getRequestedPrice();
+            reservedBalance += (limit_buy.getRequestedPrice() * BigBangkApplicatie.bigBangk.getFeePercentage());
+        }
+        return balance - reservedBalance;
+    }
+
+    /**
+     * similar to freebalance, if you have an open order to sell an asset it reserves those assets.
+     * For clarity: if you have 100 BTC and an open sell order for 50BTC, you can make another sell order for 50, but not for 100.
+     * @param asset the asset you want to check the amount of
+     * @return amount of assets that aren't reserved for other orders.
+     */
+    public double freeAssetAmount(Asset asset){
+        double reservedAssetAmount = 0.0;
+        for (Limit_Sell limit_sell : limitSell) {
+            if(limit_sell.getAsset() == asset){
+                reservedAssetAmount += limit_sell.getAssetAmount();
+            }
+        }
+        for (Stoploss_Sell stoploss_sell : stoplossSell) {
+            if(stoploss_sell.getAsset() == asset){
+                reservedAssetAmount += stoploss_sell.getAssetAmount();
+            }
+        }
+        return assets.get(asset) - reservedAssetAmount;
+    }
+
+    /**
+     * checks if the wallet has enough free balance against the amount you need.
+     * @param amountNeeded the amount you need
+     * @return boolean
+     */
+    public boolean sufficientBalance(double amountNeeded){
+        return this.freeBalance() >= amountNeeded;
+    }
+
+    /**
+     * checks if a wallet has enough free 'amount of an asset'
+     * @param asset the asset to check the amount of
+     * @param assetAmountNeeded the amount you want to check
+     * @return boolean
+     */
+    public boolean sufficientAsset(Asset asset, double assetAmountNeeded){
+        return this.freeAssetAmount(asset) >= assetAmountNeeded;
     }
 
 

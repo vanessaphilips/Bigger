@@ -18,7 +18,7 @@ public abstract class AbstractOrder {
     private double assetAmount;
     private LocalDateTime date;
 
-    public AbstractOrder(long orderId, Asset asset, double limit, double assetAmount, LocalDateTime date) {
+    public AbstractOrder(long orderId, Asset asset, double requestedPrice, double numberOfAssets, LocalDateTime date) {
         this.orderId = orderId;
         this.asset = asset;
         this.limit = limit;
