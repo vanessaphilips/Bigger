@@ -53,7 +53,7 @@ public class RootRepository {
     /**
      * Saves address, wallet and client seperately in Database.
      *
-     * @param client
+     * @param client the client object
      */
     public void createNewlyRegisteredClient(Client client) {
         addressDAO.saveAddress(client.getAddress());
@@ -162,11 +162,8 @@ public class RootRepository {
     /**
      * Saves Transaction, including sellerWallet and buyerWallet in database.
      *
-     * @param transaction
+     * @param transaction transaction object
      */
-    public void saveNewTransaction(Transaction transaction) {
-        orderDAO.saveTransaction(transaction);
-    }
 
     public void saveTransaction(Transaction transaction) {
         orderDAO.saveTransaction(transaction);

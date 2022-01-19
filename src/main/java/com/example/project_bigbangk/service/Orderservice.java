@@ -22,7 +22,8 @@ public class Orderservice {
     double currentAssetPrice;
     private Asset asset;
     private RootRepository rootRepository;
-    private Client client;
+    private Wallet clientWallet;
+    private Wallet bankWallet;
 
     public Orderservice(RootRepository rootRepository) {
         this.rootRepository = rootRepository;
@@ -50,16 +51,10 @@ public class Orderservice {
     }
 
     public String handleOrderByType(OrderDTO order, Client clientFromToken){
-        client = clientFromToken;
+        clientWallet = clientFromToken.getWallet();
+        bankWallet = rootRepository.findWalletbyBankCode(BigBangkApplicatie.bigBangk.getCode());
         currentAssetPrice = rootRepository.getCurrentPriceByAssetCode(order.getAssetCode());
         asset = rootRepository.findAssetByCode(order.getAssetCode());
-
-        // types:
-        // BuyOrder (alleen met bank)   code: Buy       -klaar
-        // SellOrder (alleen met bank)  code: Sell      -klaar
-        // Limit_Buy                    code: Lbuy      -sprint 3
-        // Limit_Sell                   code: Lsell     -sprint 3
-        // Stoploss_Sell                code: Sloss     -sprint 3
 
         if(order.getOrderType().equals("Buy")){
             return checkBuyOrder(order);
@@ -79,20 +74,16 @@ public class Orderservice {
             return "Incorrect order type in JSON";
     }
 
-    // BuyOrder (alleen met bank) -> code: Buy
 
     public String checkBuyOrder(OrderDTO order){
         double priceExcludingFee = order.getAssetAmount() * currentAssetPrice;
         double orderFee = priceExcludingFee * BigBangkApplicatie.bigBangk.getFeePercentage();
         double totalCost = priceExcludingFee + orderFee;
-        Wallet clientWallet = client.getWallet();
-        Wallet bankWallet = rootRepository.findWalletbyBankCode(BigBangkApplicatie.bigBangk.getCode());
 
-        if(clientWallet.getBalance() >= totalCost){
-            if(bankWallet.getAssets().get(asset) >= order.getAssetAmount()){
+        if(clientWallet.sufficientBalance(totalCost)){
+            if(bankWallet.sufficientAsset(asset, order.getAssetAmount())){
                 executeBuyOrder(order, priceExcludingFee, orderFee, totalCost, clientWallet, bankWallet);
                 return Messages.SuccessBuy.getBody();
-                
             } else{
                 return Messages.AssetBank.getBody();
             }
@@ -102,27 +93,23 @@ public class Orderservice {
     }
 
     private void executeBuyOrder(OrderDTO order, double priceExcludingFee, double orderFee, double totalCost, Wallet clientWallet, Wallet bankWallet) {
-        clientWallet.setBalance(clientWallet.getBalance()- totalCost);
-        clientWallet.getAssets().replace(asset, clientWallet.getAssets().get(asset) + order.getAssetAmount());
+        clientWallet.removeFromBalance(totalCost);
+        clientWallet.addToAsset(asset, order.getAssetAmount());
 
-        bankWallet.setBalance(bankWallet.getBalance() + totalCost);
-        bankWallet.getAssets().replace(asset, bankWallet.getAssets().get(asset) - order.getAssetAmount());
+        bankWallet.addToBalance(totalCost);
+        bankWallet.removeFromAsset(asset, order.getAssetAmount());
 
         Transaction transaction = new Transaction(asset, priceExcludingFee , order.getAssetAmount(), LocalDateTime.now(), orderFee, clientWallet, bankWallet);
-        sendOrderToDatabase(clientWallet, bankWallet, transaction);
+        rootRepository.saveTransaction(transaction);
     }
-
-    // SellOrder (alleen met bank) -> code: Sell
 
     public String checkSellOrder(OrderDTO order){
         double sellOrderValue = order.getAssetAmount() * currentAssetPrice;
         double orderFee = sellOrderValue * BigBangkApplicatie.bigBangk.getFeePercentage();
         double totalPayout = sellOrderValue - orderFee;
-        Wallet clientWallet = client.getWallet();
-        Wallet bankWallet = rootRepository.findWalletbyBankCode(BigBangkApplicatie.bigBangk.getCode());
 
-        if(bankWallet.getBalance() >= totalPayout) {
-            if (clientWallet.getAssets().get(asset) >= order.getAssetAmount()) {
+        if(bankWallet.sufficientBalance(totalPayout)) {
+            if (clientWallet.sufficientAsset(asset, order.getAssetAmount())) {
                 executeSellOrder(order, sellOrderValue, orderFee, totalPayout, bankWallet, clientWallet);
                 return Messages.SuccessSell.getBody();
             } else{
@@ -134,21 +121,17 @@ public class Orderservice {
     }
 
     private void executeSellOrder(OrderDTO order, double sellOrderValue, double orderFee, double totalPayout, Wallet clientWallet, Wallet bankWallet) {
-        clientWallet.setBalance(clientWallet.getBalance() + totalPayout);
-        clientWallet.getAssets().replace(asset, clientWallet.getAssets().get(asset) - order.getAssetAmount());
+        clientWallet.addToBalance(totalPayout);
+        clientWallet.removeFromAsset(asset, order.getAssetAmount());
 
-        bankWallet.setBalance(bankWallet.getBalance() - totalPayout);
-        bankWallet.getAssets().replace(asset, bankWallet.getAssets().get(asset) + order.getAssetAmount());
+        bankWallet.removeFromBalance(totalPayout);
+        bankWallet.removeFromAsset(asset, order.getAssetAmount());
 
         Transaction transaction = new Transaction(asset, sellOrderValue, order.getAssetAmount(), LocalDateTime.now(), orderFee, bankWallet, clientWallet);
-        sendOrderToDatabase(clientWallet, bankWallet, transaction);
+        rootRepository.saveTransaction(transaction);
     }
 
-    public void sendOrderToDatabase(Wallet walletOne, Wallet walletTwo, Transaction transaction){
-        rootRepository.updateWalletBalanceAndAsset(walletOne, asset, walletOne.getAssets().get(asset));
-        rootRepository.updateWalletBalanceAndAsset(walletTwo, asset, walletTwo.getAssets().get(asset));
-        rootRepository.saveNewTransaction(transaction);
-    }
+
 
     // Limit_Buy -> code: Lbuy
 
@@ -161,7 +144,6 @@ public class Orderservice {
     public String checkLbuyOrder(OrderDTO order) {
         double orderFee = order.getLimit() * BigBangkApplicatie.bigBangk.getFeePercentage();
         double totalCost = order.getLimit() + (orderFee/2.0);
-        Wallet clientWallet = client.getWallet();
 
         if (clientWallet.sufficientBalance(totalCost)) {
             Limit_Buy limit_buy = new Limit_Buy(asset, order.getLimit(), order.getAssetAmount(), LocalDateTime.now(), clientWallet);
@@ -181,8 +163,6 @@ public class Orderservice {
      * @return
      */
     public String checkLsellOrder(OrderDTO order){
-        Wallet clientWallet = client.getWallet();
-
         if (clientWallet.sufficientAsset(asset, order.getAssetAmount())) {
             Limit_Sell limit_sell = new Limit_Sell(asset, order.getLimit(), order.getAssetAmount(), LocalDateTime.now(), clientWallet);
             rootRepository.saveLimitSellOrder(limit_sell);
@@ -195,8 +175,6 @@ public class Orderservice {
     // Stoploss_Sell -> code: Sloss
 
     public String checkSlossOrder(OrderDTO order){
-        Wallet clientWallet = client.getWallet();
-
         if (clientWallet.sufficientAsset(asset, order.getAssetAmount())) {
             Limit_Sell limit_sell = new Limit_Sell(asset, order.getLimit(), order.getAssetAmount(), LocalDateTime.now(), clientWallet);
             rootRepository.saveLimitSellOrder(limit_sell);
