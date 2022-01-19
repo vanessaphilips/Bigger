@@ -11,6 +11,7 @@ import com.example.project_bigbangk.model.DTO.OrderDTO;
 import com.example.project_bigbangk.model.Orders.Limit_Buy;
 import com.example.project_bigbangk.model.Orders.Limit_Sell;
 import com.example.project_bigbangk.model.Orders.Transaction;
+import com.example.project_bigbangk.model.Orders.TransactionType;
 import com.example.project_bigbangk.model.Wallet;
 import com.example.project_bigbangk.repository.RootRepository;
 import org.springframework.stereotype.Service;
@@ -56,19 +57,19 @@ public class Orderservice {
         currentAssetPrice = rootRepository.getCurrentPriceByAssetCode(order.getAssetCode());
         asset = rootRepository.findAssetByCode(order.getAssetCode());
 
-        if(order.getOrderType().equals("Buy")){
+        if(order.getOrderType().equals(TransactionType.BUY.toString())){
             return checkBuyOrder(order);
         }
-        if(order.getOrderType().equals("Sell")){
+        if(order.getOrderType().equals(TransactionType.SELL.toString())){
             return checkSellOrder(order);
         }
-        if(order.getOrderType().equals("Lbuy")) {
+        if(order.getOrderType().equals(TransactionType.LIMIT_BUY.toString())) {
             return checkLbuyOrder(order);
         }
-        if(order.getOrderType().equals("Lsell")) {
+        if(order.getOrderType().equals(TransactionType.LIMIT_SELL.toString())) {
             return checkLsellOrder(order);
         }
-        if(order.getOrderType().equals("Sloss")) {
+        if(order.getOrderType().equals(TransactionType.STOPLOSS_SELL.toString())) {
             return checkSlossOrder(order);
         }
             return "Incorrect order type in JSON";
