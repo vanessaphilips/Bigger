@@ -154,7 +154,9 @@ public class RootRepository {
     public List<Limit_Sell> getAllLimitSell() {
       return null;
     }
-
+    public List<Limit_Buy> getAllLimitBuy() {
+        return null;
+    }
     //ORDER > TRANSACTION
 
     /**
@@ -191,10 +193,12 @@ public class RootRepository {
     public void saveTransaction(Transaction transaction) {
         orderDAO.saveTransaction(transaction);
         walletDAO.updateBalance(transaction.getBuyerWallet());
-        walletDAO.updateWalletAssets(transaction.getBuyerWallet(), transaction.getAsset(), transaction.getBuyerWallet().getAsset().get(transaction.getAsset()));
+        walletDAO.updateWalletAssets(transaction.getBuyerWallet(), transaction.getAsset(), transaction.getBuyerWallet().getAssets().get(transaction.getAsset()));
         walletDAO.updateBalance(transaction.getSellerWallet());
-        walletDAO.updateWalletAssets(transaction.getSellerWallet(), transaction.getAsset(), transaction.getSellerWallet().getAsset().get(transaction.getAsset()));
+        walletDAO.updateWalletAssets(transaction.getSellerWallet(), transaction.getAsset(), transaction.getSellerWallet().getAssets().get(transaction.getAsset()));
     }
+
+
 
     //ORDER > STOPLOSS_SELL
 

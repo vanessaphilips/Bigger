@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+
 @Service
 public class OrderMatchingService {
 
@@ -36,18 +37,15 @@ public class OrderMatchingService {
     //limit buy ik wil kopen voor een bedrag niet hoger dan limit
     //limit sell ik wil kopen voor een bedrag niet lager dan limit
     public void checkForMatchingOrders() {
-        List<Limit_Sell> allLimit_SellOrders = rootRepository.getAllOrdersbyType(TransactionType.LIMIT_SELL).stream()
-                .map(t -> (Limit_Sell) t)
-                .collect(Collectors.toList());
-        List<Limit_Buy> allLimit_BuyOrders = rootRepository.getAllOrdersbyType(TransactionType.LIMIT_BUY).stream()
-                .map(t -> (Limit_Buy) t)
-                .collect(Collectors.toList());
+        List<Limit_Sell> allLimit_SellOrders = rootRepository.getAllLimitSell();
+        List<Limit_Buy> allLimit_BuyOrders = rootRepository.getAllLimitBuy();
+
         for (Limit_Buy limit_buy : allLimit_BuyOrders) {
             double requestedPricePerAsset = limit_buy.getRequestedPrice() / limit_buy.getNumberOfAssets();
             List<Limit_Sell> matches = allLimit_SellOrders.stream()
                     .filter(lso -> requestedPricePerAsset > lso.getRequestedPrice() / lso.getNumberOfAssets())
+                    .sorted(Comparator.comparing(AbstractOrder::getRequestedPrice).reversed().thenComparing(AbstractOrder::getDate).reversed())
                     .collect(Collectors.toList());
-            matches.sort(Comparator.comparing(AbstractOrder::getRequestedPrice).reversed().thenComparing(AbstractOrder::getDate).reversed());
             processMatches(limit_buy, matches);
         }
     }
@@ -61,7 +59,7 @@ public class OrderMatchingService {
             double amountOfAssetsLimitSell = limit_sellMatch.getNumberOfAssets();
             double transactionAmountOfAssets = amountOfAssets - amountOfAssetsLimitSell < 0 ? amountOfAssets : amountOfAssetsLimitSell;
             double transActionfee = transactionAmountOfAssets * limit_sellMatch.getRequestedPrice() / limit_sellMatch.getNumberOfAssets();
-           processTransaction(new Transaction(limit_buy.getAsset(),
+            processTransaction(new Transaction(limit_buy.getAsset(),
                     limit_sellMatch.getRequestedPrice(),
                     transactionAmountOfAssets,
                     LocalDateTime.now(), transActionfee, limit_buy.getBuyerWallet(), limit_sellMatch.getSellerWallet()
@@ -73,22 +71,21 @@ public class OrderMatchingService {
         Wallet buyerWallet = transaction.getBuyerWallet();
         Wallet sellerWallet = transaction.getSellerWallet();
         Wallet bankWallet = BigBangkApplicatie.bigBangk.getWallet();
-        buyerWallet.setBalance(transaction.getBuyerWallet().getBalance() - transaction.getRequestedPrice());
-        sellerWallet.setBalance(transaction.getSellerWallet().getBalance() + transaction.getRequestedPrice());
-        buyerWallet.getAsset().replace(transaction.getAsset(), buyerWallet.getAsset().get(transaction.getAsset()) + transaction.getNumberOfAssets());
-        sellerWallet.getAsset().replace(transaction.getAsset(), sellerWallet.getAsset().get(transaction.getAsset()) - transaction.getNumberOfAssets());
-        bankWallet.setBalance(BigBangkApplicatie.bigBangk.getWallet().getBalance() + transaction.getTransactionFee());
+        buyerWallet.removeFromBalance(transaction.getPriceExcludingFee());
+        sellerWallet.addToBalance(transaction.getPriceExcludingFee());
+        buyerWallet.addToAsset(transaction.getAsset(), transaction.getAssetAmount());
+        sellerWallet.removeFromAsset(transaction.getAsset(), transaction.getAssetAmount());
+        bankWallet.addToBalance(transaction.getFee());
         if (transaction.getBuyerWallet().equals(bankWallet)) {
-            transaction.getSellerWallet().setBalance(transaction.getSellerWallet().getBalance() - transaction.getTransactionFee());
+            transaction.getSellerWallet().removeFromBalance(transaction.getFee());
         } else if (transaction.getSellerWallet().equals(bankWallet)) {
-            transaction.getBuyerWallet().setBalance(transaction.getBuyerWallet().getBalance() - transaction.getTransactionFee());
+            transaction.getBuyerWallet().removeFromBalance(transaction.getFee());
         } else {
-            transaction.getSellerWallet().setBalance(transaction.getSellerWallet().getBalance() - transaction.getTransactionFee() / 2.0);
-            transaction.getBuyerWallet().setBalance(transaction.getBuyerWallet().getBalance() - transaction.getTransactionFee() / 2.0);
+            transaction.getSellerWallet().removeFromBalance(transaction.getFee() / 2.0);
+            transaction.getBuyerWallet().removeFromBalance(transaction.getFee() / 2.0);
         }
         rootRepository.saveTransaction(transaction);
     }
-
 
 
 }
