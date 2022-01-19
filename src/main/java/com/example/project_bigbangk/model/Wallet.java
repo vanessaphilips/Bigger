@@ -90,12 +90,12 @@ public class Wallet implements Cloneable {
         double reservedAssetAmount = 0.0;
         for (Limit_Sell limit_sell : limitSell) {
             if(limit_sell.getAsset() == asset){
-                reservedAssetAmount += limit_sell.getNumberOfAssets();
+                reservedAssetAmount += limit_sell.getAssetAmount();
             }
         }
         for (Stoploss_Sell stoploss_sell : stoplossSell) {
             if(stoploss_sell.getAsset() == asset){
-                reservedAssetAmount += stoploss_sell.getNumberOfAssets();
+                reservedAssetAmount += stoploss_sell.getAssetAmount();
             }
         }
         return assets.get(asset) - reservedAssetAmount;
