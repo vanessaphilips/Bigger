@@ -141,21 +141,52 @@ public class RootRepository {
         if (wallet == null) {
             return wallet;
         }
+        fillWalletWithAssets(wallet);
+        return wallet;
+    }
+
+    public Wallet findWalletByOrderID(int orderId) {
+        Wallet wallet = walletDAO.FindBuyerWalletByOrderId(orderId);
+        if (wallet == null) {
+            wallet = walletDAO.FindSellerWalletByOrderId(orderId);
+        }
+        if (wallet != null) {
+            fillWalletWithAssets(wallet);
+        }
+        return wallet;
+    }
+
+    private void fillWalletWithAssets(Wallet wallet) {
         Map<Asset, Double> assetWithAmountMap = new HashMap<>();
         List<Asset> assets = assetDAO.getAllAssets();
         for (Asset asset : assets) {
-            assetWithAmountMap.put(assetDAO.findAssetByCode(asset.getCode()), walletDAO.findAmountOfAsset(iban, asset.getCode()));
+            assetWithAmountMap.put(assetDAO.findAssetByCode(asset.getCode()), walletDAO.findAmountOfAsset(wallet.getIban(), asset.getCode()));
         }
         wallet.setAssets(assetWithAmountMap);
-        return wallet;
     }
 
     //Order
     public List<Limit_Sell> getAllLimitSell() {
-      return null;
+        List<Limit_Sell> limit_sells = orderDAO.getAllLimitSells();
+        for (Limit_Sell limit_sell : limit_sells) {
+            limit_sell.setSeller(findWalletByOrderID(limit_sell.getOrderId()));
+        }
+        return limit_sells;
     }
+
     public List<Limit_Buy> getAllLimitBuy() {
-        return null;
+        List<Limit_Buy> limit_buys = orderDAO.getAllLimitBuys();
+        for (Limit_Buy limit_buy : limit_buys) {
+            limit_buy.setBuyer(findWalletByOrderID(limit_buy.getOrderId()));
+        }
+        return limit_buys;
+    }
+    public List<Stoploss_Sell> getAllStopLossSells() {
+        List<Stoploss_Sell> stoploss_sells = orderDAO.getAllStopLossSells();
+        for (Stoploss_Sell stoploss_sell: stoploss_sells) {
+            stoploss_sell.setSeller(findWalletByOrderID(stoploss_sell.getOrderId()));
+        }
+        return stoploss_sells;
     }
     //ORDER > TRANSACTION
 
@@ -188,7 +219,7 @@ public class RootRepository {
     //ORDER > LIMIT_SELL
 
     /**
-     * Saves Limit_Sell order temporary. To be completed when there is a match with another client's offer -> matchservice.
+     * Saves Limit_Sell order temporary. To be completed when there is a match with another client's offer (matchservice).
      * @param limit_sell
      * author = Vanessa Philips
      */

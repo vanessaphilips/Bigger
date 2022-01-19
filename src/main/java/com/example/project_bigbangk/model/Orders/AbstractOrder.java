@@ -12,13 +12,13 @@ import java.util.Objects;
 
 public abstract class AbstractOrder {
 
-    private long orderId;
+    private int orderId;
     private Asset asset;
     private double orderLimit;
     private double assetAmount;
     private LocalDateTime date;
 
-    public AbstractOrder(long orderId, Asset asset, double orderLimit, double assetAmount, LocalDateTime date) {
+    public AbstractOrder(int orderId, Asset asset, double orderLimit, double assetAmount, LocalDateTime date) {
         this.orderId = orderId;
         this.asset = asset;
         this.orderLimit = orderLimit;
@@ -26,7 +26,7 @@ public abstract class AbstractOrder {
         this.date = date;
     }
 
-    public AbstractOrder(long orderId, double orderLimit, double assetAmount, LocalDateTime date) {
+    public AbstractOrder(int orderId, double orderLimit, double assetAmount, LocalDateTime date) {
         this(orderId, null, orderLimit, assetAmount, date);
     }
 
@@ -34,11 +34,11 @@ public abstract class AbstractOrder {
         this(0, asset, orderLimit, assetAmount, date);
     }
 
-    public long getOrderId() {
+    public int getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(long orderId) {
+    public void setOrderId(int orderId) {
         this.orderId = orderId;
     }
 

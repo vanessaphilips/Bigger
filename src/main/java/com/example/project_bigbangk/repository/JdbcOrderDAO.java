@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Created by Vanessa Philips.
@@ -30,7 +31,7 @@ public class JdbcOrderDAO {
     }
 
     //Transaction
-    public void saveTransaction(Transaction transaction){
+    public void saveTransaction(Transaction transaction) {
         String sql = "INSERT INTO bigbangk.order (buyer, seller, assetCode, orderType, assetAmount, date, fee, priceExcludingFee) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
 
         try {
@@ -49,7 +50,7 @@ public class JdbcOrderDAO {
         }
     }
 
-    public Transaction findTransactionById(Long orderId){
+    public Transaction findTransactionById(Long orderId) {
         String sql = "SELECT * FROM Order WHERE id=?;";
         try {
             return jdbcTemplate.queryForObject(sql, new TransactionRowMapper(), orderId);
@@ -59,27 +60,12 @@ public class JdbcOrderDAO {
         return null;
     }
 
-    private static class TransactionRowMapper implements RowMapper<Transaction> {
-
-        @Override
-        public Transaction mapRow(ResultSet resultSet, int rowNum) throws SQLException {
-            int orderId = resultSet.getInt("orderId");
-            Double priceExcludingFee = resultSet.getDouble("priceExcludingFee");
-            Integer assetAmount = resultSet.getInt("assetAmount");
-            LocalDateTime date = resultSet.getObject("date", LocalDateTime.class);
-            Double fee = resultSet.getDouble("fee");
-            return new Transaction(orderId, priceExcludingFee, assetAmount, date, fee);
-        }
-    }
-
-    //Limit_Buy
-
     /**
-     * Saves Limit_Buy order in database, waiting to be matched with another client's offer -> matchservice.
-     * @param limit_buy
-     * author = Vanessa Philips
+     * Saves Limit_Buy order in database, waiting to be matched with another client's offer (matchservice).
+     *
+     * @param limit_buy author = Vanessa Philips
      */
-    public void saveLimit_Buy(Limit_Buy limit_buy){
+    public void saveLimit_Buy(Limit_Buy limit_buy) {
         String sql = "INSERT INTO bigbangk.order (buyer, assetCode, orderType, orderlimit, assetAmount, date) VALUES (?, ?, ?, ?, ?, ?);";
 
         try {
@@ -95,26 +81,13 @@ public class JdbcOrderDAO {
         }
     }
 
-    private static class LimitBuyRowMapper implements RowMapper<Limit_Buy> {
-
-        @Override
-        public Limit_Buy mapRow(ResultSet resultSet, int rowNum) throws SQLException {
-            int orderId = resultSet.getInt("orderId");
-            Double limit = resultSet.getDouble("orderLimit");
-            Integer assetAmount = resultSet.getInt("assetAmount");
-            LocalDateTime date = resultSet.getObject("date", LocalDateTime.class);
-            return new Limit_Buy(orderId, limit, assetAmount, date);
-        }
-    }
-
-    //Limit_Sell
 
     /**
-     * Saves Limit_Sell order in database, waiting to be matched with another client's offer -> matchservice.
-     * @param limit_sell
-     * author = Vanessa Philips
+     * Saves Limit_Sell order in database, waiting to be matched with another client's offer (matchservice).
+     *
+     * @param limit_sell author = Vanessa Philips
      */
-    public void saveLimit_Sell(Limit_Sell limit_sell){
+    public void saveLimit_Sell(Limit_Sell limit_sell) {
         String sql = "INSERT INTO bigbangk.order (seller, assetCode, orderType, orderlimit, assetAmount, date) VALUES (?, ?, ?, ?, ?, ?);";
 
         try {
@@ -130,51 +103,97 @@ public class JdbcOrderDAO {
         }
     }
 
+    public List<Limit_Buy> getAllLimitBuys() {
+        String sql = "SELECT * FROM bigbangk.Order WHERE orderType=?;";
+        try {
+            return jdbcTemplate.query(sql, new LimitBuyRowMapper(), TransactionType.LIMIT_BUY.toString());
+        } catch (DataAccessException dataAccessException) {
+            logger.info(dataAccessException.getMessage());
+        }
+        return null;
+    }
+
+    public List<Limit_Sell> getAllLimitSells() {
+        String sql = "SELECT * FROM bigbangk.Order WHERE orderType=?;";
+        try {
+            return jdbcTemplate.query(sql, new LimitSellRowMapper(), TransactionType.LIMIT_SELL.toString());
+        } catch (DataAccessException dataAccessException) {
+            System.err.println(dataAccessException.getMessage());
+        }
+        return null;
+    }
+
+    public List<Stoploss_Sell> getAllStopLossSells() {
+        String sql = "SELECT * FROM bigbangk.Order WHERE orderType=?;";
+        try {
+            return jdbcTemplate.query(sql, new StopLossRowMapper(), TransactionType.STOPLOSS_SELL.toString());
+        } catch (DataAccessException dataAccessException) {
+            System.err.println(dataAccessException.getMessage());
+        }
+        return null;
+    }
+
+    public boolean deleteOrderById(int orderId){
+        String sql = "DELETE FROM bigbangk.Order where orderID=?;";
+        try{
+            return jdbcTemplate.update(sql, orderId)>0;
+        } catch (DataAccessException dataAccessException) {
+            System.err.println(dataAccessException.getMessage());
+        }
+        return false;
+    }
+
+    private static class TransactionRowMapper implements RowMapper<Transaction> {
+
+        @Override
+        public Transaction mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+            int orderId = resultSet.getInt("orderId");
+            double priceExcludingFee = resultSet.getDouble("priceExcludingFee");
+            double assetAmount = resultSet.getDouble("assetAmount");
+            LocalDateTime date = resultSet.getObject("date", LocalDateTime.class);
+            double fee = resultSet.getDouble("fee");
+            return new Transaction(orderId, priceExcludingFee, assetAmount, date, fee);
+        }
+    }
+
     private static class LimitSellRowMapper implements RowMapper<Limit_Sell> {
 
         @Override
         public Limit_Sell mapRow(ResultSet resultSet, int rowNum) throws SQLException {
-            int orderId = resultSet.getInt("orderId");
-            Double requestedPrice = resultSet.getDouble("orderLimit");
-            Integer assetAmount = resultSet.getInt("assetAmount");
-            LocalDateTime date = resultSet.getObject("date", LocalDateTime.class);
-            return new Limit_Sell(orderId, requestedPrice, assetAmount, date);
+            return createOrderOfType(resultSet, TransactionType.LIMIT_SELL);
         }
     }
 
-    //Stoploss_Sell
+    private static class LimitBuyRowMapper implements RowMapper<Limit_Buy> {
 
-    /**
-     * Saves Stoploss_Sell order in database, waiting to be matched with another offer (bank or client) -> matchservice.
-     * @param stoploss_sell
-     * author = Vanessa Philips
-     */
-    public void saveStoploss_Sell(Stoploss_Sell stoploss_sell){
-        String sql = "INSERT INTO bigbangk.order (seller, assetCode, orderType, orderlimit, assetAmount, date) VALUES (?, ?, ?, ?, ?, ?);";
-
-        try {
-            jdbcTemplate.update(sql,
-                    stoploss_sell.getSeller().getIban(),
-                    stoploss_sell.getAsset().getCode(),
-                    TransactionType.STOPLOSS_SELL.toString(),
-                    stoploss_sell.getOrderLimit(),
-                    stoploss_sell.getAssetAmount(),
-                    java.sql.Timestamp.valueOf(stoploss_sell.getDate()));
-        } catch (DataAccessException dataAccessException) {
-            logger.info(dataAccessException.getMessage());
+        @Override
+        public Limit_Buy mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+            return createOrderOfType(resultSet, TransactionType.LIMIT_BUY);
         }
     }
 
-    private static class StoplossSellRowMapper implements RowMapper<Stoploss_Sell> {
+    private static class StopLossRowMapper implements RowMapper<Stoploss_Sell> {
 
         @Override
         public Stoploss_Sell mapRow(ResultSet resultSet, int rowNum) throws SQLException {
-            int orderId = resultSet.getInt("orderId");
-            Double limit = resultSet.getDouble("orderLimit");
-            Integer assetAmount = resultSet.getInt("assetAmount");
-            LocalDateTime date = resultSet.getObject("date", LocalDateTime.class);
-            return new Stoploss_Sell(orderId,  limit, assetAmount, LocalDateTime.now());
+            return createOrderOfType(resultSet, TransactionType.STOPLOSS_SELL);
         }
+    }
+
+    static private <T> T createOrderOfType(ResultSet resultSet, TransactionType type) throws SQLException {
+        int orderId = resultSet.getInt("orderId");
+        double limit = resultSet.getDouble("orderLimit");
+        double assetAmount = resultSet.getDouble("assetAmount");
+        LocalDateTime date = resultSet.getObject("date", LocalDateTime.class);
+        switch (type) {
+            case LIMIT_BUY:
+                return (T) new Limit_Buy(orderId, limit, assetAmount, date);
+            case LIMIT_SELL:
+                return (T) new Limit_Sell(orderId, limit, assetAmount, date);
+            case STOPLOSS_SELL:
+                return (T) new Stoploss_Sell(orderId, limit, assetAmount, date);
+        }
+        return null;
     }
 
 }
