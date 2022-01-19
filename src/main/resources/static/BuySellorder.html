@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BuySellorder</title>
+    <link rel="stylesheet" type="text/css" href="stylesheets/BuySellorderCSS.css">
+    <script defer src="scripts/GlobalConstants.js"></script>
+    <script defer src="scripts/URLs.js"></script>
+    <script defer src="scripts/Headers.js"></script>
+    <script src="scripts/BuySellorder.js"></script>
+
+</head>
+<body>
+
+<h1> Enter your transaction-order here</h1>
+
+    <h2>Order</h2>
+    <br>
+    <label for="asset">Asset code</label>
+    <input type="text" required="required" id="asset">
+    <br><br>
+    <br>
+    <label for="buyorsell">Transaction type</label>
+    <select id="buyorsell" required="required" >
+        <option value="none" selected disabled hidden>Select an Option</option>
+        <option value="Buy">Purchase order</option>
+        <option value="Sell">Selling order</option>
+    </select>
+    <br><br>
+    <br>
+    <label for="orderlimit">Limit</label>
+    <input type="number" required="required" id="orderlimit" >
+    <br><br>
+    <br>
+<!--geen mooie oplossing zo, maar ik kwam geen wijs uit een voorwaardelijke weergave, afhankelijk van aan -of verkoop optie-->
+    <label for="amount">Purchase-amount or number to sell</label>
+    <input type="number" required="required" id="amount" >
+    <br><br>
+    <br>
+    <br><br>
+    <button onclick="submitOrder()">Confirm order</button>
+    <br><br>
+
+
+</body>
+</html>

@@ -58,8 +58,8 @@ public class RootRepository {
     public void createNewlyRegisteredClient(Client client) {
         addressDAO.saveAddress(client.getAddress());
         walletDAO.saveNewWallet(client.getWallet());
-        for (Asset asset : client.getWallet().getAsset().keySet()) {
-            walletDAO.createWalletAsset(client.getWallet(), asset, client.getWallet().getAsset().get(asset));
+        for (Asset asset : client.getWallet().getAssets().keySet()) {
+            walletDAO.createWalletAsset(client.getWallet(), asset, client.getWallet().getAssets().get(asset));
         }
         clientDAO.saveClient(client);
     }
@@ -146,7 +146,7 @@ public class RootRepository {
         for (Asset asset : assets) {
             assetWithAmountMap.put(assetDAO.findAssetByCode(asset.getCode()), walletDAO.findAmountOfAsset(iban, asset.getCode()));
         }
-        wallet.setAsset(assetWithAmountMap);
+        wallet.setAssets(assetWithAmountMap);
         return wallet;
     }
 

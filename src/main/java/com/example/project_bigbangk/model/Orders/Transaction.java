@@ -16,31 +16,31 @@ public class Transaction{
     private final Logger logger = LoggerFactory.getLogger(Transaction.class);
 
     private Asset asset;
-    private double requestedPrice;
-    private double numberOfAssets;
+    private double priceExcludingFee;
+    private double assetAmount;
     private LocalDateTime date;
-    private double transactionFee;
+    private double fee;
     private Wallet buyerWallet;
     private Wallet sellerWallet;
     private long orderId;
 
-    public Transaction(long orderId, double requestedPrice, double numberOfAssets,
-                       LocalDateTime date, double transactionFee) {
+    public Transaction(long orderId, double priceExcludingFee, double assetAmount,
+                       LocalDateTime date, double fee) {
         this.orderId = orderId;
-        this.requestedPrice = requestedPrice;
-        this.transactionFee = transactionFee;
+        this.priceExcludingFee = priceExcludingFee;
+        this.fee = fee;
         this.date = date;
-        this.numberOfAssets = numberOfAssets;
+        this.assetAmount = assetAmount;
         logger.info("New transaction, without Asset and Wallets");
     }
 
-    public Transaction(Asset asset, double requestedPrice, double numberOfAssets, LocalDateTime date,
-                       double transactionFee, Wallet buyerWallet, Wallet sellerWallet) {
+    public Transaction(Asset asset, double priceExcludingFee, double assetAmount, LocalDateTime date,
+                       double fee, Wallet buyerWallet, Wallet sellerWallet) {
         this.asset = asset;
-        this.requestedPrice = requestedPrice;
+        this.priceExcludingFee = priceExcludingFee;
         this.date = date;
-        this.numberOfAssets = numberOfAssets;
-        this.transactionFee = transactionFee;
+        this.assetAmount = assetAmount;
+        this.fee = fee;
         this.buyerWallet = buyerWallet;
         this.sellerWallet = sellerWallet;
         logger.info("New transaction, without id");
@@ -61,22 +61,22 @@ public class Transaction{
     }
 
 
-    public double getRequestedPrice() {
-        return requestedPrice;
+    public double getPriceExcludingFee() {
+        return priceExcludingFee;
     }
 
 
-    public void setRequestedPrice(double requestedPrice) {
-        this.requestedPrice = requestedPrice;
+    public void setPriceExcludingFee(double priceExcludingFee) {
+        this.priceExcludingFee = priceExcludingFee;
     }
 
 
-    public double getNumberOfAssets() {
-        return numberOfAssets;
+    public double getAssetAmount() {
+        return assetAmount;
     }
 
-    public void setNumberOfAssets(double numberOfAssets) {
-        this.numberOfAssets = numberOfAssets;
+    public void setAssetAmount(double assetAmount) {
+        this.assetAmount = assetAmount;
     }
 
     public LocalDateTime getDate() {
@@ -88,12 +88,12 @@ public class Transaction{
         this.date = date;
     }
 
-    public double getTransactionFee() {
-        return transactionFee;
+    public double getFee() {
+        return fee;
     }
 
-    public void setTransactionFee(double transactionFee) {
-        this.transactionFee = transactionFee;
+    public void setFee(double fee) {
+        this.fee = fee;
     }
 
     public Wallet getBuyerWallet() {
@@ -126,7 +126,7 @@ public class Transaction{
     public String toString() {
         return super.toString() +
                 "Transaction{" +
-                "transactionFee=" + transactionFee +
+                "transactionFee=" + fee +
                 ", buyerWallet=" + buyerWallet +
                 ", sellerWallet=" + sellerWallet +
                 '}';

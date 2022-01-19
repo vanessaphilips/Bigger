@@ -32,7 +32,7 @@ public class JdbcOrderDAO {
 
     //Transaction
     public void saveTransaction(Transaction transaction){
-        String sql = "INSERT INTO bigbangk.order (buyer, seller, code, type, amount, date, fee, totalprice) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+        String sql = "INSERT INTO bigbangk.order (buyer, seller, assetCode, orderType, assetAmount, date, fee, priceExcludingFee) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
 
         try {
             jdbcTemplate.update(sql,
@@ -40,10 +40,10 @@ public class JdbcOrderDAO {
                     transaction.getSellerWallet().getIban(),
                     transaction.getAsset().getCode(),
                     TransactionType.TRANSACTION,
-                    transaction.getNumberOfAssets(),
+                    transaction.getAssetAmount(),
                     java.sql.Timestamp.valueOf(transaction.getDate()),
-                    transaction.getTransactionFee(),
-                    transaction.getRequestedPrice());
+                    transaction.getFee(),
+                    transaction.getPriceExcludingFee());
 
         } catch (DataAccessException dataAccessException) {
             logger.info(dataAccessException.getMessage());
@@ -65,11 +65,11 @@ public class JdbcOrderDAO {
         @Override
         public Transaction mapRow(ResultSet resultSet, int rowNum) throws SQLException {
             int orderId = resultSet.getInt("orderId");
-            Double requestedPrice = resultSet.getDouble("requestedPrice");
-            Integer numberOfAssets = resultSet.getInt("numberOfAssets");
+            Double priceExcludingFee = resultSet.getDouble("priceExcludingFee");
+            Integer assetAmount = resultSet.getInt("assetAmount");
             LocalDateTime date = resultSet.getObject("date", LocalDateTime.class);
-            Double transactionFee = resultSet.getDouble("transactionFee");
-            return new Transaction(orderId, requestedPrice, numberOfAssets, date, transactionFee);
+            Double fee = resultSet.getDouble("fee");
+            return new Transaction(orderId, priceExcludingFee, assetAmount, date, fee);
         }
     }
 
@@ -93,7 +93,7 @@ public class JdbcOrderDAO {
      * author = Vanessa Philips
      */
     public void saveLimit_Buy(Limit_Buy limit_buy){
-        String sql = "INSERT INTO bigbangk.order (buyer, code, type, orderlimit, amount, date) VALUES (?, ?, ?, ?, ?, ?);";
+        String sql = "INSERT INTO bigbangk.order (buyer, asssetCode, orderType, orderlimit, assetAmount, date) VALUES (?, ?, ?, ?, ?, ?);";
 
         try {
             jdbcTemplate.update(sql,

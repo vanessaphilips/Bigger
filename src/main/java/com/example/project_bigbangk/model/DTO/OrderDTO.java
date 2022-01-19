@@ -6,32 +6,32 @@ package com.example.project_bigbangk.model.DTO;
 
 public class OrderDTO {
 
-    private String code; //automatisch ingevuld veld.
-    private String type; //dropdown menu of zoiets.
+    private String assetCode; //automatisch ingevuld veld.
+    private String orderType; //dropdown menu of zoiets.
     private double limit; //de trigger voor alle orders behalve transacties met bank. Sprint 3 default 0 of -1 bij transacties? (BUY SELL als type)
-    private double amount; //hoeveelheid coin of hoeveelheid geld(alleen in het geval dat je van de bank koopt. dan koop je 100€ aan bitcoin ipv 0.0004 bitcoin.
+    private double assetAmount; //hoeveelheid coin of hoeveelheid geld(alleen in het geval dat je van de bank koopt. dan koop je 100€ aan bitcoin ipv 0.0004 bitcoin.
 
-    public OrderDTO(String code, String type, double limit, double amount) {
-        this.code = code;
-        this.type = type;
+    public OrderDTO(String assetCode, String orderType, double limit, double assetAmount) {
+        this.assetCode = assetCode;
+        this.orderType = orderType;
         this.limit = limit;
-        this.amount = amount;
+        this.assetAmount = assetAmount;
     }
 
-    public String getCode() {
-        return code;
+    public String getAssetCode() {
+        return assetCode;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setAssetCode(String assetCode) {
+        this.assetCode = assetCode;
     }
 
-    public String getType() {
-        return type;
+    public String getOrderType() {
+        return orderType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setOrderType(String orderType) {
+        this.orderType = orderType;
     }
 
     public double getLimit() {
@@ -42,26 +42,14 @@ public class OrderDTO {
         this.limit = limit;
     }
 
-    public double getAmount() {
-        return amount;
+    public double getAssetAmount() {
+        return assetAmount;
     }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
+    public void setAssetAmount(double assetAmount) {
+        this.assetAmount = assetAmount;
     }
 
-
-    //Tabel parameters:
-    //orderid is autoinc.
-    //(WalletID in db) buyer of seller ben je zelf afhankelijk van order. en de ander een bank of een klant.
-    //
-    //code
-    //type
-    //limit
-    //amount
-
-    //totalprice        berekend in db
-    //fee               staat ergens opgeslagen..in de code?
 
 
 
