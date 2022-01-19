@@ -15,23 +15,23 @@ public abstract class AbstractOrder {
     private long orderId;
     private Asset asset;
     private double requestedPrice;
-    private double numberOfAssets;
+    private double assetAmount;
     private LocalDateTime date;
 
-    public AbstractOrder(long orderId, Asset asset, double requestedPrice, double numberOfAssets, LocalDateTime date) {
+    public AbstractOrder(long orderId, Asset asset, double requestedPrice, double assetAmount, LocalDateTime date) {
         this.orderId = orderId;
         this.asset = asset;
         this.requestedPrice = requestedPrice;
-        this.numberOfAssets = numberOfAssets;
+        this.assetAmount = assetAmount;
         this.date = date;
     }
 
-    public AbstractOrder(long orderId, double requestedPrice, double numberOfAssets, LocalDateTime date) {
-        this(orderId, null, requestedPrice, numberOfAssets, date);
+    public AbstractOrder(long orderId, double requestedPrice, double assetAmount, LocalDateTime date) {
+        this(orderId, null, requestedPrice, assetAmount, date);
     }
 
-    public AbstractOrder(Asset asset, double requestedPrice, double numberOfAssets, LocalDateTime date) {
-        this(0, asset, requestedPrice, numberOfAssets, date);
+    public AbstractOrder(Asset asset, double requestedPrice, double assetAmount, LocalDateTime date) {
+        this(0, asset, requestedPrice, assetAmount, date);
     }
 
     public long getOrderId() {
@@ -58,12 +58,12 @@ public abstract class AbstractOrder {
         this.requestedPrice = requestedPrice;
     }
 
-    public double getNumberOfAssets() {
-        return numberOfAssets;
+    public double getAssetAmount() {
+        return assetAmount;
     }
 
-    public void setNumberOfAssets(int numberOfAssets) {
-        this.numberOfAssets = numberOfAssets;
+    public void setAssetAmount(int assetAmount) {
+        this.assetAmount = assetAmount;
     }
 
     public LocalDateTime getDate() {
@@ -80,7 +80,7 @@ public abstract class AbstractOrder {
                 "orderId=" + orderId +
                 ", asset=" + asset +
                 ", requestedPrice=" + requestedPrice +
-                ", numberOfAssets=" + numberOfAssets +
+                ", assetAmount=" + assetAmount +
                 ", date=" + date +
                 '}';
     }
