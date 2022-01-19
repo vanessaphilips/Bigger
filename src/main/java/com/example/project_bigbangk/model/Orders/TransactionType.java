@@ -11,27 +11,10 @@ package com.example.project_bigbangk.model.Orders;
 //TODO even overleg over onderstaande namen!
 
 public enum TransactionType {
-    TRANSACTION ("Transaction"),
-    LIMIT_SELL ("Sell if price reaches level above current level"),
-    LIMIT_BUY("Buy if price reaches below desired level"),
-    STOPLOSS_SELL("Sell if price reaches certain level below current price");
-
-    private String transactionName;
-
-    private TransactionType(String transactionName) {
-        this.transactionName =  transactionName;
-    }
-
-    @Override
-    public String toString() {
-        return transactionName;
-    }
-
-    public String getTransactionCode() {
-        return this.name();
-    }
-
-    public String getTransactionName() {
-        return transactionName;
-    }
+    BUY_ORDER,
+    SELL_ORDER,
+    TRANSACTION,
+    LIMIT_SELL,
+    LIMIT_BUY,
+    STOPLOSS_SELL;
 }
