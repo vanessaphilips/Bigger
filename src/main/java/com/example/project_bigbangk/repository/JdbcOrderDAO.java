@@ -102,6 +102,21 @@ public class JdbcOrderDAO {
             logger.info(dataAccessException.getMessage());
         }
     }
+    public void saveStoploss_Sell(Stoploss_Sell stoploss_sell) {
+        String sql = "INSERT INTO bigbangk.order (seller, assetCode, orderType, orderlimit, assetAmount, date) VALUES (?, ?, ?, ?, ?, ?);";
+
+        try {
+            jdbcTemplate.update(sql,
+                    stoploss_sell.getSeller().getIban(),
+                    stoploss_sell.getAsset().getCode(),
+                    TransactionType.STOPLOSS_SELL.toString(),
+                    stoploss_sell.getOrderLimit(),
+                    stoploss_sell.getAssetAmount(),
+                    java.sql.Timestamp.valueOf(stoploss_sell.getDate()));
+        } catch (DataAccessException dataAccessException) {
+            logger.info(dataAccessException.getMessage());
+        }
+    }
 
     public List<Limit_Buy> getAllLimitBuys() {
         String sql = "SELECT * FROM bigbangk.Order WHERE orderType=?;";
