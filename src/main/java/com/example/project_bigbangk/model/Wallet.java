@@ -7,7 +7,6 @@ import com.example.project_bigbangk.model.Orders.Limit_Buy;
 import com.example.project_bigbangk.model.Orders.Limit_Sell;
 import com.example.project_bigbangk.model.Orders.Stoploss_Sell;
 import com.example.project_bigbangk.model.Orders.Transaction;
-import com.example.project_bigbangk.service.IbanGeneratorService;
 
 import java.util.List;
 import java.util.Map;
@@ -18,31 +17,31 @@ public class Wallet implements Cloneable {
     private String bank;
     private String iban;
     private double balance;
-    private Map<Asset, Double> asset;
+    private Map<Asset, Double> assets;
     private List<Transaction> transaction;
     private List<Limit_Sell> limitSell;
     private List<Limit_Buy> limitBuy;
     private List<Stoploss_Sell> stoplossSell;
     private ICanTrade owner;
 
-    public Wallet(String bank, String iban, double balance, Map<Asset, Double> asset, List<Transaction> transaction,
-                  List<Limit_Sell> limitSell, List<Limit_Buy> limnitBuy, List<Stoploss_Sell> stoplossSell,
+    public Wallet(String bank, String iban, double balance, Map<Asset, Double> assets, List<Transaction> transaction,
+                  List<Limit_Sell> limitSell, List<Limit_Buy> limitBuy, List<Stoploss_Sell> stoplossSell,
                   ICanTrade owner) {
         this.bank = bank;
         this.iban = iban;
         this.balance = balance;
-        this.asset = asset;
+        this.assets = assets;
         this.transaction = transaction;
         this.limitSell = limitSell;
-        this.limitBuy = limnitBuy;
+        this.limitBuy = limitBuy;
         this.stoplossSell = stoplossSell;
         this.owner = owner;
     }
 
-    public Wallet(String iban, double balance, Map<Asset, Double> asset) {
+    public Wallet(String iban, double balance, Map<Asset, Double> assets) {
         this.iban = iban;
         this.balance = balance;
-        this.asset = asset;
+        this.assets = assets;
     }
 
     public Wallet(String iban, double balance) {
@@ -50,13 +49,30 @@ public class Wallet implements Cloneable {
         this.balance = balance;
     }
 
+    public void addToBalance(double addedCash){
+        this.setBalance(this.getBalance() + addedCash);
+    }
+
+    public void removeFromBalance(double removedCash){
+        this.setBalance(this.getBalance() -removedCash);
+    }
+
+    public void addToAsset(Asset asset, double addedAmount){
+        this.assets.replace(asset, (this.assets.get(asset) + addedAmount));
+    }
+
+    public void removeFromAsset(Asset asset, double removedAmount){
+        this.assets.replace(asset, (this.assets.get(asset) - removedAmount));
+    }
+
+
     @Override
     public String toString() {
         return "Wallet{" +
                 "bank='" + bank + '\'' +
                 ", iban='" + iban + '\'' +
                 ", balance=" + balance +
-                ", assets=" + asset +
+                ", assets=" + assets +
                 ", transactions=" + transaction +
                 ", limitSell=" + limitSell +
                 ", limitBuy=" + limitBuy +
@@ -102,12 +118,12 @@ public class Wallet implements Cloneable {
         this.balance = balance;
     }
 
-    public Map<Asset, Double> getAsset() {
-        return asset;
+    public Map<Asset, Double> getAssets() {
+        return assets;
     }
 
-    public void setAsset(Map<Asset, Double> asset) {
-        this.asset = asset;
+    public void setAssets(Map<Asset, Double> assets) {
+        this.assets = assets;
     }
 
     public List<Transaction> getTransaction() {
