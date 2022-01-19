@@ -168,28 +168,6 @@ public class RootRepository {
         orderDAO.saveTransaction(transaction);
     }
 
-    //ORDER > LIMIT_BUY
-
-    /**
-     * Saves Limit_Buy order temporary. To be completed when there is a match with another client's offer (matchservice).
-     * @param limit_buy
-     * author = Vanessa Philips
-     */
-    public void saveWaitingLimitBuyOrder(Limit_Buy limit_buy){
-        orderDAO.saveLimit_Buy(limit_buy);
-    }
-
-    //ORDER > LIMIT_SELL
-
-    /**
-     * Saves Limit_Sell order temporary. To be completed when there is a match with another client's offer (matchservice).
-     * @param limit_sell
-     * author = Vanessa Philips
-     */
-    public void saveWaitingLimitSellOrder(Limit_Sell limit_sell){
-        orderDAO.saveLimit_Sell(limit_sell);
-    }
-
     public void saveTransaction(Transaction transaction) {
         orderDAO.saveTransaction(transaction);
         walletDAO.updateBalance(transaction.getBuyerWallet());
@@ -199,7 +177,37 @@ public class RootRepository {
     }
 
 
+    //ORDER > LIMIT_BUY
+
+    /**
+     * Saves Limit_Buy order temporary. To be completed when there is a match with another client's offer -> matchservice.
+     * @param limit_buy
+     * author = Vanessa Philips
+     */
+    public void saveLimitBuyOrder(Limit_Buy limit_buy){
+        orderDAO.saveLimit_Buy(limit_buy);
+    }
+
+    //ORDER > LIMIT_SELL
+
+    /**
+     * Saves Limit_Sell order temporary. To be completed when there is a match with another client's offer -> matchservice.
+     * @param limit_sell
+     * author = Vanessa Philips
+     */
+    public void saveLimitSellOrder(Limit_Sell limit_sell){
+        orderDAO.saveLimit_Sell(limit_sell);
+    }
 
     //ORDER > STOPLOSS_SELL
+
+    /**
+     * Saves Stoploss_Sell order temporary. To be completed when there is a match with another offer (bank or client) -> matchservice.
+     * @param stoploss_sell
+     * author = Vanessa Philips
+     */
+    public void saveStoploss_Sell(Stoploss_Sell stoploss_sell){
+        orderDAO.saveStoploss_Sell(stoploss_sell);
+    }
 
 }

@@ -71,45 +71,11 @@ public class JdbcOrderDAO {
             return new Transaction(orderId, priceExcludingFee, assetAmount, date, fee);
         }
     }
-    private static class LimitSellRowMapper implements RowMapper<Limit_Sell> {
 
-        @Override
-        public Limit_Sell mapRow(ResultSet resultSet, int rowNum) throws SQLException {
-            int orderId = resultSet.getInt("orderId");
-            Double requestedPrice = resultSet.getDouble("orderLimit");
-            Integer assetAmount = resultSet.getInt("assetAmount");
-            LocalDateTime date = resultSet.getObject("date", LocalDateTime.class);
-            return new Limit_Sell(orderId, requestedPrice, assetAmount, date);
-        }
-    }
-
-    private static class LimitBuyRowMapper implements RowMapper<Limit_Buy> {
-
-        @Override
-        public Limit_Buy mapRow(ResultSet resultSet, int rowNum) throws SQLException {
-            int orderId = resultSet.getInt("orderId");
-            Double limit = resultSet.getDouble("orderLimit");
-            Integer assetAmount = resultSet.getInt("assetAmount");
-            LocalDateTime date = resultSet.getObject("date", LocalDateTime.class);
-            return new Limit_Buy(orderId, limit, assetAmount, date);
-        }
-    }
-    private static class StopLossRowMapper implements RowMapper<Stoploss_Sell> {
-
-        @Override
-        public Stoploss_Sell mapRow(ResultSet resultSet, int rowNum) throws SQLException {
-            int orderId = resultSet.getInt("orderId");
-            Double limit = resultSet.getDouble("orderLimit");
-            Integer assetAmount = resultSet.getInt("assetAmount");
-            LocalDateTime date = resultSet.getObject("date", LocalDateTime.class);
-
-            return new Stoploss_Sell(orderId,  limit, assetAmount, LocalDateTime.now());
-        }
-    }
-
+    //Limit_Buy
 
     /**
-     * Saves Limit_Buy order in database, waiting to be matched with another client's offer (matchservice).
+     * Saves Limit_Buy order in database, waiting to be matched with another client's offer -> matchservice.
      * @param limit_buy
      * author = Vanessa Philips
      */
@@ -129,9 +95,22 @@ public class JdbcOrderDAO {
         }
     }
 
+    private static class LimitBuyRowMapper implements RowMapper<Limit_Buy> {
+
+        @Override
+        public Limit_Buy mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+            int orderId = resultSet.getInt("orderId");
+            Double limit = resultSet.getDouble("orderLimit");
+            Integer assetAmount = resultSet.getInt("assetAmount");
+            LocalDateTime date = resultSet.getObject("date", LocalDateTime.class);
+            return new Limit_Buy(orderId, limit, assetAmount, date);
+        }
+    }
+
+    //Limit_Sell
 
     /**
-     * Saves Limit_Sell order in database, waiting to be matched with another client's offer (matchservice).
+     * Saves Limit_Sell order in database, waiting to be matched with another client's offer -> matchservice.
      * @param limit_sell
      * author = Vanessa Philips
      */
@@ -151,6 +130,51 @@ public class JdbcOrderDAO {
         }
     }
 
+    private static class LimitSellRowMapper implements RowMapper<Limit_Sell> {
 
+        @Override
+        public Limit_Sell mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+            int orderId = resultSet.getInt("orderId");
+            Double requestedPrice = resultSet.getDouble("orderLimit");
+            Integer assetAmount = resultSet.getInt("assetAmount");
+            LocalDateTime date = resultSet.getObject("date", LocalDateTime.class);
+            return new Limit_Sell(orderId, requestedPrice, assetAmount, date);
+        }
+    }
+
+    //Stoploss_Sell
+
+    /**
+     * Saves Stoploss_Sell order in database, waiting to be matched with another offer (bank or client) -> matchservice.
+     * @param stoploss_sell
+     * author = Vanessa Philips
+     */
+    public void saveStoploss_Sell(Stoploss_Sell stoploss_sell){
+        String sql = "INSERT INTO bigbangk.order (seller, assetCode, orderType, orderlimit, assetAmount, date) VALUES (?, ?, ?, ?, ?, ?);";
+
+        try {
+            jdbcTemplate.update(sql,
+                    stoploss_sell.getSeller().getIban(),
+                    stoploss_sell.getAsset().getCode(),
+                    TransactionType.STOPLOSS_SELL.toString(),
+                    stoploss_sell.getOrderLimit(),
+                    stoploss_sell.getAssetAmount(),
+                    java.sql.Timestamp.valueOf(stoploss_sell.getDate()));
+        } catch (DataAccessException dataAccessException) {
+            logger.info(dataAccessException.getMessage());
+        }
+    }
+
+    private static class StoplossSellRowMapper implements RowMapper<Stoploss_Sell> {
+
+        @Override
+        public Stoploss_Sell mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+            int orderId = resultSet.getInt("orderId");
+            Double limit = resultSet.getDouble("orderLimit");
+            Integer assetAmount = resultSet.getInt("assetAmount");
+            LocalDateTime date = resultSet.getObject("date", LocalDateTime.class);
+            return new Stoploss_Sell(orderId,  limit, assetAmount, LocalDateTime.now());
+        }
+    }
 
 }

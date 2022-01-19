@@ -36,8 +36,9 @@ public class Orderservice {
         AssetBank("Order Failed: Bank has insufficient assets."),
         SuccessBuy("Buy-Order successful"),
         SuccessSell("Sell-Order successful"),
-        WaitingLimitBuy("Limit-buy order waiting for match"),
-        WaitingLimitSell("Limit-sell order waiting for match");
+        WaitingLimitBuy("Limit-buy order saved and waiting for match"),
+        WaitingLimitSell("Limit-sell order saved and waiting for match"),
+        WaitingStoplossSell("Stoploss-sell order saved and waiting for match");
         private String body;
 
         Messages(String envBody) {
@@ -158,14 +159,13 @@ public class Orderservice {
      * author = Vanessa Philips
      */
     public String checkLbuyOrder(OrderDTO order) {
-        double wantedAssetAmount = order.getAssetAmount() / currentAssetPrice;
-        double orderFee = order.getAssetAmount() * BigBangkApplicatie.bigBangk.getFeePercentage();
-        double totalCost = order.getAssetAmount() + orderFee;
+        double orderFee = order.getLimit() * BigBangkApplicatie.bigBangk.getFeePercentage();
+        double totalCost = order.getLimit() + (orderFee/2.0);
         Wallet clientWallet = client.getWallet();
 
-        if (clientWallet.getBalance() >= totalCost) {
-            Limit_Buy limit_buy = new Limit_Buy(asset, order.getLimit(), wantedAssetAmount, LocalDateTime.now(), clientWallet);
-            rootRepository.saveWaitingLimitBuyOrder(limit_buy);
+        if (clientWallet.sufficientBalance(totalCost)) {
+            Limit_Buy limit_buy = new Limit_Buy(asset, order.getLimit(), order.getAssetAmount(), LocalDateTime.now(), clientWallet);
+            rootRepository.saveLimitBuyOrder(limit_buy);
         } else {
             return Messages.FundClient.getBody();
         }
@@ -181,13 +181,11 @@ public class Orderservice {
      * @return
      */
     public String checkLsellOrder(OrderDTO order){
-        double offeredAssetAmount = order.getAssetAmount() / currentAssetPrice;
         Wallet clientWallet = client.getWallet();
-        Asset asset = rootRepository.findAssetByCode(order.getAssetCode());
 
-        if (clientWallet.getAssets().get(asset) >= offeredAssetAmount) {
-            Limit_Sell limit_sell = new Limit_Sell(asset, order.getLimit(), offeredAssetAmount, LocalDateTime.now(), clientWallet);
-            rootRepository.saveWaitingLimitSellOrder(limit_sell);
+        if (clientWallet.sufficientAsset(asset, order.getAssetAmount())) {
+            Limit_Sell limit_sell = new Limit_Sell(asset, order.getLimit(), order.getAssetAmount(), LocalDateTime.now(), clientWallet);
+            rootRepository.saveLimitSellOrder(limit_sell);
         } else {
             return Messages.AssetClient.getBody();
         }
@@ -197,7 +195,15 @@ public class Orderservice {
     // Stoploss_Sell -> code: Sloss
 
     public String checkSlossOrder(OrderDTO order){
-        return null;
+        Wallet clientWallet = client.getWallet();
+
+        if (clientWallet.sufficientAsset(asset, order.getAssetAmount())) {
+            Limit_Sell limit_sell = new Limit_Sell(asset, order.getLimit(), order.getAssetAmount(), LocalDateTime.now(), clientWallet);
+            rootRepository.saveLimitSellOrder(limit_sell);
+        } else {
+            return Messages.AssetClient.getBody();
+        }
+        return Messages.WaitingStoplossSell.getBody();
     }
 
 }

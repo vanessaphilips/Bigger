@@ -17,7 +17,6 @@ public class Stoploss_Sell extends AbstractOrder{
 
     private Wallet seller;
 
-
     public Stoploss_Sell(int orderId, double orderLimit, double assetAmount, LocalDateTime date) {
         super(orderId, orderLimit, assetAmount, date);
         logger.info("New Stoploss_Sell, without Asset and Wallet");
@@ -37,7 +36,6 @@ public class Stoploss_Sell extends AbstractOrder{
     public void setSeller(Wallet seller) {
         this.seller = seller;
     }
-
 
     @Override
     public String toString() {
