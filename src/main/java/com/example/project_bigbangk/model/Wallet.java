@@ -50,11 +50,11 @@ public class Wallet implements Cloneable {
     }
 
     public void addToBalance(double addedCash){
-        this.setBalance(this.getBalance() + addedCash);
+        this.balance+= addedCash;
     }
 
     public void removeFromBalance(double removedCash){
-        this.setBalance(this.getBalance() -removedCash);
+        this.balance-= removedCash;
     }
 
     public void addToAsset(Asset asset, double addedAmount){
@@ -63,6 +63,14 @@ public class Wallet implements Cloneable {
 
     public void removeFromAsset(Asset asset, double removedAmount){
         this.assets.replace(asset, (this.assets.get(asset) - removedAmount));
+    }
+
+    public boolean sufficientBalance(double amountNeeded){
+        return this.balance >= amountNeeded;
+    }
+
+    public boolean sufficientAsset(Asset asset, double assetAmountNeeded){
+        return this.assets.get(asset) >= assetAmountNeeded;
     }
 
 
