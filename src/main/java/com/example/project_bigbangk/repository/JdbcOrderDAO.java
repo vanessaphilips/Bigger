@@ -92,7 +92,7 @@ public class JdbcOrderDAO {
      * author = Vanessa Philips
      */
     public void saveLimit_Buy(Limit_Buy limit_buy){
-        String sql = "INSERT INTO bigbangk.order (buyer, asssetCode, orderType, orderlimit, assetAmount, date) VALUES (?, ?, ?, ?, ?, ?);";
+        String sql = "INSERT INTO bigbangk.order (buyer, assetCode, orderType, orderlimit, assetAmount, date) VALUES (?, ?, ?, ?, ?, ?);";
 
         try {
             jdbcTemplate.update(sql,
@@ -117,7 +117,7 @@ public class JdbcOrderDAO {
      * author = Vanessa Philips
      */
     public void saveLimit_Sell(Limit_Sell limit_sell){
-        String sql = "INSERT INTO bigbangk.order (seller, code, type, orderlimit, amount, date) VALUES (?, ?, ?, ?, ?, ?);";
+        String sql = "INSERT INTO bigbangk.order (seller, assetCode, oderType, orderlimit, assetAmount, date) VALUES (?, ?, ?, ?, ?, ?);";
 
         try {
             jdbcTemplate.update(sql,
