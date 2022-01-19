@@ -10,7 +10,7 @@ import java.util.Objects;
  * Abstract class for "Order/Transaction".
  */
 
-abstract class AbstractOrder {
+public abstract class AbstractOrder {
 
     private long orderId;
     private Asset asset;
